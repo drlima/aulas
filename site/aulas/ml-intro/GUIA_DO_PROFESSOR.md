@@ -16,7 +16,7 @@ fazem: você vai usar isso nos exemplos.
 
 **A aula existe em dois idiomas.** O alternador **PT · EN** fica no canto direito da barra
 de navegação. Se houver alguém que não lê português, mande o link direto:
-https://drlima.github.io/aula-ml/en/
+https://drlima.github.io/aulas/aulas/ml-intro/en/
 
 | Bloco da página | Tempo | O que acontece ao vivo |
 |---|---|---|

@@ -3,8 +3,8 @@
 Aula ao vivo, interativa, para iniciantes absolutos. Páginas HTML estáticas hospedadas no
 GitHub Pages, em português e inglês. Sem build, sem npm, sem framework, sem servidor.
 
-**Português:** https://drlima.github.io/aula-ml/
-**English:** https://drlima.github.io/aula-ml/en/
+**Português:** https://drlima.github.io/aulas/aulas/ml-intro/
+**English:** https://drlima.github.io/aulas/aulas/ml-intro/en/
 
 ## Estrutura
 
