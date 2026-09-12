@@ -1,0 +1,24 @@
+{
+  "aulas": [
+    {
+      "slug": "ml-intro",
+      "ordem": 1,
+      "status": "publicada",
+      "duracao_min": 90,
+      "nivel": "iniciante",
+      "tags": ["machine learning", "python", "ao vivo"],
+      "atualizada_em": "2026-09-12",
+      "capa": { "emoji": "🤖", "cor": "grape" },
+      "pt-BR": {
+        "titulo": "Machine Learning do zero",
+        "resumo": "Uma hora e meia para entender o que um computador faz quando \"aprende\".",
+        "url": "aulas/ml-intro/"
+      },
+      "en": {
+        "titulo": "Machine Learning from scratch",
+        "resumo": "Ninety minutes to understand what a computer actually does when it \"learns\".",
+        "url": "aulas/ml-intro/en/"
+      }
+    }
+  ]
+}

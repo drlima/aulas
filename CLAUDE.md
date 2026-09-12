@@ -45,8 +45,9 @@ Uma aula carrega, nesta ordem, `base.css`, `aula.css`, `extra.css` e depois
 `core.js`, `aula.js`. O hub carrega `base.css`, `hub.css`, `core.js`, `hub.js`.
 
 - **`base.css`**: tokens da paleta e das fontes (`:root`), reset, tipografia
-  (h1–h3, p, code, a), `.wrap` (coluna de 780px), `nav.map` com o link `.home` e o
-  alternador `.lang`, `.hero`, `footer`, `.tag`. Não sabe que existe aula.
+  (h1–h3, p, code, a), `.wrap` (coluna de 780px), `nav.map` com o link `.home`, o
+  alternador `.lang` e a variante `.solo` (nav só com o alternador, sem o degradê
+  de rolagem), `.hero`, `footer`, `.tag`. Não sabe que existe aula.
 - **`aula.css`**: `section.block`, `.eyebrow`, `.q`, `mark`, `.widget` (e
   `.widget.wide`, até 980px com margem negativa simétrica), controles (`range`,
   `checkbox`, `text`, `button` com `.ghost`, `.small`), `.val`, `.out`, `.legend`,
@@ -130,6 +131,13 @@ Chaves de `STR` que o core lê: `locale`, `pyDownload`, `pySklearn`, `pyReady`,
 - `capa.cor`: um token da paleta, `marker`, `coral`, `teal` ou `grape`.
 - `url`: relativa à raiz de `site/`.
 - `pt-BR` e `en`: os dois obrigatórios, cada um com `titulo`, `resumo` e `url`.
+
+O hub (`site/index.html` e `site/en/index.html`) define, inline e antes dos
+scripts, `window.HUB = { json, lang, base }` (o caminho do JSON, `"pt-BR"` ou
+`"en"`, e o prefixo dos links dos cards) e as chaves de `STR` que o `hub.js` lê:
+`hubMeta` (o molde `"{min} min · nível {nivel}"`), `hubNiveis`, `hubEmpty` e
+`hubLoadError`. Se o JSON não carregar, o hub mostra `hubLoadError` no lugar
+dos cards.
 
 ## Formato pedagógico padrão
 

@@ -1,0 +1,18 @@
+/* hub.css — so o hub: a grade de cards das aulas. Tipografia, paleta, nav e capa
+   vem de base.css, para o hub parecer a mesma coisa que as aulas. */
+.wrap.wide{max-width:980px}
+.hub{padding:0 0 70px}
+.aulas{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.aula-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;color:var(--ink);text-decoration:none;box-shadow:0 8px 30px rgba(23,32,58,.06);transition:transform .08s}
+.aula-card:hover{transform:translateY(-2px)}
+.aula-card:focus-visible{outline:3px solid var(--grape);outline-offset:2px}
+.aula-card .capa{display:flex;align-items:center;justify-content:center;height:128px;font-size:56px;line-height:1}
+.aula-card .corpo{padding:18px 20px 20px}
+.aula-card h2{font-size:25px;margin:0 0 .35em}
+.aula-card p{font-size:17px;line-height:1.45;margin:0 0 12px}
+.aula-card .meta{font-family:var(--disp);font-weight:700;font-size:14px;color:var(--ink-2)}
+.aula-card .tags{display:flex;flex-wrap:wrap;gap:6px}
+.aula-card .tag{margin-right:0}
+/* mensagem no lugar dos cards: lista vazia ou indice que nao carregou */
+.hub-msg{grid-column:1/-1;font-family:var(--disp);font-weight:700;font-size:17px;color:var(--ink-2);background:#fff;border:1px dashed var(--line);border-radius:12px;padding:14px 18px;margin:0}
+.hub-msg.erro{color:var(--bad);border-color:var(--bad)}

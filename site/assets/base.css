@@ -32,6 +32,8 @@ nav.map .lang{margin-left:auto;flex:0 0 auto;display:flex;align-items:center;gap
 nav.map .lang a{color:var(--ink-2);text-decoration:none;padding:6px 8px;border-radius:999px}
 nav.map .lang a:hover{background:var(--paper-2);color:var(--ink)}
 nav.map .lang strong{color:var(--ink);padding:6px 8px}
+/* nav so com o alternador (hub, 404): nada rola, entao sem o degrade que sugere rolagem */
+nav.map.solo::after{display:none}
 .hero{padding:70px 0 40px}
 .hero p.lead{font-size:23px;max-width:640px}
 .hero .note{font-size:16px;color:var(--ink-2);margin-top:20px;border:1px dashed var(--line);border-radius:12px;padding:12px 16px}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interactive lessons</title>
+<meta name="description" content="Live, interactive lessons for beginners: widgets to poke at, get wrong and only then see the answer. They run in the browser, nothing to install.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Interactive lessons">
+<meta property="og:description" content="Live, interactive lessons for beginners. They run in the browser, nothing to install.">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<meta property="og:url" content="https://drlima.github.io/aulas/en/">
+<link rel="alternate" hreflang="pt-BR" href="../">
+<link rel="alternate" hreflang="en" href="./">
+<link rel="alternate" hreflang="x-default" href="../">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="../assets/hub.css">
+</head>
+<body>
+
+<nav class="map solo" aria-label="Language"><div class="wrap">
+<span class="lang"><a href="../" hreflang="pt-BR">PT</a> · <strong>EN</strong></span>
+</div></nav>
+
+<header class="hero"><div class="wrap wide">
+<h1>Lessons</h1>
+<p class="lead">Live, interactive lessons where you poke, guess and get it wrong before you see the answer. Everything runs in the browser, nothing to install.</p>
+</div></header>
+
+<main class="hub"><div class="wrap wide">
+<div class="aulas" id="aulas" aria-live="polite"></div>
+</div></main>
+
+<script>
+window.STR = {
+  locale: "en-US",
+  hubMeta: "{min} min · {nivel} level",
+  hubNiveis: { iniciante: "beginner", intermediario: "intermediate", avancado: "advanced" },
+  hubEmpty: "No lessons published yet.",
+  hubLoadError: "Could not load the list of lessons. Check your connection and reload the page."
+};
+window.HUB = { json:"../data/aulas.json", lang:"en", base:"../" };
+</script>
+<script src="../assets/core.js"></script>
+<script src="../assets/hub.js"></script>
+</body>
+</html>

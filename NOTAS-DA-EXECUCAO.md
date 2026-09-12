@@ -48,3 +48,49 @@ perguntar. Em cada uma, a alternativa escolhida foi a que muda menos coisa.
   ~20 MB do bloco 8). Mantive a seção, reescrita para valer para qualquer aula, e
   apontei para o `GUIA_DO_PROFESSOR.md` de cada uma, onde os números da aula de
   ML já estão. Nenhuma dica se perdeu.
+
+## Etapa 3 — Índice e hub
+
+- **Resumo no aulas.json**: a primeira frase da lead de cada versão, sem editar.
+  A frase seguinte da lead ("Sem matemática pesada...") ficou de fora para o
+  resumo continuar sendo uma frase só.
+- **O hub carrega core.js antes do hub.js.** O prompt fala só das folhas de
+  estilo do hub. O hub.js precisa de `$`, `esc` e `T`, que já existem no core;
+  copiar esses helpers para o hub.js contrariaria a regra de que o reutilizável
+  mora na camada compartilhada. No hub, o core não faz nada sozinho além disso:
+  o realce da nav não acha seções e o Pyodide só baixa quando alguém chama.
+- **Textos do hub, escolhidos por mim**: título "Aulas" / "Lessons" e uma linha
+  sobre o que é, no mesmo tom da lead da aula. Título da aba "Aulas interativas"
+  / "Interactive lessons". Sem rodapé e sem eyebrow: o prompt pede barra, hero e
+  grade, e o `.eyebrow` mora no aula.css, que o hub não carrega.
+- **O card mostra** emoji e cor da capa, título, resumo, a linha
+  "90 min · nível iniciante" (chave `hubMeta`, um molde só, porque a ordem das
+  palavras muda entre pt e en) e as tags. `atualizada_em` não aparece: o prompt
+  cita tags e nível como informação do card, e não a data. O card inteiro é o
+  link.
+- **Mensagens no lugar dos cards**: além da falha de carregamento
+  (`hubLoadError`), acrescentei `hubEmpty` para quando não há nenhuma aula
+  publicada. Sem ela, um aulas.json só com rascunhos deixaria a grade em branco.
+- **Valores fora do contrato não quebram o hub**: `capa.cor` desconhecida cai em
+  `grape`; uma aula sem o objeto do idioma da página não gera card. O check.py
+  impede os dois casos antes do push.
+- **`.wrap.wide` (980px) no hero e na grade do hub**, para os dois alinharem à
+  esquerda. É a mesma largura que o `.widget.wide` já usa nas aulas.
+- **`nav.map.solo` no base.css.** Em 390px, o degradê que a nav usa para sugerir
+  rolagem desbotava o "EN", porque no hub e na 404 não há nada para rolar. A
+  regra fica no base.css, e não no hub.css, porque a 404 só carrega o base.css.
+  A nav da aula não tem a classe e não muda.
+- **Link "Todas as aulas" sem CSS novo.** Ele usa o estilo dos outros links da
+  nav. Em 1280px a nav continua com duas linhas e 89px, os 12 links visíveis;
+  em 390px ele entra na faixa que já rola sozinha. Conferido por pixels: nas
+  duas línguas e larguras, com os details fechados e abertos, toda diferença na
+  aula está dentro da faixa da nav, e a altura da página não mudou.
+- **404 bilíngue.** Ela é uma só para qualquer caminho, então não tem como saber
+  o idioma de quem chegou. Título e frase em pt, uma linha em en, e o alternador
+  PT · EN apontando para os dois hubs. Leva `noindex`.
+- **Como a 404 foi testada localmente.** O `http.server` não serve `404.html`, e
+  os caminhos absolutos `/aulas/...` só batem com o Pages. Usei um servidor de
+  teste, fora do repositório, que serve `site/` sob `/aulas/` e devolve a 404
+  para caminhos inexistentes. O único erro de console ali é o próprio status 404
+  do documento, que o navegador sempre registra. Depois do deploy, conferi também
+  no Pages.
