@@ -1,13 +1,11 @@
 /* extra.css — so o que e desta aula de Machine Learning e de mais nenhuma:
-   a caixa de e-mail do bloco 3, a formula do bloco 5, o editor e o console
-   do bloco 8, e os ajustes de telinha para os SVGs desta aula. */
+   a caixa de e-mail do bloco 3, a formula do bloco 5,
+   e os ajustes de telinha para os SVGs desta aula. */
 .mail{border:1px solid var(--line);border-radius:12px;padding:12px 16px;background:var(--paper);margin-bottom:10px;font-size:17px}
 .mail b{font-family:var(--disp);margin-right:8px;background:var(--ink);color:#fff;border-radius:6px;padding:1px 8px;font-size:14px}
 .answer{transition:opacity .15s}
 .formula{font-family:var(--mono);font-size:clamp(20px,3vw,30px);text-align:center;padding:18px;background:var(--ink);color:#fff;border-radius:14px;margin:12px 0 18px}
 .formula .a{color:var(--marker)}.formula .b{color:#8BE9B4}
-textarea{white-space:pre;overflow-x:auto;width:100%;min-height:220px;font-family:var(--mono);font-size:14px;line-height:1.5;padding:14px;border-radius:12px;border:2px solid var(--line);background:#101627;color:#E6ECFF;resize:vertical}
-.console{font-family:var(--mono);font-size:14px;white-space:pre-wrap;background:var(--paper-2);border-radius:12px;padding:14px;min-height:60px;margin-top:10px}
 @media(max-width:700px){
   /* SVG de viewBox largo: texto legivel depois da escala */
   #svgLabels text{font-size:24px}
