@@ -1,19 +1,7 @@
-// Toda a interatividade da aula. Nenhum texto de interface mora aqui:
-// cada pagina define window.STR antes de carregar este arquivo.
-const S = window.STR;
-const T = (tpl, v) => tpl.replace(/\{(\w+)\}/g, (_, k) => v[k]);
-
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const NS="http://www.w3.org/2000/svg";
-const el=(t,a={},parent)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(parent)parent.appendChild(e);return e};
-const fmt=n=>n.toLocaleString(S.locale);
-let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646};
-const gauss=()=>{let u=0,v=0;while(!u)u=rnd();while(!v)v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)};
-const C={coral:"#FF6B57",teal:"#1BA39C",ink:"#17203A",grey:"#B9C0D8",line:"#C9D1E4"};
-
-// nav highlight
-const links=$$("nav.map a[href^='#']");
-$$("section.block").forEach(s=>new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)links.forEach(l=>l.classList.toggle("on",l.getAttribute("href")==="#"+s.id))})},{rootMargin:"-30% 0px -60% 0px"}).observe(s));
+// aula.js — a aula de Machine Learning, e so ela. O motor esta em core.js,
+// carregado antes deste arquivo: helpers, sorteio com semente, paleta, eixos,
+// escala, quiz, realce de Python e o carregador do Pyodide vem de la.
+// Nenhum texto de interface mora aqui: cada pagina define window.STR.
 
 // 1: rule tester
 $("#ruleBtn").onclick=()=>{
@@ -36,9 +24,6 @@ function makeFruits(){fruits=[];for(let i=0;i<30;i++){fruits.push({x:150+gauss()
 makeFruits();
 const P={x0:80,x1:290,y0:0.05,y1:0.95};
 const sx=(x,W,pad)=>pad+(x-P.x0)/(P.x1-P.x0)*(W-2*pad), sy=(y,H,pad)=>H-pad-(y-P.y0)/(P.y1-P.y0)*(H-2*pad);
-function axes(svg,W,H,pad,xl,yl){el("line",{x1:pad,y1:H-pad,x2:W-pad,y2:H-pad,stroke:C.line,"stroke-width":2},svg);el("line",{x1:pad,y1:pad,x2:pad,y2:H-pad,stroke:C.line,"stroke-width":2},svg);
-  el("text",{x:W/2,y:H-8,"font-size":13,"text-anchor":"middle",fill:"#4A5472"},svg).textContent=xl;
-  el("text",{x:14,y:H/2,"font-size":13,"text-anchor":"middle",fill:"#4A5472",transform:`rotate(-90 14 ${H/2})`},svg).textContent=yl}
 const fcol=f=>f.c?C.teal:C.coral;
 
 // 3: labels toggle
@@ -65,30 +50,19 @@ function drawFeats(){const f=feats(),p=priceOf(f);
 ["#ftArea","#ftRooms","#ftYear"].forEach(sel=>$(sel).oninput=drawFeats);
 $$("#ftHood button").forEach((b,i)=>b.onclick=()=>{hood=i;$$("#ftHood button").forEach((x,j)=>x.setAttribute("aria-pressed",i===j));drawFeats()});
 drawFeats();
-const QZ=S.quiz;
-let qdone=0,qright=0;
-QZ.forEach(([t,a])=>{const row=document.createElement("div");row.className="row";row.innerHTML=`<span>${t}</span><button class="ghost small">${S.quizC}</button><button class="ghost small">${S.quizR}</button>`;
-  const [b1,b2]=row.querySelectorAll("button");const pick=g=>{if(row.dataset.done)return;row.dataset.done=1;qdone++;const ok=g===a;if(ok)qright++;row.classList.add(ok?"right":"wrong");b1.disabled=b2.disabled=true;
-    if(!ok)row.querySelector("span").textContent+=T(S.quizAnswer,{a:a==="C"?S.quizC:S.quizR});
-    if(qdone===QZ.length){const o=$("#quizOut");o.className="out "+(qright===QZ.length?"ok":"");o.textContent=T(S.quizScore,{right:qright,total:QZ.length})+(qright===QZ.length?S.quizPerfect:S.quizHint)}};
-  b1.onclick=()=>pick("C");b2.onclick=()=>pick("R");$("#quiz").appendChild(row)});
+// 4b: quiz de rotulo ou numero — duas alternativas fixas, motor no core
+quizPair("#quiz","#quizOut",S.quiz,{
+  opts:[["C",S.quizC],["R",S.quizR]],
+  answer:a=>T(S.quizAnswer,{a:a==="C"?S.quizC:S.quizR}),
+  done:(o,right,total)=>{o.className="out "+(right===total?"ok":"");
+    o.textContent=T(S.quizScore,{right,total})+(right===total?S.quizPerfect:S.quizHint)}});
 
 // 9: quiz de autoavaliacao (mesmo padrao .quiz do bloco 4, com N opcoes por pergunta)
-let q9done=0,q9right=0;
-S.quiz9.forEach(([pergunta,opcoes,certa])=>{
-  const row=document.createElement("div");row.className="row multi";
-  row.innerHTML=`<span>${pergunta}</span><div class="opts">${opcoes.map(o=>`<button class="ghost small">${o}</button>`).join("")}</div>`;
-  const bts=[...row.querySelectorAll("button")];
-  bts.forEach((b,i)=>b.onclick=()=>{if(row.dataset.done)return;row.dataset.done=1;q9done++;
-    const ok=i===certa;if(ok)q9right++;
-    row.classList.add(ok?"right":"wrong");bts.forEach(x=>x.disabled=true);
-    if(!ok)bts[certa].disabled=false,bts[certa].style.borderColor="var(--ok)",bts[certa].style.color="var(--ok)";
-    if(q9done===S.quiz9.length){const o=$("#quiz9Out");
-      const pct=q9right/S.quiz9.length;
-      o.className="out "+(pct===1?"ok":pct<0.5?"bad":"");
-      o.textContent=T(S.quiz9Score,{right:q9right,total:S.quiz9.length})+
-        (pct===1?S.quiz9Perfect:pct<0.5?S.quiz9Weak:S.quiz9Good)}});
-  $("#quiz9").appendChild(row)});
+quizOptions("#quiz9","#quiz9Out",S.quiz9,{
+  done:(o,right,total)=>{const pct=right/total;
+    o.className="out "+(pct===1?"ok":pct<0.5?"bad":"");
+    o.textContent=T(S.quiz9Score,{right,total})+
+      (pct===1?S.quiz9Perfect:pct<0.5?S.quiz9Weak:S.quiz9Good)}});
 
 // 5: regression
 const apts=[[45,310],[48,340],[52,360],[56,385],[60,395],[64,455],[68,440],[72,425],[75,455],[78,540],[80,520],[88,505],
@@ -149,8 +123,7 @@ const DEMO=[{x:120,y:0.70,c:1},{x:135,y:0.62,c:1},{x:150,y:0.74,c:1},{x:160,y:0.
 const DNEW={x:192,y:0.55};
 const DG={W:700,H:340,pad:52};
 // cada desenho recebe a sua propria escala; P continua servindo para a escala global
-const mapper=B=>({X:f=>DG.pad+(f.x-B.x0)/(B.x1-B.x0)*(DG.W-2*DG.pad),
-                  Y:f=>DG.H-DG.pad-(f.y-B.y0)/(B.y1-B.y0)*(DG.H-2*DG.pad)});
+const mapper=B=>scale(B,DG.W,DG.H,DG.pad);
 // caixa envolvente dos pontos mostrados, com 15% de folga: a demonstracao ocupa o grafico inteiro
 const bounds=(pts,ref)=>{const xs=[...pts.map(f=>f.x),ref.x],ys=[...pts.map(f=>f.y),ref.y];
   const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
@@ -284,42 +257,19 @@ function drawSplit(){const hide=+$("#slHide").value/100,k=+$("#slK2").value;$("#
   if(aTe==null)el("text",{x:170,y:292,"font-size":11,"text-anchor":"middle",fill:"#4A5472"},s2).textContent=S.scoreHint}
 $("#slHide").oninput=drawSplit;$("#slK2").oninput=drawSplit;drawSplit();
 
-// realce de sintaxe minimo para os paineis de codigo (sem dependencia externa)
-const PY_RE=/(#[^\n]*)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|\b(\d+\.?\d*)\b|\b(from|import|as|def|return|print|if|else|elif|for|in|while|with|class|None|True|False|and|or|not|lambda)\b/g;
-const esc=t=>t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-function highlight(src){let out="",last=0,m;PY_RE.lastIndex=0;
-  while((m=PY_RE.exec(src))!==null){out+=esc(src.slice(last,m.index));
-    const cls=m[1]?"c":m[2]?"s":m[3]?"n":"k";out+=`<span class="${cls}">${esc(m[0])}</span>`;last=PY_RE.lastIndex}
-  return out+esc(src.slice(last))}
+// os paineis de codigo desta pagina, realcados pelo highlight() do core
 $$("pre code.py").forEach(c=>{c.innerHTML=highlight(c.textContent)});
 
-// 8: pyodide
-const PYODIDE="https://cdn.jsdelivr.net/pyodide/v0.27.5/full/";
-let pyReady=null;
-async function getPy(){if(pyReady)return pyReady;pyReady=(async()=>{$("#pyStatus").textContent=S.pyDownload;
-  await new Promise((res,rej)=>{const s=document.createElement("script");s.src=PYODIDE+"pyodide.js";s.onload=res;s.onerror=()=>rej(new Error(S.pyNetError));document.head.appendChild(s)});
-  const py=await loadPyodide({indexURL:PYODIDE});$("#pyStatus").textContent=S.pySklearn;await py.loadPackage(["scikit-learn"]);$("#pyStatus").textContent=S.pyReady;return py})();
-  pyReady.catch(()=>{pyReady=null});return pyReady}
+// 8: Python no navegador. O core baixa e prepara o Pyodide; aqui so dizemos
+// onde o andamento aparece e o que fazer quando uma figura falha.
+PyUI.statusSel="#pyStatus";
+PyUI.onFigFail=()=>{$("#vizBtn").disabled=false};
 $("#runBtn").onclick=async()=>{const btn=$("#runBtn"),out=$("#pyOut");btn.disabled=true;out.textContent="";
   try{const py=await getPy();py.setStdout({batched:s=>out.textContent+=s+"\n"});py.setStderr({batched:s=>out.textContent+=s+"\n"});await py.runPythonAsync($("#py").value)}
   catch(e){out.textContent+=String(e).split("\n").slice(-3).join("\n");$("#pyStatus").textContent=S.pyCodeError}
   btn.disabled=false};
 
 // 8b: exemplos visuais com matplotlib (so baixa quando o aluno pede)
-let vizReady=null;
-function getViz(){if(vizReady)return vizReady;
-  vizReady=(async()=>{const py=await getPy();$("#pyStatus").textContent=S.vizDownload;
-    await py.loadPackage(["matplotlib"]);$("#pyStatus").textContent=S.pyReady;return py})();
-  vizReady.catch(()=>{vizReady=null});return vizReady}
-const figFail=(boxId,msg)=>{$("#"+boxId).classList.remove("busy");$("#"+boxId).innerHTML=`<div class="figmsg">${msg}</div>`};
-async function drawFig(boxId,imgId,code,globals){const box=$("#"+boxId);box.classList.add("busy");
-  try{const py=await getViz();for(const g in globals)py.globals.set(g,globals[g]);
-    const b64=await py.runPythonAsync(code);
-    let img=$("#"+imgId);if(!img){box.innerHTML=`<img id="${imgId}">`;img=$("#"+imgId)}
-    img.src="data:image/png;base64,"+b64;box.classList.remove("busy");return true}
-  catch(e){console.warn(e);
-    figFail(boxId,S.vizFail);
-    $("#pyStatus").textContent=S.vizFailStatus;$("#vizBtn").disabled=false;return false}}
 const drawKnnFig=()=>drawFig("figKnn","imgKnn",$("#codeKnn").textContent,{k:+$("#slKviz").value});
 const drawTreeFig=()=>drawFig("figTree","imgTree",$("#codeTree").textContent,{d:+$("#slDepth").value});
 $("#vizBtn").onclick=async()=>{$("#vizBtn").disabled=true;$("#vizWrap").hidden=false;$("#vizNote").textContent=S.vizLoading;
