@@ -1,75 +1,70 @@
-# Aula 1 — Machine Learning do zero
+# Aulas
 
-Aula ao vivo, interativa, para iniciantes absolutos. Páginas HTML estáticas hospedadas no
-GitHub Pages, em português e inglês. Sem build, sem npm, sem framework, sem servidor.
+Um hub de aulas ao vivo e interativas, para iniciantes. Cada aula é uma página HTML
+estática, em português e inglês, com widgets para mexer, errar e só depois ver a
+resposta. Sem build, sem npm, sem framework, sem servidor: tudo roda no navegador.
 
-**Português:** https://drlima.github.io/aulas/aulas/ml-intro/
-**English:** https://drlima.github.io/aulas/aulas/ml-intro/en/
+**Hub em português:** https://drlima.github.io/aulas/
+**Hub in English:** https://drlima.github.io/aulas/en/
+
+## Aulas disponíveis
+
+| Aula | Português | English |
+|---|---|---|
+| Machine Learning do zero | [abrir](https://drlima.github.io/aulas/aulas/ml-intro/) | [open](https://drlima.github.io/aulas/aulas/ml-intro/en/) |
+
+A lista que o hub mostra vem de `site/data/aulas.json`.
 
 ## Estrutura
 
-| Arquivo | O que é |
+| Caminho | O que é |
 |---|---|
-| `site/index.html` | A aula em pt-BR: texto, widgets (SVG/JS puro) e o bloco de Python que roda no navegador. |
-| `site/en/index.html` | A mesma aula em en-US. Mesmos ids, mesma ordem de seções. |
-| `site/assets/style.css` | Todo o CSS, compartilhado pelas duas páginas. |
-| `site/assets/app.js` | Todo o JS, compartilhado. Não contém nenhum texto de interface. |
-| `GUIA_DO_PROFESSOR.md` | Roteiro com tempos e os *punches* de cada bloco. |
-| `.github/workflows/deploy.yml` | Publica a pasta `site/` a cada push na `main`. |
+| `site/index.html`, `site/en/index.html` | O hub, que lê `site/data/aulas.json` e mostra um card por aula publicada. |
+| `site/data/aulas.json` | O índice das aulas: título, resumo, duração, nível, status. |
+| `site/assets/` | A camada compartilhada: `base.css`, `aula.css` e `core.js` servem todas as aulas; `hub.css` e `hub.js` servem o hub. |
+| `site/aulas/<slug>/` | Uma aula: `index.html` (pt), `en/index.html`, `assets/aula.js`, `assets/extra.css`, `CLAUDE.md` e `GUIA_DO_PROFESSOR.md`. |
+| `site/404.html` | A página de caminho inexistente, com link para o hub. |
+| `template/` | O molde de aula nova. Fica fora de `site/` para não ser publicado. |
+| `scripts/` | `nova-aula.py` cria uma aula; `check.py` verifica o repositório. |
+| `.github/workflows/deploy.yml` | Publica `site/` a cada push na `main`. |
 
 ## Como os dois idiomas funcionam
 
-O HTML carrega o texto; o JS carrega o comportamento. Cada página define `window.STR`
-num `<script>` inline **antes** de carregar `app.js`:
+O HTML carrega o texto; o JS carrega o comportamento. Cada página define
+`window.STR` num `<script>` inline **antes** dos scripts, e nenhum JS contém texto
+de interface. Assim a versão em inglês nunca mostra português por acidente. As
+duas versões de cada página têm as mesmas chaves de `STR`, os mesmos ids e as
+mesmas seções na mesma ordem.
 
-```html
-<script>window.STR = { locale: "pt-BR", apple: "maçã", ... };</script>
-<script src="assets/app.js"></script>
-```
-
-`app.js` lê tudo de `STR` e nunca contém texto de interface. Se você adicionar uma
-mensagem nova ao JS, ela **tem** que sair de `STR`, ou a versão em inglês vai mostrar
-português. Para conferir:
+## Criar uma aula
 
 ```bash
-grep -nE "[áàâãéêíóôõúüç]" site/assets/app.js   # não deve retornar nada
+python3 scripts/nova-aula.py minha-aula
 ```
 
-### Onde ficam as strings
+O script pergunta título, resumo e duração, cria `site/aulas/minha-aula/` a partir
+do template e registra a aula como rascunho no `aulas.json`. Rascunhos não aparecem
+no hub. Os passos seguintes estão no `CLAUDE.md` da raiz.
 
-| Tipo de texto | Onde editar |
-|---|---|
-| Títulos, perguntas, Revelar, tabelas, referências | direto no HTML de cada idioma |
-| Respostas do testador de regras, mensagens de acerto/erro, quiz, rótulos dos eixos, legendas das barras, status do Pyodide, resultado da votação | no bloco `window.STR` de cada HTML |
-| Código Python dos painéis e das figuras | direto no HTML (`<pre><code class="py">` e `#codeTree`), com os comentários no idioma da página |
-
-O Python das figuras do bloco 8 mora no HTML de propósito: o `app.js` executa exatamente
-o mesmo texto que o aluno lê, então os dois não podem divergir, e a tradução acontece
-junto com o resto da página.
-
-## Editar
-
-Abra os arquivos em qualquer editor. Para ver localmente, sirva a pasta por HTTP (os
-caminhos relativos e o alternador PT · EN precisam disso):
+## Ver localmente e verificar
 
 ```bash
 python3 -m http.server --directory site 8000
-# pt: http://localhost:8000/   ·   en: http://localhost:8000/en/
+# hub: http://localhost:8000/   ·   en: http://localhost:8000/en/
+python3 scripts/check.py
 ```
 
-Cada bloco da aula é uma `<section class="block">` com um id de `s1` a `s10`. **Os ids
-são o contrato entre o HTML e o `app.js`**: se você renomear um, renomeie nos dois
-idiomas.
+Sirva por HTTP, e não abrindo o arquivo direto: o hub busca o `aulas.json` e os
+caminhos relativos precisam de um servidor.
+
+## Na aula ao vivo
+
+- Peça que abram o link antes de começar. As páginas carregam na hora; o que pesa são
+  os blocos de Python, e só quando o aluno pede. Eles exigem internet.
+- As interações são individuais. Para votação da turma, use o chat da plataforma de vídeo.
+- O roteiro com tempos de cada aula está no `GUIA_DO_PROFESSOR.md` da pasta dela.
 
 ## Publicar
 
 `git push` na `main`. O GitHub Pages precisa estar em **Source: GitHub Actions**
 (Settings → Pages).
-
-## Na aula ao vivo
-
-- Peça que abram o link antes de começar. A página carrega instantaneamente; o que pesa é
-  o bloco 8, e só quando o aluno pede.
-- O bloco 8 baixa em duas etapas: ~20 MB de Python + scikit-learn no botão "Rodar Python",
-  e ~10 MB de matplotlib no botão "Carregar exemplos visuais". Os dois exigem internet.
-- As interações são individuais. Para votação da turma, use o chat da plataforma de vídeo.
