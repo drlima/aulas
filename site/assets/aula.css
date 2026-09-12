@@ -1,22 +1,6 @@
-:root{
-  --paper:#F3F6FB; --paper-2:#E8EDF7; --ink:#17203A; --ink-2:#4A5472; --line:#C9D1E4;
-  --marker:#FFD84D; --coral:#FF6B57; --teal:#1BA39C; --grape:#7B61FF; --grey:#B9C0D8;
-  --ok:#1E9E5A; --bad:#D63B3B;
-  --disp:"Bricolage Grotesque",system-ui,sans-serif; --body:"Source Serif 4",Georgia,serif; --mono:"JetBrains Mono",ui-monospace,monospace;
-}
-*{box-sizing:border-box}
-[hidden]{display:none!important}   /* o atributo hidden nao pode perder para display:flex/grid */
-html{scroll-behavior:smooth}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);font-size:19px;line-height:1.55}
-h1,h2,h3{font-family:var(--disp);line-height:1.05;margin:0 0 .4em;letter-spacing:-.01em}
-h1{font-size:clamp(44px,7vw,84px);font-weight:800}
-h2{font-size:clamp(30px,4.2vw,46px);font-weight:700}
-h3{font-size:22px;font-weight:700}
-p{margin:0 0 1em}
-code{font-family:var(--mono);font-size:.86em;background:var(--paper-2);padding:.1em .35em;border-radius:4px}
-a{color:var(--grape)}
-.wrap{max-width:780px;margin:0 auto;padding:0 22px}
+/* aula.css — os componentes didaticos, reutilizaveis por qualquer aula:
+   bloco, pergunta, widget, controles, revelar, cartoes, quiz, tabela,
+   painel de codigo, figura e referencias. */
 /* a coluna de texto e sempre 780; so o widget largo extrapola, simetricamente */
 .widget.wide{margin-left:-122px;margin-right:-122px}
 @media(max-width:1040px){.widget.wide{margin-left:0;margin-right:0}}
@@ -26,21 +10,6 @@ section.block{padding:84px 0 40px;border-top:1px solid var(--line);scroll-margin
 .q{font-family:var(--disp);font-weight:700;font-size:clamp(22px,2.6vw,28px);line-height:1.25;margin:26px 0 18px;padding-left:18px;border-left:6px solid var(--marker)}
 .q::before{content:"Pergunta";display:block;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin-bottom:4px}
 mark{background:linear-gradient(transparent 45%,var(--marker) 45%);padding:0 .1em}
-nav.map{position:sticky;top:0;z-index:10;background:rgba(243,246,251,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-nav.map .wrap{max-width:1100px;display:flex;gap:4px;overflow-x:auto;padding:10px 22px;scrollbar-width:none}
-nav.map .wrap::-webkit-scrollbar{display:none}
-@media(min-width:900px){nav.map .wrap{flex-wrap:wrap;overflow:visible}}
-@media(max-width:899px){nav.map::after{content:"";position:absolute;top:0;right:0;bottom:0;width:44px;pointer-events:none;
-  background:linear-gradient(90deg,rgba(243,246,251,0),rgba(243,246,251,.97))}}
-nav.map a{flex:0 0 auto;font-family:var(--disp);font-weight:700;font-size:13px;color:var(--ink-2);text-decoration:none;padding:6px 10px;border-radius:999px}
-nav.map a.on{color:var(--ink);background:var(--marker)}
-nav.map .lang{margin-left:auto;flex:0 0 auto;display:flex;align-items:center;gap:2px;font-family:var(--disp);font-weight:700;font-size:13px;color:var(--ink-2);padding-left:14px;white-space:nowrap}
-nav.map .lang a{color:var(--ink-2);text-decoration:none;padding:6px 8px;border-radius:999px}
-nav.map .lang a:hover{background:var(--paper-2);color:var(--ink)}
-nav.map .lang strong{color:var(--ink);padding:6px 8px}
-.hero{padding:70px 0 40px}
-.hero p.lead{font-size:23px;max-width:640px}
-.hero .note{font-size:16px;color:var(--ink-2);margin-top:20px;border:1px dashed var(--line);border-radius:12px;padding:12px 16px}
 .widget{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;margin:22px 0 28px;box-shadow:0 8px 30px rgba(23,32,58,.06)}
 .widget h3{margin-top:0}
 .widget .ctrls{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center;margin:10px 0 14px;font-family:var(--disp);font-size:15px;font-weight:700}
@@ -73,8 +42,6 @@ details.reveal .in p:last-child{margin:0}
 .card.right{border-color:var(--ok);background:#EAF8F0}
 .card.wrong{border-color:var(--bad);background:#FDEDED}
 .card small{display:block;font-family:var(--body);font-weight:400;font-size:15px;color:var(--ink-2);margin-top:4px}
-.mail{border:1px solid var(--line);border-radius:12px;padding:12px 16px;background:var(--paper);margin-bottom:10px;font-size:17px}
-.mail b{font-family:var(--disp);margin-right:8px;background:var(--ink);color:#fff;border-radius:6px;padding:1px 8px;font-size:14px}
 .quiz{display:grid;gap:10px}
 .quiz .row{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:#fff}
 .quiz .row.right{border-color:var(--ok);background:#EAF8F0}.quiz .row.wrong{border-color:var(--bad);background:#FDEDED}
@@ -84,16 +51,11 @@ details.reveal .in p:last-child{margin:0}
 .quiz .opts button{text-align:left}
 .seg{display:inline-flex;gap:6px;flex-wrap:wrap}
 .seg button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
-.answer{transition:opacity .15s}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
 @media(max-width:700px){.two{grid-template-columns:1fr}.quiz .row{grid-template-columns:1fr}}
 table{border-collapse:collapse;width:100%;font-size:16px;margin:10px 0 20px}
 th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-family:var(--disp);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
-.formula{font-family:var(--mono);font-size:clamp(20px,3vw,30px);text-align:center;padding:18px;background:var(--ink);color:#fff;border-radius:14px;margin:12px 0 18px}
-.formula .a{color:var(--marker)}.formula .b{color:#8BE9B4}
-textarea{white-space:pre;overflow-x:auto;width:100%;min-height:220px;font-family:var(--mono);font-size:14px;line-height:1.5;padding:14px;border-radius:12px;border:2px solid var(--line);background:#101627;color:#E6ECFF;resize:vertical}
-.console{font-family:var(--mono);font-size:14px;white-space:pre-wrap;background:var(--paper-2);border-radius:12px;padding:14px;min-height:60px;margin-top:10px}
 @media(max-width:700px){
   /* sliders: ocupam a sobra da linha em vez de largura fixa */
   input[type=range]{height:24px}
@@ -102,14 +64,6 @@ textarea{white-space:pre;overflow-x:auto;width:100%;min-height:220px;font-family
   /* tabelas largas rolam dentro da propria caixa em vez de serem cortadas */
   table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
   table tbody{display:table;width:max-content;min-width:100%}
-  /* SVG de viewBox largo: texto legivel depois da escala */
-  #svgLabels text{font-size:24px}
-  #svgReg text{font-size:25px}
-  #svgKnn text{font-size:26px}
-  #svgSteps text{font-size:26px}
-  /* a arvore e larga: rola na horizontal em vez de encolher ate ficar ilegivel */
-  #figTree{overflow-x:auto;justify-content:flex-start}
-  #figTree img{width:auto;max-width:none;height:320px}
 }
 /* painel de codigo: apendice discreto, distinto do Revelar (que e o punch) */
 details.code{margin:-6px 0 26px;border:1px dashed var(--line);border-radius:12px;background:transparent}
@@ -138,5 +92,3 @@ code .n{color:var(--coral)}
 .refs a:hover{text-decoration:underline}
 .refs .why{display:block;font-size:16px;color:var(--ink-2);margin-top:3px;line-height:1.45}
 h3.refgroup{margin:30px 0 0;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
-footer{padding:40px 0 60px;color:var(--ink-2);font-size:15px;text-align:center}
-.tag{display:inline-block;font-family:var(--disp);font-weight:700;font-size:13px;padding:3px 10px;border-radius:999px;background:var(--paper-2);color:var(--ink-2);margin-right:6px}
