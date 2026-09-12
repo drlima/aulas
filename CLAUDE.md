@@ -153,8 +153,16 @@ python3 scripts/nova-aula.py <slug>
 ```
 
 O script pergunta título, resumo e duração, copia `template/` para
-`site/aulas/<slug>/`, troca os marcadores e acrescenta a aula ao `aulas.json` como
-`"rascunho"`, com a próxima `ordem`. Recusa slug que já existe. Depois:
+`site/aulas/<slug>/`, troca os marcadores (`__SLUG__`, `__TITULO__`, `__RESUMO__`,
+`__DURACAO__`) e acrescenta a aula ao `aulas.json` como `"rascunho"`, com a próxima
+`ordem`, `nivel` `"iniciante"`, `tags` vazias e capa 📘 em `grape`. Nos `.js` e
+`.css` o título entra sem acento, por causa da regra de i18n. O slug aceita só
+letras minúsculas, números e hífens, e o script recusa slug que já existe.
+
+O template traz, prontos e comentados, os padrões da casa: um widget com SVG
+(`scale` + `axes`), um `quizPair`, um `quizOptions` com painel "O mesmo, em
+Python", um bloco de Python com `PyUI` e `drawFig`, referências e o `STR` completo
+nos dois idiomas. Depois:
 
 1. Escreva os blocos nos dois HTMLs; os do template mostram cada padrão pronto.
 2. Apague o bloco de Python se a aula não usa Python.
@@ -172,10 +180,11 @@ python3 scripts/check.py                       # sai com código 1 e lista o que
 ```
 
 `check.py` confere: nenhum acento nos JS; `aulas.json` válido e completo; toda
-aula do JSON existe em disco nos dois idiomas, e vice-versa; por página, as mesmas
-chaves de `STR` em pt e en; os ids de `section` e os ids que o `aula.js` usa
-existem nos dois HTMLs; todo `href`/`src` relativo aponta para um arquivo que
-existe.
+aula do JSON existe em disco nos dois idiomas, e vice-versa; em cada aula e no hub,
+as mesmas chaves de `STR` em pt e en e as mesmas `section` na mesma ordem; todo id
+que o `aula.js` usa (em seletores e em `drawFig`) existe nos dois HTMLs; todo
+`href`/`src` relativo aponta para um arquivo que existe, e os absolutos
+`/aulas/...` da 404 também.
 
 Depois, com Playwright, em 1280px e 390px, nas duas línguas:
 

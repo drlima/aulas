@@ -94,3 +94,59 @@ perguntar. Em cada uma, a alternativa escolhida foi a que muda menos coisa.
   para caminhos inexistentes. O único erro de console ali é o próprio status 404
   do documento, que o navegador sempre registra. Depois do deploy, conferi também
   no Pages.
+
+## Etapa 4 — Template e scripts
+
+- **Os caminhos do template já são os de dentro de `site/aulas/<slug>/`.** Em
+  `template/` eles não resolvem, porque o template só existe para ser copiado. O
+  check.py olha só `site/`, então não reclama.
+- **O STR do template traz as chaves do core e as dos quizzes, e não as do hub.**
+  O prompt pede "as do hub/quiz". Uma aula não lê nenhuma chave do hub (quem lê é
+  o hub.js, nas páginas do hub), e colocá-las na aula faria o check.py exigir as
+  mesmas chaves inúteis em toda aula nova. Li como as chaves de quiz.
+- **O template en está em inglês, comentários incluídos**, exceto a linha
+  "APAGUE ESTE BLOCO INTEIRO SE A AULA NÃO USA PYTHON", que o prompt pede com
+  esse texto e aparece igual nos dois HTMLs.
+- **O trecho do bloco 4 no aula.js do template é marcado, não protegido por `if`.**
+  Um comentário manda apagá-lo junto com o bloco do HTML. Se o autor esquecer, a
+  página dá erro no console e o check.py aponta cada id que ficou sem HTML, em vez
+  de o código morto seguir escondido.
+- **nova-aula.py, escolhas que o prompt não fixou:**
+  - o slug aceita só letras minúsculas, números e hífens, o que também impede um
+    slug como `../fora` de escrever fora de `site/aulas/`;
+  - título e resumo são perguntados uma vez, em pt, e a versão en nasce com o
+    mesmo texto, no HTML e no aulas.json, para o autor traduzir; o próprio script
+    lembra disso ao terminar;
+  - a entrada nova nasce com `nivel` "iniciante", `tags` vazias, capa 📘 em
+    `grape` e `atualizada_em` com a data do dia;
+  - nos `.html` o texto entra escapado (`&`, `<`, aspas); nos `.js` e `.css` entra
+    sem acento, porque até comentário acentuado reprova o check.py;
+  - tudo é montado em memória e só é escrito depois de todas as respostas: entrada
+    incompleta, slug inválido ou repetido não deixam nenhum arquivo para trás;
+  - o aulas.json é regravado no mesmo desenho do arquivo escrito à mão (conferido:
+    reformatar o índice atual reproduz o arquivo byte a byte), para o diff de uma
+    aula nova mostrar só a entrada nova;
+  - entrada e saída forçadas para UTF-8: no console do Windows os acentos
+    digitados chegavam corrompidos.
+- **check.py, verificações além da lista mínima:**
+  - a igualdade de chaves de STR e de sections vale também para o par do hub, não
+    só para as aulas, porque a regra de i18n do CLAUDE.md vale para toda página;
+  - as sections são comparadas na mesma ordem, como a regra pede;
+  - os ids passados a `drawFig`/`figFail` contam como ids usados pelo aula.js,
+    porque o core faz o `querySelector` com eles;
+  - os caminhos absolutos `/aulas/...` da 404 também são conferidos, porque o
+    `http.server` não serve a 404 e um erro ali passaria despercebido;
+  - o conjunto de acentos procurado é exatamente o do `grep` documentado, para os
+    dois darem sempre o mesmo resultado.
+- **Como os scripts foram testados.** Numa cópia do repositório fora do projeto:
+  o nova-aula.py criou uma aula com título acentuado, `&` e aspas; o check.py
+  passou; a aula abriu sem erro de console nas duas línguas e larguras, com o
+  slider, os dois quizzes, o Python e a figura funcionando, e o hub continuou
+  escondendo o rascunho. Depois, cada verificação do check.py foi provocada de
+  propósito (acento em JS, status e cor inválidos, idioma faltando, slug
+  repetido, JSON quebrado, pasta órfã, chave de STR só em pt, sections trocadas,
+  id sumido, link quebrado) e todas saíram com código 1 e a mensagem certa.
+  Nenhuma aula de teste foi commitada.
+- **Fora do escopo, só registrado:** o rótulo "Pergunta" acima de cada `.q` vem de
+  `content:"Pergunta"` no aula.css e aparece também nas páginas em inglês. Isso já
+  acontecia na aula de ML, e o template en herda o mesmo problema.

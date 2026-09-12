@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITULO__ — aula interativa</title>
+<meta name="description" content="__RESUMO__">
+<meta property="og:type" content="article">
+<meta property="og:title" content="__TITULO__">
+<meta property="og:description" content="__RESUMO__">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:url" content="https://drlima.github.io/aulas/aulas/__SLUG__/">
+<link rel="alternate" hreflang="pt-BR" href="./">
+<link rel="alternate" hreflang="en" href="en/">
+<link rel="alternate" hreflang="x-default" href="./">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- Ordem das folhas: base (o site), aula (componentes de qualquer aula), extra (só esta aula). -->
+<link rel="stylesheet" href="../../assets/base.css">
+<link rel="stylesheet" href="../../assets/aula.css">
+<link rel="stylesheet" href="assets/extra.css">
+</head>
+<body>
+
+<!-- Barra do site: volta para o hub, um link por bloco (o core.js realça o bloco
+     visível) e o alternador de idioma. Um <a href="#sN"> para cada section. -->
+<nav class="map" aria-label="Mapa da aula"><div class="wrap">
+<a class="home" href="../../">← Todas as aulas</a><a href="#s1">1 Desenho</a><a href="#s2">2 Duas opções</a><a href="#s3">3 Várias opções</a><a href="#s4">4 Python</a><a href="#s5">5 Referências</a><span class="lang"><strong>PT</strong> · <a href="en/" hreflang="en">EN</a></span>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+<div class="eyebrow">Aula ao vivo · __DURACAO__ min</div>
+<h1>__TITULO__</h1>
+<p class="lead">__RESUMO__</p>
+<div class="note">Cada bloco abre com uma pergunta. Pense (ou vote no chat) <em>antes</em> de abrir o painel <strong>Revelar</strong>. A graça está em errar primeiro.</div>
+</div></header>
+
+<!-- ===================================================================
+     Formato de todo bloco: pergunta (div.q) → widget (div.widget) → Revelar.
+     O aluno pensa, mexe, erra, e só depois abre a resposta.
+     =================================================================== -->
+
+<!-- BLOCO 1 — widget com um SVG desenhado pelo aula.js (scale + axes do core). -->
+<section class="block" id="s1"><div class="wrap">
+<div class="eyebrow">Bloco 1</div>
+<h2>Um desenho que responde ao aluno</h2>
+<p>Contexto do bloco: o que o aluno precisa saber para entender a pergunta.</p>
+<div class="q">Qual inclinação deixa metade dos pontos de cada lado da reta?</div>
+<div class="widget">
+  <div class="ctrls"><label>inclinação <input type="range" id="slDemo" min="0" max="2" step="0.1" value="0.5"> <span class="val" id="vDemo">0,5</span></label></div>
+  <svg id="svgDemo" viewBox="0 0 640 360" width="100%" aria-label="Pontos e uma reta"></svg>
+  <div class="out" id="demoOut"></div>
+</div>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>O punch do bloco: a frase que o aluno leva para casa. <mark>Marque a ideia central.</mark></p>
+</div></details>
+</div></section>
+
+<!-- BLOCO 2 — quiz de duas alternativas fixas (quizPair). Os itens ficam em STR.quiz. -->
+<section class="block" id="s2"><div class="wrap">
+<div class="eyebrow">Bloco 2</div>
+<h2>Duas opções</h2>
+<div class="q">Cada item abaixo é do tipo A ou do tipo B?</div>
+<div class="widget"><div class="quiz" id="quiz"></div><div class="out" id="quizOut"></div></div>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>O critério que separa A de B, dito em uma frase.</p>
+</div></details>
+</div></section>
+
+<!-- BLOCO 3 — quiz de N alternativas (quizOptions) e o painel "O mesmo, em Python".
+     O painel é apêndice: vem depois do widget e nunca o substitui. -->
+<section class="block" id="s3"><div class="wrap">
+<div class="eyebrow">Bloco 3</div>
+<h2>Várias opções</h2>
+<div class="q">Escolha a melhor resposta para cada pergunta.</div>
+<div class="widget"><div class="quiz" id="quiz3"></div><div class="out" id="quiz3Out"></div></div>
+<details class="code"><summary>O mesmo, em Python</summary><div class="in">
+<p class="tie">Uma frase ligando o widget ao código: o que, no código, corresponde ao que o aluno fez.</p>
+<pre><code class="py">respostas = ["a", "b", "c"]     # o que o aluno marcou
+certas    = ["a", "c", "c"]     # o gabarito
+
+acertos = sum(r == c for r, c in zip(respostas, certas))
+print(acertos, "de", len(certas))</code></pre>
+</div></details>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>O que as perguntas tinham em comum.</p>
+</div></details>
+</div></section>
+
+<!-- APAGUE ESTE BLOCO INTEIRO SE A AULA NÃO USA PYTHON (e também o trecho do bloco 4 no aula.js, o link #s4 da nav e as chaves py* e viz* do STR). -->
+<!-- BLOCO 4 — Python no navegador. O core.js baixa o Pyodide (getPy) e o matplotlib
+     (getViz) só quando o aluno aperta o botão; o aula.js liga os ids abaixo. -->
+<section class="block" id="s4"><div class="wrap">
+<div class="eyebrow">Bloco 4</div>
+<h2>O mesmo, em Python de verdade</h2>
+<div class="q">O que você espera que o código imprima?</div>
+<div class="widget">
+<textarea id="py" spellcheck="false">from sklearn.linear_model import LinearRegression
+
+X = [[1], [2], [3], [4]]      # uma medida por exemplo
+y = [2, 4, 6, 8]              # a resposta de cada exemplo
+
+modelo = LinearRegression().fit(X, y)
+print("Para 5, o modelo prevê:", round(modelo.predict([[5]])[0], 2))</textarea>
+<div class="ctrls" style="margin-top:12px"><button id="runBtn">Rodar Python</button><span id="pyStatus" style="font-weight:400;color:var(--ink-2)">Na primeira vez, o navegador baixa o Python (~20 MB). Leva alguns segundos.</span></div>
+<div class="console" id="pyOut"></div>
+</div>
+
+<div class="widget">
+<div class="ctrls"><button id="vizBtn">Carregar a figura</button><span id="vizNote" style="font-weight:400;color:var(--ink-2);font-family:var(--body);font-size:16px">Baixa o matplotlib, cerca de 10&nbsp;MB a mais.</span></div>
+<div id="vizWrap" hidden>
+  <div class="ctrls"><label>pontos <input type="range" id="slFig" min="10" max="200" step="10" value="60"> <span class="val" id="vFig">60</span></label></div>
+  <!-- drawFig("figDemo", "imgDemo", código, {n}) roda o código abaixo e mostra o PNG aqui. -->
+  <div class="fig" id="figDemo"><img id="imgDemo" alt="Pontos desenhados pelo matplotlib"></div>
+  <details class="code"><summary>O código que desenhou esta figura</summary><div class="in">
+  <p class="tie">A última linha devolve a figura como texto; é assim que ela sai do Python e aparece na página.</p>
+  <pre><code class="py" id="codeDemo">import matplotlib
+matplotlib.use("Agg")          # desenha na memória, não numa janela
+import io, base64
+import numpy as np
+import matplotlib.pyplot as plt
+
+rng = np.random.default_rng(7)
+x = rng.uniform(0, 10, n)      # o n vem do slider acima
+y = 0.8 * x + rng.normal(0, 1.2, n)
+
+fig, ax = plt.subplots(figsize=(6.4, 4))
+ax.scatter(x, y, c="#7B61FF", s=36, edgecolor="white")
+ax.set_xlabel("medida")
+ax.set_ylabel("resposta")
+
+buf = io.BytesIO()
+fig.savefig(buf, format="png", dpi=120, bbox_inches="tight")
+plt.close(fig)
+base64.b64encode(buf.getvalue()).decode()</code></pre>
+  </div></details>
+</div>
+</div>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>O que o aluno deveria ter notado na saída.</p>
+</div></details>
+</div></section>
+
+<!-- BLOCO FINAL — referências. Só links conferidos, cada um com o porquê. -->
+<section class="block" id="s5"><div class="wrap">
+<div class="eyebrow">Bloco 5</div>
+<h2>Para continuar</h2>
+<p>Tudo o que está aqui é gratuito e aberto.</p>
+<h3 class="refgroup">Livros e cursos</h3>
+<ul class="refs">
+<li><a href="https://pyodide.org/en/stable/" target="_blank" rel="noopener">Pyodide</a>
+<span class="why">Por que ler: uma frase dizendo o que o aluno ganha com este link.</span></li>
+</ul>
+</div></section>
+
+<footer>__TITULO__ · aula interativa · o Python desta página roda no seu navegador via Pyodide.</footer>
+
+<!-- Todo texto que o JS escreve na tela mora aqui. A versão en tem exatamente as
+     mesmas chaves. O core.js lê locale e as chaves py* e viz*; o resto é do aula.js. -->
+<script>
+window.STR = {
+  locale: "pt-BR",
+  decimalComma: true,
+
+  // bloco 1 — desenho
+  axX: "medida",
+  axY: "resposta",
+  demoOut: "{acima} pontos acima da reta, {abaixo} abaixo.",
+
+  // bloco 2 — quiz de duas alternativas (quizPair): [enunciado, "A" ou "B"]
+  quizA: "tipo A",
+  quizB: "tipo B",
+  quizAnswer: "  → é {a}",
+  quizScore: "{right} de {total}. ",
+  quizPerfect: "Perfeito.",
+  quizHint: "Dica: releia o critério no Revelar.",
+  quiz: [
+    ["Primeiro item", "A"],
+    ["Segundo item", "B"],
+    ["Terceiro item", "A"]
+  ],
+
+  // bloco 3 — quiz de N alternativas (quizOptions): [enunciado, [opções], índice da certa]
+  quiz3Score: "{right} de {total}. ",
+  quiz3Perfect: "Você entendeu o bloco inteiro.",
+  quiz3Good: "Boa. Reveja as que errou.",
+  quiz3Weak: "Vale reabrir o Revelar deste bloco.",
+  quiz3: [
+    ["Primeira pergunta?", ["opção certa", "opção errada", "outra errada"], 0],
+    ["Segunda pergunta?", ["opção errada", "opção certa"], 1]
+  ],
+
+  // bloco 4 — Python no navegador. O core.js lê pyDownload, pySklearn, pyReady,
+  // pyNetError, vizDownload, vizFail e vizFailStatus; as outras são do aula.js.
+  pyDownload: "Baixando o Python…",
+  pySklearn: "Baixando o scikit-learn…",
+  pyReady: "Pronto. Rode quantas vezes quiser.",
+  pyNetError: "Não foi possível baixar o Python. Confira a conexão e tente de novo.",
+  pyCodeError: "Deu erro no código (veja abaixo). Corrija e rode de novo.",
+  vizDownload: "Baixando o matplotlib…",
+  vizLoading: "Baixando…",
+  vizDone: "Pronta. Mova o slider para redesenhar.",
+  vizFail: "Não foi possível desenhar a figura. Ela precisa baixar o matplotlib da internet — confira a conexão e toque de novo em <em>Carregar a figura</em>.",
+  vizFailStatus: "Falhou ao baixar. Tente de novo."
+};
+</script>
+<script src="../../assets/core.js"></script>
+<script src="assets/aula.js"></script>
+</body>
+</html>

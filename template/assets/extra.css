@@ -1,0 +1,6 @@
+/* extra.css — so o que e desta aula (__TITULO__) e de mais nenhuma.
+   Se uma regra daqui servir para outra aula, ela sobe para site/assets/aula.css. */
+@media(max-width:700px){
+  /* SVG de viewBox largo: texto legivel depois da escala */
+  #svgDemo text{font-size:22px}
+}
