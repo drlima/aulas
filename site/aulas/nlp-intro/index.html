@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Texto vira número — aula interativa</title>
+<meta name="description" content="Como um computador lê uma avaliação e decide se ela é positiva, e por que ele erra em &quot;não é ruim&quot;.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Texto vira número">
+<meta property="og:description" content="Como um computador lê uma avaliação e decide se ela é positiva, e por que ele erra em &quot;não é ruim&quot;.">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:url" content="https://drlima.github.io/aulas/aulas/nlp-intro/">
+<link rel="alternate" hreflang="pt-BR" href="./">
+<link rel="alternate" hreflang="en" href="en/">
+<link rel="alternate" hreflang="x-default" href="./">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- Ordem das folhas: base (o site), aula (componentes de qualquer aula), extra (só esta aula). -->
+<link rel="stylesheet" href="../../assets/base.css">
+<link rel="stylesheet" href="../../assets/aula.css">
+<link rel="stylesheet" href="assets/extra.css">
+</head>
+<body>
+
+<nav class="map" aria-label="Mapa da aula"><div class="wrap">
+<a class="home" href="../../">← Todas as aulas</a><a href="#s1">1 Parecido</a><a href="#s2">2 A lista</a><a href="#s3">3 A tabela</a><a href="#s4">4 Pedaços</a><a href="#s5">5 Vazias</a><a href="#s6">6 Radical</a><a href="#s7">7 Pesos</a><a href="#s8">8 Sua frase</a><a href="#s9">9 Python</a><a href="#s10">10 Mapa</a><a href="#s11">11 Referências</a><span class="lang"><strong>PT</strong> · <a href="en/" hreflang="en">EN</a></span>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+<div class="eyebrow">Aula 2 · ao vivo · introdução a NLP</div>
+<h1>Texto vira<br>número</h1>
+<p class="lead">Um computador não lê. Em uma hora e meia, você vai ver <mark>uma frase virar uma linha de números</mark>, um programa decidir se ela é positiva ou negativa, e entender por que ele acerta e por que ele erra.</p>
+<div class="note">Cada bloco abre com uma pergunta. Pense (ou vote no chat) <em>antes</em> de abrir o painel <strong>Revelar</strong>. A graça está em errar primeiro.</div>
+</div></header>
+
+<!-- BLOCO 1 — forma e sentido -->
+<section class="block" id="s1"><div class="wrap">
+<div class="eyebrow">Bloco 1</div>
+<h2>Parecido para quem?</h2>
+<p>Na aula anterior, uma fruta de 150&nbsp;g e uma de 151&nbsp;g eram vizinhas no gráfico: números perto queriam dizer coisas parecidas. O corretor do celular pensa parecido com as letras: troca "ruim" por "rim" porque só falta uma. Texto funciona assim também?</p>
+<div class="q">Em cada par, as duas frases são parecidas ou diferentes?</div>
+<div class="widget">
+  <div class="pairs" id="pairCards"></div>
+  <div class="out" id="pairOut">Vote nos quatro pares.</div>
+</div>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>Pelas letras, "é ruim" e "não é ruim" são quase gêmeas, e "ótimo" e "excelente" não têm nada em comum. Faz sentido medir assim: é o que o corretor do celular faz.</p>
+<p>Mas o sentido anda para o outro lado. Quatro letras invertem a frase; nove letras diferentes não mudam nada; trocar a ordem das metades mexe em vinte letras e deixa o sentido igual. Nas frutas, perto nos números era perto no sentido. <mark>No texto, parecido na forma não é parecido no sentido.</mark></p>
+<p>Por isso texto é um problema à parte dentro de machine learning, com nome próprio: processamento de linguagem natural, ou NLP. E é a pergunta desta aula: se nem a distância entre as letras serve, como transformar uma frase em números que um computador consiga usar?</p>
+</div></details>
+</div></section>
+
+<!-- BLOCO 2 — a lista de palavras escrita à mão -->
+<section class="block" id="s2"><div class="wrap">
+<div class="eyebrow">Bloco 2</div>
+<h2>A lista de palavras</h2>
+<p>Temos 4000 avaliações de uma loja online, escritas por clientes. As de 1 ou 2 estrelas ganharam o rótulo <em>negativa</em>; as de 4 ou 5, <em>positiva</em>; as de 3 ficaram de fora. Você lê uma crítica de restaurante e sabe em dois segundos se a pessoa gostou. Dá para escrever isso como regra?</p>
+<div class="q">Escreva as palavras que entregam uma avaliação positiva e as que entregam uma negativa. Quantas das 4000 a sua lista vai acertar?</div>
+<div class="widget">
+  <div class="two">
+    <label class="stack">palavras positivas<textarea class="words" id="listPos" spellcheck="false">ótimo, ótima, bom, boa, excelente, recomendo, gostei, adorei, perfeito, lindo, maravilhoso, rápido, rápida</textarea></label>
+    <label class="stack">palavras negativas<textarea class="words" id="listNeg" spellcheck="false">péssimo, péssima, ruim, horrível, defeito, quebrado, quebrou, demorou, problema, errado, devolver, decepcionado</textarea></label>
+  </div>
+  <div class="ctrls"><label>meu palpite de acerto <input type="range" id="listGuess" min="0" max="100" step="5" value="80"> <span class="val" id="vListGuess">80%</span></label><button id="listBtn">Testar nas 4000 avaliações</button></div>
+  <div class="bars" id="listBars"></div>
+  <div class="out" id="listOut">Ajuste as listas, faça seu palpite e aperte o botão.</div>
+  <div class="samples" id="listMute"></div>
+</div>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>Parecia fácil: são poucas as palavras que alguém usa para elogiar ou reclamar.</p>
+<p>A lista de partida acerta 47% das avaliações, erra 6% e <mark>fica sem resposta em 47%</mark>. O problema não é errar: é ficar muda, porque as pessoas escrevem de mil jeitos ("chegou antes do prazo", "não posso avaliar, ainda não recebi"). Em 2002, pesquisadores de Cornell e da IBM fizeram o mesmo teste com críticas de cinema: as listas escritas por pessoas acertaram 58% e 64%.</p>
+<p>É o bloco 1 da aula anterior de novo: regra escrita à mão não escala. Lá, a saída foi dar exemplos com gabarito e deixar o computador preencher a fórmula. Só que um classificador quer uma <strong>tabela de números</strong>: uma linha por exemplo, uma coluna por medida, como o peso e a doçura das frutas. Qual é a coluna de uma frase?</p>
+</div></details>
+</div></section>
+
+<!-- BLOCO 3 — cada palavra, uma coluna -->
+<section class="block" id="s3"><div class="wrap">
+<div class="eyebrow">Bloco 3</div>
+<h2>A tabela</h2>
+<p>A ideia mais simples possível: cada palavra diferente que aparece nas 4000 avaliações vira uma coluna. A linha de uma avaliação tem 1 nas colunas das palavras que ela usa e 0 em todas as outras. Por enquanto, "palavra" é o que fica entre dois espaços.</p>
+<div class="q">Chute: quantas colunas tem essa tabela? E, na linha da frase que você escrever, quantas casas são zero?</div>
+<div class="widget wide">
+  <div class="ctrls"><label>meu palpite de colunas <input type="text" inputmode="numeric" id="tabGuess" value="500" class="short"></label></div>
+  <label class="stack">sua frase<input type="text" id="tabText" value="chegou rápido mas veio quebrado"></label>
+  <div class="ctrls"><button class="ghost" id="tabShuffle">Embaralhar as palavras</button></div>
+  <div class="grid" id="tabGrid"></div>
+  <div class="out" id="tabOut">Carregando as avaliações…</div>
+</div>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>A intuição é que a tabela teria algumas centenas de colunas: ninguém usa tantas palavras assim.</p>
+<p>São <strong>9801 colunas</strong>. Uma avaliação usa, em média, 12,6 palavras diferentes: <mark>99,87% da linha é zero</mark>. E 67% das colunas aparecem numa avaliação só. A ordem também sumiu: "chegou rápido mas veio quebrado" e "veio quebrado mas chegou rápido" são a mesma linha, como a letra de uma música com os versos embaralhados, que continua usando as mesmas palavras.</p>
+<p>A lista de todas as palavras diferentes chama-se <strong>vocabulário</strong>; a linha da frase é um <strong>vetor</strong>; e essa forma de montar a tabela, jogando as palavras num saco e anotando só quais estão lá, é o <strong>saco de palavras</strong> (<em>bag of words</em>). Uma tabela quase só de zeros é <strong>esparsa</strong>. Ficaram três custos na mesa: colunas demais, a maioria com um exemplo só, e a ordem perdida. Os próximos três blocos atacam os dois primeiros; o terceiro volta no bloco 8.</p>
+</div></details>
+</div></section>
+
+<!-- BLOCO 4 — tokenização e normalização -->
+<section class="block" id="s4"><div class="wrap">
+<div class="eyebrow">Bloco 4</div>
+<h2>Pedaços</h2>
+<p>Quando você busca "Ótimo Restaurante" ou "ótimo restaurante", o Google traz a mesma coisa. A nossa tabela não é tão esperta: olhe as colunas dela.</p>
+<div class="q">Em quantas colunas diferentes a palavra "ótimo" se espalhou?</div>
+<div class="widget">
+  <label class="stack">palavra<input type="text" id="tokSearch" value="ótimo"></label>
+  <div class="ctrls">
+    <label><input type="checkbox" id="tokLower"> tudo minúsculo</label>
+    <label><input type="checkbox" id="tokLetters"> só letras</label>
+    <label><input type="checkbox" id="tokAccents"> tirar acentos</label>
+  </div>
+  <div class="chips" id="tokList"></div>
+  <div class="out" id="tokOut">Carregando as avaliações…</div>
+</div>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>Os chutes costumam ser uma ou duas.</p>
+<p>São <strong>19 colunas</strong>: ótimo (122 vezes), Ótimo (101), otimo (28), "ótimo." (15), Otimo (13), "ótimo," (11), ÓTIMO (7)… Cada uma com poucos exemplos, e cada uma aprendida separadamente. <mark>A mesma palavra, espalhada em 19 colunas, divide os exemplos em 19 pedaços.</mark> Com tudo minúsculo e só letras, a tabela cai de 9801 para 5357 colunas (−45%); tirando os acentos, para 5145.</p>
+<p>Cortar o texto em pedaços é a <strong>tokenização</strong>, e cada pedaço é um <strong>token</strong>. Deixar formas diferentes iguais (minúsculas, sem pontuação, sem acento) é a <strong>normalização</strong>. Não é um ritual de limpeza: é juntar numa coluna só os exemplos que estavam espalhados.</p>
+</div></details>
+</div></section>
+
+<!-- BLOCO 5 — stopwords -->
+<section class="block" id="s5"><div class="wrap">
+<div class="eyebrow">Bloco 5</div>
+<h2>Palavras vazias</h2>
+<p>No tempo do telegrama, cada palavra custava, e as pessoas cortavam os artigos: "chego terça trem cinco". Das 52 mil palavras destas avaliações, 39% são palavras assim, que aparecem em todo lugar.</p>
+<div class="q">Toque nas palavras que você jogaria fora, porque não dizem nada sobre gostar ou não gostar.</div>
+<div class="widget">
+  <div class="chips pick" id="stopChips"></div>
+  <div class="ctrls"><button class="ghost" id="stopBtn">Usar a lista pronta</button></div>
+  <div class="samples" id="stopSamples"></div>
+  <div class="out" id="stopOut">Carregando as avaliações…</div>
+</div>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>Jogar fora o que aparece em todo lugar parece economia pura.</p>
+<p>A lista pronta corta 39% do texto, mas só <strong>131 colunas</strong> das 5357: são poucas palavras, repetidas muitas vezes. E nela está <mark>"não"</mark>, a quarta palavra mais comum destas avaliações e uma das que mais dizem: aparece em 1118 das 2000 negativas e em 136 das 2000 positivas. "não gostei" vira "gostei"; "não recomendo" vira "recomendo".</p>
+<p>Essas listas de palavras frequentes se chamam <strong>stopwords</strong>. Foram feitas para busca, onde "o" e "de" atrapalham mesmo. Para sentimento, palavra comum não é palavra vazia. Quanto isso custa em acertos, a gente mede no bloco 8.</p>
+</div></details>
+</div></section>
+
+<!-- BLOCO 6 — stemming e lematização -->
+<section class="block" id="s6"><div class="wrap">
+<div class="eyebrow">Bloco 6</div>
+<h2>Cortar a ponta</h2>
+<p>gostei, gosto, gosta, gostaria, gostoso: cinco colunas para a mesma ideia. Uma saída é cortar a ponta de cada palavra e deixar só o começo, como quem procura a família de uma palavra no dicionário.</p>
+<div class="q">Para cada par, as duas palavras vão cair na mesma coluna depois do corte?</div>
+<div class="widget">
+  <div class="pairs" id="stemCards"></div>
+  <label class="stack">experimente outra palavra<input type="text" id="stemInput" value="maravilhoso"></label>
+  <div class="out" id="stemOut">Carregando as regras de corte…</div>
+</div>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>Parece que cortar a ponta junta as palavras da mesma família, e só elas.</p>
+<p>O corte é uma lista de regras de terminação, não um dicionário: <mark>junta barato com barata (o inseto) e casa com casamento, e separa bom de boa, amei de amo</mark>. Ainda assim, tira 40% das colunas: de 5357 para 3195.</p>
+<p>Isso é <strong>stemming</strong>, e o pedaço que sobra é o <strong>radical</strong>. O stemmer desta página é o RSLP, criado para o português por Viviane Orengo e Christian Huyck em 2001.</p>
+</div></details>
+
+<h3 class="sub">E com dicionário?</h3>
+<div class="q">Qual é a forma de dicionário de "fui"?</div>
+<div class="widget">
+<p class="widget-note">Uma ferramenta que usa dicionário e contexto (spaCy 3.8, modelo <code>pt_core_news_sm</code>) leu a frase: "Eu fui ontem, vou amanhã e iria de novo. Ela foi e era boa. Amei, amo e amava. O produto veio quebrado e as entregas atrasaram." Os resultados foram calculados antes e estão fixos aqui; essa ferramenta não roda nesta página.</p>
+<table id="lemmaTable"><tr><th>palavra</th><th>forma de dicionário</th><th>radical (corte)</th></tr>
+<tr><td>fui</td><td><strong>ser</strong></td><td>fui</td></tr>
+<tr><td>vou</td><td>ir</td><td>vou</td></tr>
+<tr><td>iria</td><td>ir</td><td>iri</td></tr>
+<tr><td>foi</td><td>ser</td><td>foi</td></tr>
+<tr><td>era</td><td>ser</td><td>era</td></tr>
+<tr><td>boa</td><td>bom</td><td>boa</td></tr>
+<tr><td>Amei</td><td><strong>Amei</strong></td><td>ame</td></tr>
+<tr><td>amo</td><td><strong>amo</strong></td><td>amo</td></tr>
+<tr><td>amava</td><td>amar</td><td>am</td></tr>
+<tr><td>quebrado</td><td>quebrar</td><td>quebr</td></tr>
+<tr><td>entregas</td><td>entrega</td><td>entreg</td></tr></table>
+</div>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>"fui" é "ir" em "eu fui ontem" e "ser" em "eu fui feliz". <mark>A forma de dicionário depende da frase</mark>, e a ferramenta escolheu "ser" justo onde era "ir". Ela também deixou "Amei" e "amo" como estavam.</p>
+<p>Achar a forma de dicionário é a <strong>lematização</strong>, e a forma encontrada é o <strong>lema</strong>. Ela junta o que o corte não junta (boa com bom, vou com iria), mas precisa de dicionário e de contexto, custa mais, e ainda erra.</p>
+</div></details>
+</div></section>
+
+<!-- BLOCO 7 — pesos: aprender é contar -->
+<section class="block" id="s7"><div class="wrap">
+<div class="eyebrow">Bloco 7</div>
+<h2>Quanto cada palavra puxa</h2>
+<p>Na aula anterior, o modelo era uma fórmula com espaços em branco, <code>preço = a × área + b</code>, e aprender era preencher os espaços. Aqui a fórmula tem um espaço por coluna: quanto cada palavra puxa a avaliação para positiva ou para negativa. A nota de uma frase é a soma do quanto puxam as palavras dela. Falta saber como preencher 5357 espaços. Na loja de aplicativos do celular, você já faz isso de olho: bate o olho nos comentários e sente para que lado vão.</p>
+<div class="q">Para que lado puxa cada palavra?</div>
+<div class="widget">
+  <div class="pull" id="pullCards"></div>
+</div>
+<div class="widget">
+  <label class="stack">uma frase<input type="text" id="sumText" value="não posso avaliar"></label>
+  <svg id="svgSum" viewBox="0 0 640 200" width="100%" aria-label="Quanto cada palavra da frase puxa para positiva ou negativa"></svg>
+  <div class="out" id="sumOut">Carregando as avaliações…</div>
+  <div class="out" id="accOut"></div>
+</div>
+<details class="code"><summary>A conta, em Python</summary><div class="in">
+<p class="tie">O classificador guarda, para cada classe, em quantas avaliações cada palavra aparece (mais 1, para nenhuma palavra ficar com zero), dividido pelo total. O peso é a diferença entre os logaritmos das duas classes: positivo se a palavra é mais comum nas positivas.</p>
+<pre><code class="py">import re
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
+palavras = lambda t: re.findall(r"[^\W\d_]+", t.lower())
+vetorizador = CountVectorizer(analyzer=palavras, binary=True)   # 1 se a palavra está lá
+X = vetorizador.fit_transform(textos)
+modelo = MultinomialNB().fit(X, rotulos)       # conta as avaliações com cada palavra
+
+pesos = modelo.feature_log_prob_[1] - modelo.feature_log_prob_[0]
+print(round(pesos[vetorizador.vocabulary_["avaliar"]], 2))   # -3.7</code></pre>
+</div></details>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>A gente julga a palavra pelo que ela quer dizer: "avaliar" é neutra, "dentro" também.</p>
+<p>O computador não sabe o que nenhuma palavra quer dizer. Ele só contou onde cada uma apareceu: "avaliar" apareceu em 131 negativas, quase sempre de quem ainda não tinha recebido o produto; "dentro" veio de "chegou dentro do prazo"; "produto" está em tudo e pesa quase zero. <mark>O peso vem de onde a palavra apareceu, não do que ela significa.</mark> A nota da frase é a soma dos pesos, e com isso ele acerta 91,7% das avaliações que não viu no treino.</p>
+<p>Cada um desses números é um <strong>peso</strong>: é o "a" da fórmula da aula anterior, um por coluna. Aprender, aqui, é contar. Esse classificador chama-se <strong>Naive Bayes</strong>. <em>Naive</em>, ingênuo, porque soma as palavras como se cada uma não tivesse nada a ver com as vizinhas, o que já diz onde ele vai errar.</p>
+</div></details>
+</div></section>
+
+<!-- BLOCO 8 — a frase do aluno: o pouso -->
+<section class="block" id="s8"><div class="wrap">
+<div class="eyebrow">Bloco 8</div>
+<h2>Sua frase</h2>
+<p>Todas as peças estão na mesa: cortar em pedaços, deixar tudo minúsculo, talvez tirar as palavras vazias, talvez cortar a ponta, virar uma linha, somar os pesos. Quem já falou com um atendimento automático sabe: às vezes ele entende tudo, às vezes nada.</p>
+<div class="q">Escreva uma avaliação que o classificador erre. Antes de ver a resposta, diga por que você acha que ele vai errar.</div>
+<div class="widget wide">
+  <label class="stack">sua avaliação<input type="text" id="frText" value="chegou rápido mas veio quebrado"></label>
+  <div class="chips" id="frChips"></div>
+  <div class="ctrls">
+    <label><input type="checkbox" id="frStop"> tirar palavras vazias</label>
+    <label><input type="checkbox" id="frStem"> cortar a ponta</label>
+    <label><input type="checkbox" id="frPairs"> pares de palavras</label>
+  </div>
+  <div class="belt" id="frBelt"></div>
+  <svg id="svgFrase" viewBox="0 0 640 220" width="100%" aria-label="Peso de cada coluna da frase e a soma"></svg>
+  <div class="verdict" id="frVerdict"></div>
+  <div class="out" id="frAcc">Carregando as avaliações…</div>
+</div>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>A gente esperava que ele errasse ironia, e ele erra. Mas talvez não esperasse que errasse "não é ruim" ou "sem defeito nenhum", que qualquer pessoa entende.</p>
+<p>Cada erro está escrito nos números. "não" pesa −2,0 e "ruim" pesa −3,5: somados, dão uma frase muito negativa, porque <mark>a soma não sabe que um desfaz o outro</mark>. "a entrega atrasou" sai positiva porque "entrega" veio de "entrega rápida" e "atrasou" quase nunca apareceu; cortar a ponta junta atraso e atrasado, e conserta. O mesmo corte junta "maravilha" com "maravilhoso" e cai na ironia. Tirar as palavras vazias apaga o "não" e inverte "não gostei". E a média quase não se mexe (91,7% sem opções, 91,2% sem as palavras vazias, pior em 16 de 20 sorteios) enquanto frases inteiras trocam de lado.</p>
+<p>Pares de palavras ("não_recomendo") devolvem um pouco da ordem: são os <strong>n-gramas</strong> (<strong>bigramas</strong>, no caso de pares). Acertam mais, 92,7%, melhor em 20 de 20 sorteios, e deixam a tabela cinco vezes maior. Nenhuma técnica de preparo é boa ou ruim em geral: cada uma joga alguma coisa fora, e o que importa é se aquilo que ela jogou fora era o que decidia.</p>
+</div></details>
+</div></section>
+
+<!-- BLOCO 9 — Python de verdade -->
+<section class="block" id="s9"><div class="wrap">
+<div class="eyebrow">Bloco 9</div>
+<h2>O mesmo, em Python</h2>
+<p>As mesmas 4000 avaliações e os mesmos 20 sorteios dos blocos anteriores, agora com as bibliotecas que se usam de verdade: <code>nltk</code> e <code>scikit-learn</code>. As avaliações já estão carregadas nas variáveis <code>textos</code>, <code>rotulos</code> e <code>divisoes</code>.</p>
+<div class="q">Encontre, no código, a linha de cada bloco da aula. Depois troque a frase e rode de novo.</div>
+<div class="widget">
+<div class="ctrls"><span id="pyStatus" class="status">Na primeira vez, o navegador baixa o Python, o scikit-learn e o nltk (cerca de 25&nbsp;MB). Leva alguns segundos.</span></div>
+<textarea id="py1" spellcheck="false">import re
+from nltk.stem import RSLPStemmer
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
+radical = RSLPStemmer().stem
+def preparar(texto):
+    palavras = re.findall(r"[^\W\d_]+", texto.lower())   # bloco 4: minúsculas, só letras
+    return [radical(p) for p in palavras]                 # bloco 6: o radical
+
+vetorizador = CountVectorizer(analyzer=preparar, binary=True)   # bloco 3: uma coluna por palavra
+X = vetorizador.fit_transform(textos)
+modelo = MultinomialNB().fit(X, rotulos)                        # bloco 7: aprender é contar
+
+frase = "a entrega atrasou"
+pesos = modelo.feature_log_prob_[1] - modelo.feature_log_prob_[0]
+colunas = vetorizador.vocabulary_
+for palavra in preparar(frase):
+    print(palavra, round(pesos[colunas[palavra]], 2) if palavra in colunas else "nunca vista")
+print(X.shape, "->", ["negativa", "positiva"][modelo.predict(vetorizador.transform([frase]))[0]])</textarea>
+<div class="ctrls" style="margin-top:12px"><button id="run1">Rodar Python</button></div>
+<div class="console" id="pyOut1"></div>
+</div>
+<div class="widget">
+<textarea id="py2" spellcheck="false">from nltk.corpus import stopwords
+vazias = set(stopwords.words("portuguese"))
+
+def nota_media(preparo):
+    docs = [preparo(t) for t in textos]
+    notas = []
+    for divisao in divisoes:                                  # os mesmos 20 sorteios dos widgets
+        treino = [i for i, d in enumerate(divisao) if d == "0"]
+        teste = [i for i, d in enumerate(divisao) if d == "1"]
+        vet = CountVectorizer(analyzer=lambda d: d, binary=True)
+        m = MultinomialNB().fit(vet.fit_transform([docs[i] for i in treino]), [rotulos[i] for i in treino])
+        notas.append(m.score(vet.transform([docs[i] for i in teste]), [rotulos[i] for i in teste]))
+    return round(sum(notas) / len(notas), 3)
+
+so_letras = lambda t: re.findall(r"[^\W\d_]+", t.lower())
+print("só letras:        ", nota_media(so_letras))
+print("sem stopwords:    ", nota_media(lambda t: [p for p in so_letras(t) if p not in vazias]))
+print("com radical:      ", nota_media(preparar))</textarea>
+<div class="ctrls" style="margin-top:12px"><button id="run2">Rodar Python</button><span class="status">Rode a primeira caixa antes: esta usa o que ela definiu.</span></div>
+<div class="console" id="pyOut2"></div>
+</div>
+<details class="reveal"><summary>Revelar</summary><div class="in">
+<p>O mesmo classificador, com as bibliotecas de verdade. O <code>CountVectorizer</code> é a tabela do bloco 3, e <code>binary=True</code> quer dizer "1 se a palavra está lá". O <code>RSLPStemmer</code> é o corte do bloco 6. O <code>MultinomialNB</code> é a contagem do bloco 7. Os 20 sorteios são os mesmos dos widgets, por isso os números batem: 0,917, 0,912 e 0,919. <mark>Nada do que você viu era de brinquedo.</mark></p>
+</div></details>
+</div></section>
+
+<!-- BLOCO 10 — mapa -->
+<section class="block" id="s10"><div class="wrap">
+<div class="eyebrow">Bloco 10</div>
+<h2>O mapa do que você fez hoje</h2>
+<table><tr><th>Pergunta que fizemos</th><th>Ideia</th><th>Nome técnico</th></tr>
+<tr><td>Essas frases são parecidas?</td><td>forma não é sentido</td><td>NLP</td></tr>
+<tr><td>Dá para listar as palavras?</td><td>a lista fica muda</td><td>classificador de sentimento</td></tr>
+<tr><td>Como texto vira tabela?</td><td>uma coluna por palavra, quase tudo zero, sem ordem</td><td>vocabulário, saco de palavras, esparsa</td></tr>
+<tr><td>Por que tantas colunas?</td><td>"ótimo" espalhado em 19</td><td>tokenização, normalização</td></tr>
+<tr><td>Jogar fora as palavras comuns?</td><td>a lista apaga o "não"</td><td>stopwords</td></tr>
+<tr><td>Juntar a família da palavra?</td><td>o corte junta demais e de menos</td><td>stemming, lematização</td></tr>
+<tr><td>De onde vêm os pesos?</td><td>aprender é contar</td><td>peso, Naive Bayes</td></tr>
+<tr><td>Por que ele erra?</td><td>a soma não sabe negar</td><td>n-gramas</td></tr></table>
+<p>Três perguntas ficaram abertas, e são o caminho das próximas aulas:</p>
+<p>1. "ótimo" e "excelente" são colunas sem nada em comum. E se palavras de sentido parecido ficassem perto uma da outra, como as frutas no gráfico? → <em>embeddings</em><br>2. "não é ruim" erra porque a soma ignora a ordem. E se o modelo lesse cada palavra junto com as outras da frase? → <em>Transformers</em><br>3. Os pesos vêm de 4000 avaliações de uma loja, em português. "avaliar" é negativa aqui. Em críticas de cinema, em outra língua ou numa mistura de duas, o que muda? → <em>domínio e modelos multilíngues</em></p>
+<h3 style="margin-top:34px">Teste você mesmo</h3>
+<p>Oito perguntas sobre tudo o que passou. Responda antes de fechar a aba.</p>
+<div class="widget"><div class="quiz" id="quiz10"></div><div class="out" id="quiz10Out"></div></div>
+</div></section>
+
+<!-- BLOCO 11 — referências -->
+<section class="block" id="s11"><div class="wrap">
+<div class="eyebrow">Bloco 11</div>
+<h2>Para continuar</h2>
+<p>Tudo o que está aqui é gratuito e aberto. Os livros estão em inglês.</p>
+<h3 class="refgroup">Livros e cursos</h3>
+<ul class="refs">
+<li><a href="https://web.stanford.edu/~jurafsky/slp3/B.pdf" target="_blank" rel="noopener">Jurafsky &amp; Martin, <em>Speech and Language Processing</em>, apêndice B</a>
+<span class="why">O classificador desta aula, contado passo a passo, com as melhorias para sentimento (presença em vez de contagem, o truque para a negação).</span></li>
+<li><a href="https://web.stanford.edu/~jurafsky/slp3/2.pdf" target="_blank" rel="noopener">Jurafsky &amp; Martin, capítulo 2, "Words and Tokens"</a>
+<span class="why">Tokenização a sério: o que é uma palavra, e por que os modelos de hoje cortam o texto em pedaços menores que ela.</span></li>
+<li><a href="https://web.stanford.edu/class/cs224n/" target="_blank" rel="noopener">Stanford CS224n, aula 2, "Word Vectors"</a>
+<span class="why">O próximo passo: palavras como pontos no espaço, em que "hotel" e "motel" ficam perto.</span></li>
+<li><a href="https://www.nltk.org/book/ch03.html" target="_blank" rel="noopener">NLTK Book, capítulo 3, seção 3.6 "Normalizing Text"</a>
+<span class="why">Stemmers e lematizadores lado a lado, com código.</span></li>
+</ul>
+<h3 class="refgroup">Documentação e artigos</h3>
+<ul class="refs">
+<li><a href="https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction" target="_blank" rel="noopener">scikit-learn, "Text feature extraction"</a>
+<span class="why">A tabela do bloco 3, a esparsidade e o aviso sobre listas de stopwords, na documentação oficial.</span></li>
+<li><a href="https://aclanthology.org/W02-1011/" target="_blank" rel="noopener">Pang, Lee &amp; Vaithyanathan (2002), "Thumbs up?"</a>
+<span class="why">O artigo do experimento da lista de palavras do bloco 2, com críticas de cinema.</span></li>
+<li><a href="https://www.nltk.org/howto/portuguese_en.html" target="_blank" rel="noopener">NLTK, "Portuguese HOWTO"</a>
+<span class="why">O RSLP e a lista de stopwords em português, com exemplos para rodar.</span></li>
+</ul>
+<h3 class="refgroup">Dados desta aula</h3>
+<ul class="refs">
+<li><a href="https://github.com/americanas-tech/b2w-reviews01" target="_blank" rel="noopener">B2W-Reviews01 (B2W Digital)</a>
+<span class="why">De onde vêm as 4000 avaliações: Real, Oshiro &amp; Mafra (2019). Licença <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>; a amostra usada nesta página segue a mesma licença.</span></li>
+<li><a href="https://www.inf.ufrgs.br/~viviane/rslp/index.htm" target="_blank" rel="noopener">RSLP, Orengo &amp; Huyck (2001)</a>
+<span class="why">O stemmer do bloco 6. As regras de corte e a lista de stopwords vêm do <a href="https://www.nltk.org/nltk_data/" target="_blank" rel="noopener">NLTK Data</a>.</span></li>
+</ul>
+</div></section>
+
+<footer>Texto vira número · aula 2 · o Python desta página roda no seu navegador via Pyodide.</footer>
+
+<!-- Todo texto que o JS escreve na tela mora aqui. A versão en tem exatamente as mesmas chaves. -->
+<script>
+window.STR = {
+  locale: "pt-BR",
+  decimalComma: true,
+  // dados desta língua (caminhos relativos à página)
+  dadosUrl: "assets/avaliacoes-pt.json",
+  stopUrl: "assets/stopwords-pt.json",
+  rslpUrl: "assets/rslp.json",
+  stemmer: "rslp",
+  dataError: "Não foi possível carregar as avaliações. Recarregue a página.",
+  labelPos: "positiva",
+  labelNeg: "negativa",
+
+  // bloco 1 — pares: [frase A, frase B, mesmo sentido?]
+  pairs: [
+    ["é ruim", "não é ruim", false],
+    ["ótimo", "excelente", true],
+    ["ótimo", "otimo", true],
+    ["chegou rápido mas veio quebrado", "veio quebrado mas chegou rápido", true]
+  ],
+  pairSame: "parecidas",
+  pairDiff: "diferentes",
+  pairMeter: "letras que mudam: {n} de {m}",
+  pairMeanSame: "mesmo sentido",
+  pairMeanOpp: "sentido oposto",
+  pairOutMore: "Faltam {n} pares.",
+  pairOutDone: "Pronto. Compare o medidor de letras com o sentido de cada par.",
+
+  // bloco 2 — lista à mão
+  listRight: "certas",
+  listWrong: "erradas",
+  listMute: "sem resposta",
+  listGuessFmt: "{v}%",
+  listOut: "Sua lista acertou {certas}, errou {erradas} e ficou sem resposta em {mudas}. Seu palpite era {palpite} de acerto.",
+  listMuteTitle: "Três avaliações em que a lista ficou sem resposta:",
+  listEmpty: "As duas listas estão vazias: a lista fica sem resposta em tudo.",
+
+  // bloco 3 — a tabela
+  tabYou: "sua frase",
+  tabReview: "avaliação {n}",
+  tabMore: "+ {n} colunas, todas 0",
+  tabPick: ["chegou", "rápido", "quebrado"],
+  tabOut: "{cols} colunas · sua frase tem {uns} uns e {zeros} zeros: {pct} da linha é zero.",
+  tabGuessOut: " Seu palpite era {g}.",
+  tabNew: " {n} palavra(s) da sua frase não aparecem em nenhuma avaliação e não têm coluna.",
+  tabSame: "Mesmas palavras, outra ordem: a linha é idêntica.",
+  tabEmpty: "Escreva uma frase.",
+
+  // bloco 4 — pedaços
+  tokOut: "{cols} colunas na tabela · \"{q}\" está em {k} coluna(s) diferentes.",
+  tokItem: "{w} · {n}×",
+  tokNone: "Nenhuma coluna com essa palavra.",
+
+  // bloco 5 — palavras vazias
+  stopOut: "Cortado: {pct} do texto e {cols} colunas (de {total}).",
+  stopNone: "Nada cortado ainda.",
+  stopSampleWords: ["não", "nem", "muito"],
+  stopExtra: ["não gostei", "não recomendo"],
+
+  // bloco 6 — cortar a ponta: [palavra A, palavra B]
+  stemPairs: [["gostei", "gostaria"], ["barato", "barata"], ["casa", "casamento"], ["livro", "livre"], ["bom", "boa"], ["amei", "amo"], ["demora", "demorou"], ["fui", "ir"]],
+  stemSame: "mesma coluna",
+  stemDiff: "colunas diferentes",
+  stemOut: "{w} → {r} · a tabela inteira: {antes} colunas → {depois} ({pct})",
+  stemEmpty: "Digite uma palavra. A tabela inteira: {antes} colunas → {depois} ({pct}).",
+
+  // bloco 7 — pesos
+  pullWords: ["entrega", "dentro", "avaliar", "produto", "ainda", "top"],
+  pullNeg: "← negativa",
+  pullNeu: "neutra",
+  pullPos: "positiva →",
+  pullCounts: "em {p} positivas · em {n} negativas",
+  pullWeight: "peso {w}",
+  sumOut: "soma {s} → {label}",
+  sumUnknown: "nunca vista",
+  sumEmpty: "Escreva uma frase.",
+  accOut: "Acerto nas avaliações de teste: {acc} (média de 20 sorteios de treino e teste).",
+
+  // bloco 8 — sua frase
+  frChips: ["não é ruim", "sem defeito nenhum", "não tenho do que reclamar", "a entrega atrasou", "que maravilha, esperei dois meses pela entrega", "não gostei", "não recomendo"],
+  beltTokens: "pedaços",
+  beltPrep: "depois do preparo",
+  beltRow: "a linha",
+  beltRowOut: "{uns} colunas com 1 · {zeros} com 0",
+  frVerdict: "{label} · soma {s}",
+  frAcc: "Acerto, média de 20 sorteios: {acc} com estas opções · {base} sem opções · {cmp}.",
+  frBetter: "melhor em {n} de 20",
+  frWorse: "pior em {n} de 20",
+  frEqual: "igual em todos",
+  frBase: "são as opções de partida",
+  frCalc: "Calculando o acerto…",
+  frEmpty: "Escreva uma avaliação.",
+
+  // bloco 9 — Python. O core.js lê pyDownload, pySklearn, pyReady e pyNetError.
+  pyDownload: "Baixando o Python…",
+  pySklearn: "Baixando o scikit-learn…",
+  pyReady: "Pronto. Rode quantas vezes quiser.",
+  pyNetError: "Não foi possível baixar o Python. Confira a conexão e tente de novo.",
+  pyNltk: "Baixando o nltk, as regras do RSLP e as stopwords…",
+  pyData: "Carregando as avaliações no Python…",
+  pyCodeError: "Deu erro no código (veja abaixo). Corrija e rode de novo.",
+  pyVars: ["textos", "rotulos", "divisoes"],
+
+  // bloco 10 — quiz: [pergunta, [opções], índice da certa]
+  quiz10Score: "{right} de {total}. ",
+  quiz10Perfect: "Você amarrou a aula inteira.",
+  quiz10Good: "Boa. Reabra o Revelar das que errou.",
+  quiz10Weak: "Vale voltar aos blocos 3, 7 e 8.",
+  quiz10: [
+    ["\"Ótimo!\" e \"ótimo\", no saco de palavras sem preparo, são…", ["a mesma coluna", "colunas diferentes", "a mesma linha"], 1],
+    ["Por que tirar stopwords atrapalha na análise de sentimentos?", ["apaga o \"não\"", "aumenta a tabela", "deixa o treino lento"], 0],
+    ["Cortando a ponta, \"barato\" e \"barata\" (o inseto)…", ["viram a mesma coluna", "continuam separadas", "são apagadas"], 0],
+    ["De onde vem o peso de uma palavra?", ["de um dicionário de sentimentos", "de quantas avaliações positivas e negativas a usam", "do tamanho da palavra"], 1],
+    ["\"chegou rápido mas veio quebrado\" e a mesma frase de trás para a frente…", ["viram a mesma linha", "viram linhas diferentes"], 0],
+    ["Uma palavra que nunca apareceu no treino pesa…", ["muito para positiva", "zero", "muito para negativa"], 1],
+    ["Pares de palavras acertam mais. Qual é o custo?", ["nenhum", "a tabela fica várias vezes maior", "o \"não\" some"], 1],
+    ["A lista de palavras escrita à mão errou pouco, mas…", ["ficou sem resposta em quase metade", "acertou tudo", "só funciona em inglês"], 0]
+  ]
+};
+</script>
+<script src="../../assets/core.js"></script>
+<script src="assets/aula.js"></script>
+</body>
+</html>

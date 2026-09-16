@@ -19,6 +19,26 @@
         "resumo": "Ninety minutes to understand what a computer actually does when it \"learns\".",
         "url": "aulas/ml-intro/en/"
       }
+    },
+    {
+      "slug": "nlp-intro",
+      "ordem": 2,
+      "status": "rascunho",
+      "duracao_min": 90,
+      "nivel": "iniciante",
+      "tags": [],
+      "atualizada_em": "2026-09-16",
+      "capa": { "emoji": "📘", "cor": "grape" },
+      "pt-BR": {
+        "titulo": "Texto vira número",
+        "resumo": "Como um computador lê uma avaliação e decide se ela é positiva, e por que ele erra em \"não é ruim\".",
+        "url": "aulas/nlp-intro/"
+      },
+      "en": {
+        "titulo": "Texto vira número",
+        "resumo": "Como um computador lê uma avaliação e decide se ela é positiva, e por que ele erra em \"não é ruim\".",
+        "url": "aulas/nlp-intro/en/"
+      }
     }
   ]
 }
