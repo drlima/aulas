@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Texto vira número — an interactive class</title>
-<meta name="description" content="Como um computador lê uma avaliação e decide se ela é positiva, e por que ele erra em &quot;não é ruim&quot;.">
+<title>Text becomes numbers — an interactive class</title>
+<meta name="description" content="How a computer reads a review and decides whether it is positive, and why it gets &quot;not bad&quot; wrong.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Texto vira número">
-<meta property="og:description" content="Como um computador lê uma avaliação e decide se ela é positiva, e por que ele erra em &quot;não é ruim&quot;.">
+<meta property="og:title" content="Text becomes numbers">
+<meta property="og:description" content="How a computer reads a review and decides whether it is positive, and why it gets &quot;not bad&quot; wrong.">
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="pt_BR">
 <meta property="og:url" content="https://drlima.github.io/aulas/aulas/nlp-intro/en/">
@@ -23,186 +23,454 @@
 </head>
 <body>
 
-<!-- Site bar: back to the hub, one link per block (core.js highlights the visible
-     block) and the language switcher. One <a href="#sN"> for each section. -->
 <nav class="map" aria-label="Class map"><div class="wrap">
-<a class="home" href="../../../en/" hreflang="en">← All lessons</a><a href="#s1">1 Drawing</a><a href="#s2">2 Two options</a><a href="#s3">3 Many options</a><a href="#s4">4 Python</a><a href="#s5">5 Further reading</a><span class="lang"><a href="../" hreflang="pt-BR">PT</a> · <strong>EN</strong></span>
+<a class="home" href="../../../en/" hreflang="en">← All lessons</a><a href="#s1">1 Similar</a><a href="#s2">2 The list</a><a href="#s3">3 The table</a><a href="#s4">4 Pieces</a><a href="#s5">5 Empty words</a><a href="#s6">6 The ending</a><a href="#s7">7 How hard</a><a href="#s8">8 Your sentence</a><a href="#s9">9 Python</a><a href="#s10">10 Map</a><a href="#s11">11 Further reading</a><span class="lang"><a href="../" hreflang="pt-BR">PT</a> · <strong>EN</strong></span>
 </div></nav>
 
 <header class="hero"><div class="wrap">
-<div class="eyebrow">Live class · 90 min</div>
-<h1>Texto vira número</h1>
-<p class="lead">Como um computador lê uma avaliação e decide se ela é positiva, e por que ele erra em &quot;não é ruim&quot;.</p>
-<div class="note">Every block opens with a question. Think about it (or vote in the chat) <em>before</em> you open the <strong>Reveal</strong> panel. Getting it wrong first is the whole point.</div>
+<div class="eyebrow">Lesson 2 · live · intro to NLP</div>
+<h1>Text becomes<br>numbers</h1>
+<p class="lead">A computer cannot read. In ninety minutes, you will watch <mark>a sentence become a row of numbers</mark>, a program decide whether it is positive or negative, and understand why it gets it right and why it gets it wrong.</p>
+<div class="note">Every block opens with a question. Think (or vote in the chat) <em>before</em> you open the <strong>Reveal</strong> panel. The fun is in getting it wrong first.</div>
 </div></header>
 
-<!-- ===================================================================
-     Every block: question (div.q) → widget (div.widget) → Reveal.
-     The student thinks, pokes, gets it wrong, and only then opens the answer.
-     =================================================================== -->
-
-<!-- BLOCK 1 — widget with an SVG drawn by aula.js (scale + axes from core). -->
+<!-- BLOCK 1 — form and meaning -->
 <section class="block" id="s1"><div class="wrap">
 <div class="eyebrow">Block 1</div>
-<h2>A drawing that answers back</h2>
-<p>Block context: what the student needs to know to understand the question.</p>
-<div class="q">Which slope leaves half of the points on each side of the line?</div>
+<h2>Similar to whom?</h2>
+<p>In the previous class, a 150&nbsp;g fruit and a 151&nbsp;g fruit were neighbours on the chart: numbers that were close meant similar things. Your phone's autocorrect thinks the same way about letters: it turns "bad" into "bag" because only one letter changes. Does text work like that?</p>
+<div class="q">In each pair, are the two phrases similar or different?</div>
 <div class="widget">
-  <div class="ctrls"><label>slope <input type="range" id="slDemo" min="0" max="2" step="0.1" value="0.5"> <span class="val" id="vDemo">0.5</span></label></div>
-  <svg id="svgDemo" viewBox="0 0 640 360" width="100%" aria-label="Points and a line"></svg>
-  <div class="out" id="demoOut"></div>
+  <div class="pairs" id="pairCards"></div>
+  <div class="out" id="pairOut">Vote on all four pairs.</div>
 </div>
 <details class="reveal"><summary>Reveal</summary><div class="in">
-<p>The punch of the block: the sentence the student takes home. <mark>Highlight the central idea.</mark></p>
+<p>By letters, "bad" and "not bad" are almost twins, and "great" and "excellent" have little in common. It makes sense to measure that way: it is what autocorrect does.</p>
+<p>But meaning goes the other way. Four letters flip the phrase; seven different letters change nothing; swapping the two halves of a sentence moves twenty-six letters and keeps the meaning. With the fruit, close in numbers was close in meaning. <mark>In text, similar in form is not similar in meaning.</mark></p>
+<p>That is why text is a problem of its own inside machine learning, with its own name: natural language processing, or NLP. And it is the question of this class: if not even the distance between letters works, how do we turn a sentence into numbers a computer can use?</p>
 </div></details>
 </div></section>
 
-<!-- BLOCK 2 — two fixed options quiz (quizPair). The items live in STR.quiz. -->
+<!-- BLOCK 2 — the hand-written word list -->
 <section class="block" id="s2"><div class="wrap">
 <div class="eyebrow">Block 2</div>
-<h2>Two options</h2>
-<div class="q">Is each item below type A or type B?</div>
-<div class="widget"><div class="quiz" id="quiz"></div><div class="out" id="quizOut"></div></div>
+<h2>The word list</h2>
+<p>We have 1,984 sentences taken from online reviews of products and restaurants, each already labelled <em>positive</em> or <em>negative</em>. You read a restaurant review and know in two seconds whether the person liked it. Can you write that down as a rule?</p>
+<div class="q">Write the words that give away a positive review and the ones that give away a negative one. How many of the 1,984 will your list get right?</div>
+<div class="widget">
+  <div class="two">
+    <label class="stack">positive words<textarea class="words" id="listPos" spellcheck="false">good, great, excellent, love, recommend, perfect, nice, best, amazing, happy, awesome, delicious</textarea></label>
+    <label class="stack">negative words<textarea class="words" id="listNeg" spellcheck="false">bad, terrible, worst, poor, hate, broken, awful, disappointed, waste, horrible, disgusting, slow</textarea></label>
+  </div>
+  <div class="ctrls"><label>my guess <input type="range" id="listGuess" min="0" max="100" step="5" value="80"> <span class="val" id="vListGuess">80%</span></label><button id="listBtn">Test on the 1,984 reviews</button></div>
+  <div class="bars" id="listBars"></div>
+  <div class="out" id="listOut">Edit the lists, make your guess and press the button.</div>
+  <div class="samples" id="listMute"></div>
+</div>
 <details class="reveal"><summary>Reveal</summary><div class="in">
-<p>The criterion that separates A from B, in one sentence.</p>
+<p>It looked easy: there are only so many words people use to praise or to complain.</p>
+<p>The starting list gets 34% of the reviews right, gets under 4% wrong, and <mark>has no answer for 62%</mark>. The problem is not getting things wrong: it is staying silent, because people write in a thousand ways ("the food came out in five minutes", "waited an hour for a table"). In 2002, researchers from Cornell and IBM ran the same test on movie reviews: word lists written by people got 58% and 64% right.</p>
+<p>It is block 1 of the previous class all over again: hand-written rules do not scale. There, the way out was to give examples with answers and let the computer fill in the formula. But a classifier wants a <strong>table of numbers</strong>: one row per example, one column per measurement, as with the fruit in the previous class. What is the column of a sentence?</p>
 </div></details>
 </div></section>
 
-<!-- BLOCK 3 — N options quiz (quizOptions) and the "Same thing, in Python" panel.
-     The panel is an appendix: it comes after the widget and never replaces it. -->
+<!-- BLOCK 3 — one column per word -->
 <section class="block" id="s3"><div class="wrap">
 <div class="eyebrow">Block 3</div>
-<h2>Many options</h2>
-<div class="q">Pick the best answer to each question.</div>
-<div class="widget"><div class="quiz" id="quiz3"></div><div class="out" id="quiz3Out"></div></div>
-<details class="code"><summary>Same thing, in Python</summary><div class="in">
-<p class="tie">One sentence tying the widget to the code: what in the code matches what the student did.</p>
-<pre><code class="py">answers = ["a", "b", "c"]     # what the student picked
-correct = ["a", "c", "c"]     # the answer key
-
-hits = sum(a == c for a, c in zip(answers, correct))
-print(hits, "of", len(correct))</code></pre>
-</div></details>
+<h2>The table</h2>
+<p>The simplest idea possible: every different word that shows up in the 1,984 reviews becomes a column. A review's row has a 1 in the columns of the words it uses and a 0 in all the others. For now, a "word" is whatever sits between two spaces.</p>
+<div class="q">Guess: how many columns does this table have? And in the row of the sentence you write, how many cells are zero?</div>
+<div class="widget wide">
+  <div class="ctrls"><label>my guess of columns <input type="text" inputmode="numeric" id="tabGuess" value="500" class="short"></label></div>
+  <label class="stack">your sentence<input type="text" id="tabText" value="fast delivery but it arrived broken"></label>
+  <div class="ctrls"><button class="ghost" id="tabShuffle">Shuffle the words</button></div>
+  <div class="grid" id="tabGrid"></div>
+  <div class="out" id="tabOut">Loading the reviews…</div>
+</div>
 <details class="reveal"><summary>Reveal</summary><div class="in">
-<p>What the questions had in common.</p>
+<p>The intuition is that the table would have a few hundred columns: nobody uses that many words.</p>
+<p>It has <strong>4,977 columns</strong>. A review uses, on average, 10.1 different words: <mark>99.80% of the row is zero</mark>. And 66% of the columns show up in a single review. The order is gone too: "fast delivery but it arrived broken" and "it arrived broken but fast delivery" are the same row, like the lyrics of a song with the lines shuffled, still using the same words.</p>
+<p>The list of all the different words is called the <strong>vocabulary</strong>; the sentence's row is a <strong>vector</strong>; and this way of building the table, throwing the words in a bag and writing down only which ones are there, is the <strong>bag of words</strong>. A table made almost entirely of zeros is <strong>sparse</strong>. Three costs are on the table: too many columns, most of them with a single example, and lost order. The next three blocks go after the first two; the third comes back in block 8.</p>
 </div></details>
 </div></section>
 
-<!-- APAGUE ESTE BLOCO INTEIRO SE A AULA NÃO USA PYTHON (e também o trecho do bloco 4 no aula.js, o link #s4 da nav e as chaves py* e viz* do STR). -->
-<!-- BLOCK 4 — Python in the browser. core.js downloads Pyodide (getPy) and matplotlib
-     (getViz) only when the student presses the button; aula.js wires the ids below. -->
+<!-- BLOCK 4 — tokenization and normalization -->
 <section class="block" id="s4"><div class="wrap">
 <div class="eyebrow">Block 4</div>
-<h2>The same, in real Python</h2>
-<div class="q">What do you expect the code to print?</div>
+<h2>Pieces</h2>
+<p>When you search for "Great Restaurant" or "great restaurant", Google gives you the same results. Our table is not that smart: look at its columns.</p>
+<div class="q">How many different columns did the word "great" get spread across?</div>
 <div class="widget">
-<textarea id="py" spellcheck="false">from sklearn.linear_model import LinearRegression
-
-X = [[1], [2], [3], [4]]      # one measurement per example
-y = [2, 4, 6, 8]              # the answer for each example
-
-model = LinearRegression().fit(X, y)
-print("For 5, the model predicts:", round(model.predict([[5]])[0], 2))</textarea>
-<div class="ctrls" style="margin-top:12px"><button id="runBtn">Run Python</button><span id="pyStatus" style="font-weight:400;color:var(--ink-2)">The first time, your browser downloads Python (~20 MB). It takes a few seconds.</span></div>
-<div class="console" id="pyOut"></div>
-</div>
-
-<div class="widget">
-<div class="ctrls"><button id="vizBtn">Load the figure</button><span id="vizNote" style="font-weight:400;color:var(--ink-2);font-family:var(--body);font-size:16px">Downloads matplotlib, about 10&nbsp;MB more.</span></div>
-<div id="vizWrap" hidden>
-  <div class="ctrls"><label>points <input type="range" id="slFig" min="10" max="200" step="10" value="60"> <span class="val" id="vFig">60</span></label></div>
-  <!-- drawFig("figDemo", "imgDemo", code, {n}) runs the code below and shows the PNG here. -->
-  <div class="fig" id="figDemo"><img id="imgDemo" alt="Points drawn by matplotlib"></div>
-  <details class="code"><summary>The code that drew this figure</summary><div class="in">
-  <p class="tie">The last line returns the figure as text; that is how it leaves Python and shows up on the page.</p>
-  <pre><code class="py" id="codeDemo">import matplotlib
-matplotlib.use("Agg")          # draw in memory, not in a window
-import io, base64
-import numpy as np
-import matplotlib.pyplot as plt
-
-rng = np.random.default_rng(7)
-x = rng.uniform(0, 10, n)      # n comes from the slider above
-y = 0.8 * x + rng.normal(0, 1.2, n)
-
-fig, ax = plt.subplots(figsize=(6.4, 4))
-ax.scatter(x, y, c="#7B61FF", s=36, edgecolor="white")
-ax.set_xlabel("measurement")
-ax.set_ylabel("answer")
-
-buf = io.BytesIO()
-fig.savefig(buf, format="png", dpi=120, bbox_inches="tight")
-plt.close(fig)
-base64.b64encode(buf.getvalue()).decode()</code></pre>
-  </div></details>
-</div>
+  <label class="stack">word<input type="text" id="tokSearch" value="great"></label>
+  <div class="ctrls">
+    <label><input type="checkbox" id="tokLower"> all lowercase</label>
+    <label><input type="checkbox" id="tokLetters"> letters only</label>
+    <label><input type="checkbox" id="tokAccents"> remove accents</label>
+  </div>
+  <div class="chips" id="tokList"></div>
+  <div class="out" id="tokOut">Loading the reviews…</div>
 </div>
 <details class="reveal"><summary>Reveal</summary><div class="in">
-<p>What the student should have noticed in the output.</p>
+<p>The usual guesses are one or two.</p>
+<p>It is <strong>11 columns</strong>: great (69 times), Great (46), "great." (22), "great," (11), "great!" (6), GREAT (1)… Each with few examples, and each learned separately. <mark>The same word, spread over 11 columns, splits its examples into 11 pieces.</mark> With everything lowercase and letters only, the table drops from 4,977 to 3,187 columns (−36%); removing accents barely matters in English: 3,185.</p>
+<p>Cutting text into pieces is <strong>tokenization</strong>, and each piece is a <strong>token</strong>. Making different forms the same (lowercase, no punctuation, no accents) is <strong>normalization</strong>. It is not a cleaning ritual: it gathers into one column the examples that were scattered.</p>
 </div></details>
 </div></section>
 
-<!-- FINAL BLOCK — further reading. Only checked links, each with the why. -->
+<!-- BLOCK 5 — stopwords -->
 <section class="block" id="s5"><div class="wrap">
 <div class="eyebrow">Block 5</div>
-<h2>Keep going</h2>
+<h2>Empty words</h2>
+<p>Back in the days of the telegram, every word cost money, and people cut the little ones: "arriving tuesday train five". Of the 21,000 words in these reviews, 49% are words like that, the kind that show up everywhere.</p>
+<div class="q">Tap the words you would throw away because they say nothing about liking or disliking.</div>
+<div class="widget">
+  <div class="chips pick" id="stopChips"></div>
+  <div class="ctrls"><button class="ghost" id="stopBtn">Use the ready-made list</button></div>
+  <div class="samples" id="stopSamples"></div>
+  <div class="out" id="stopOut">Loading the reviews…</div>
+</div>
+<details class="reveal"><summary>Reveal</summary><div class="in">
+<p>Throwing away what shows up everywhere looks like pure savings.</p>
+<p>The ready-made list cuts 49% of the text, but only <strong>150 columns</strong> out of 3,187: a few words, repeated many times. And the list includes <mark>"not"</mark>, the eleventh most common word in these reviews and one of the most telling: it shows up in 189 of the 992 negative reviews and in 32 of the 992 positive ones. "i did not like it" becomes "like"; "i do not recommend it" becomes "recommend".</p>
+<p>These lists of frequent words are called <strong>stopwords</strong>. They were made for search, where "the" and "of" really do get in the way. For sentiment, a common word is not an empty word. How much this costs in accuracy, we measure in block 8.</p>
+</div></details>
+</div></section>
+
+<!-- BLOCK 6 — stemming and lemmatization -->
+<section class="block" id="s6"><div class="wrap">
+<div class="eyebrow">Block 6</div>
+<h2>Cutting the ending</h2>
+<p>love, loved, loves, loving: four columns for the same idea. One way out is to cut off the end of each word and keep only the beginning, like looking up a word's family in the dictionary.</p>
+<div class="q">For each pair, will the two words land in the same column after the cut?</div>
+<div class="widget">
+  <div class="pairs" id="stemCards"></div>
+  <label class="stack">try another word<input type="text" id="stemInput" value="happiness"></label>
+  <div class="out" id="stemOut">Loading the cutting rules…</div>
+</div>
+<details class="reveal"><summary>Reveal</summary><div class="in">
+<p>It looks as if cutting the ending gathers the words of the same family, and only those.</p>
+<p>The cut is a list of rules about endings, not a dictionary: <mark>it joins liked with likely, general with generous and news with new, and keeps good apart from better and went apart from go</mark>. Even so, it removes 20% of the columns: from 3,187 to 2,554.</p>
+<p>This is <strong>stemming</strong>, and the piece that is left is the <strong>stem</strong>. The stemmer on this page is Porter's, published by Martin Porter in 1980, in its original version.</p>
+</div></details>
+
+<h3 class="sub">What about a dictionary?</h3>
+<div class="q">What is the dictionary form of "better"?</div>
+<div class="widget">
+<p class="widget-note">A tool that uses a dictionary and context (spaCy 3.8, model <code>en_core_web_sm</code>) read the text: "I went yesterday, I am going tomorrow and I was happy. The phones were better and she loved it. The deliveries arrived broken." The results were computed beforehand and are fixed here; that tool does not run on this page.</p>
+<table id="lemmaTable"><tr><th>word</th><th>dictionary form</th><th>stem (cut)</th></tr>
+<tr><td>went</td><td>go</td><td>went</td></tr>
+<tr><td>going</td><td>go</td><td>go</td></tr>
+<tr><td>am</td><td>be</td><td>am</td></tr>
+<tr><td>was</td><td>be</td><td>wa</td></tr>
+<tr><td>were</td><td>be</td><td>were</td></tr>
+<tr><td>better</td><td><strong>well</strong></td><td>better</td></tr>
+<tr><td>loved</td><td>love</td><td>love</td></tr>
+<tr><td>broken</td><td>break</td><td>broken</td></tr>
+<tr><td>phones</td><td>phone</td><td>phone</td></tr>
+<tr><td>deliveries</td><td>delivery</td><td>deliveri</td></tr>
+<tr><td>arrived</td><td>arrive</td><td>arriv</td></tr></table>
+</div>
+<details class="reveal"><summary>Reveal</summary><div class="in">
+<p>"better" is the comparative of "good" in "the phones were better" and of "well" in "she sings better". <mark>The dictionary form depends on the sentence</mark>, and the tool picked "well" exactly where it was "good".</p>
+<p>Finding the dictionary form is <strong>lemmatization</strong>, and the form it finds is the <strong>lemma</strong>. It joins what the cut cannot (went with go, was with were), but it needs a dictionary and context, costs more, and still makes mistakes.</p>
+</div></details>
+</div></section>
+
+<!-- BLOCK 7 — weights: learning is counting -->
+<section class="block" id="s7"><div class="wrap">
+<div class="eyebrow">Block 7</div>
+<h2>How hard each word pulls</h2>
+<p>In the previous class, the model was a formula with blanks, <code>price = a × area + b</code>, and learning meant filling in the blanks. Here the formula has one blank per column: how hard each word pulls the review toward positive or toward negative. A sentence's score is the sum of how hard its words pull. What is left is figuring out how to fill in 3,187 blanks. On your phone's app store, you already do this by eye: you skim the comments and feel which way they lean.</p>
+<div class="q">Which way does each word pull?</div>
+<div class="widget">
+  <div class="pull" id="pullCards"></div>
+</div>
+<div class="widget">
+  <label class="stack">a sentence<input type="text" id="sumText" value="waste of money"></label>
+  <svg id="svgSum" viewBox="0 0 640 200" width="100%" aria-label="How hard each word of the sentence pulls toward positive or negative"></svg>
+  <div class="out" id="sumOut">Loading the reviews…</div>
+  <div class="out" id="accOut"></div>
+</div>
+<details class="code"><summary>The math, in Python</summary><div class="in">
+<p class="tie">For each class, the classifier stores in how many reviews each word shows up (plus 1, so no word is left at zero), divided by the total. The weight is the difference between the logarithms of the two classes: positive if the word is more common in positive reviews.</p>
+<pre><code class="py">import re
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
+words = lambda t: re.findall(r"[^\W\d_]+(?:'[^\W\d_]+)?", t.lower())
+vectorizer = CountVectorizer(analyzer=words, binary=True)   # 1 if the word is there
+X = vectorizer.fit_transform(texts)
+model = MultinomialNB().fit(X, labels)        # counts the reviews with each word
+
+weights = model.feature_log_prob_[1] - model.feature_log_prob_[0]
+print(round(weights[vectorizer.vocabulary_["money"]], 2))   # -2.47</code></pre>
+</div></details>
+<details class="reveal"><summary>Reveal</summary><div class="in">
+<p>We judge a word by what it means: "money" is neutral, and so is "town".</p>
+<p>The computer does not know what any word means. It only counted where each one showed up: "money" appeared in 24 negative reviews, almost always as "waste of money"; "town" came from "best tacos in town"; "the" is everywhere and weighs almost nothing. <mark>The weight comes from where the word appeared, not from what it means.</mark> A sentence's score is the sum of the weights, and with that it gets 81.3% of the reviews it did not see in training right.</p>
+<p>Each of these numbers is a <strong>weight</strong>: it is the "a" of the previous class's formula, one per column. Learning, here, is counting. This classifier is called <strong>Naive Bayes</strong>. <em>Naive</em> because it adds up the words as if each one had nothing to do with its neighbours, which already tells you where it will go wrong.</p>
+</div></details>
+</div></section>
+
+<!-- BLOCK 8 — the student's sentence -->
+<section class="block" id="s8"><div class="wrap">
+<div class="eyebrow">Block 8</div>
+<h2>Your sentence</h2>
+<p>All the pieces are on the table: cut into pieces, make everything lowercase, maybe remove the empty words, maybe cut the endings, turn it into a row, add up the weights. Anyone who has talked to an automated customer service line knows: sometimes it understands everything, sometimes nothing.</p>
+<div class="q">Write a review the classifier gets wrong. Before you look, say why you think it will fail.</div>
+<div class="widget wide">
+  <label class="stack">your review<input type="text" id="frText" value="fast delivery but it arrived broken"></label>
+  <div class="chips" id="frChips"></div>
+  <div class="ctrls">
+    <label><input type="checkbox" id="frStop"> remove empty words</label>
+    <label><input type="checkbox" id="frStem"> cut the endings</label>
+    <label><input type="checkbox" id="frPairs"> word pairs</label>
+  </div>
+  <div class="belt" id="frBelt"></div>
+  <svg id="svgFrase" viewBox="0 0 640 220" width="100%" aria-label="Weight of each column of the sentence and the sum"></svg>
+  <div class="verdict" id="frVerdict"></div>
+  <div class="out" id="frAcc">Loading the reviews…</div>
+</div>
+<details class="reveal"><summary>Reveal</summary><div class="in">
+<p>We expected it to miss irony, and it does. But maybe we did not expect it to miss "not bad" or "no problems", which anyone understands.</p>
+<p>Every mistake is written in the numbers. "not" weighs −1.7 and "bad" weighs −3.4: added together they make a very negative phrase, because <mark>the sum does not know that one cancels the other</mark>. "the delivery was late" comes out positive by a hair, because "late" showed up in one positive and one negative review and weighs nothing. Cutting the endings flips "oh great, it broke after two days" to positive. Removing the empty words erases the "not" and turns "i do not recommend it" positive. And the average barely moves (81.3% with no options, 79.3% without the empty words, worse in 18 of 20 draws) while whole sentences switch sides.</p>
+<p>Word pairs ("not_recommend") bring back a little of the order: they are <strong>n-grams</strong> (<strong>bigrams</strong>, for pairs). They get more right, 82.4%, better in 15 of 20 draws, and make the table almost five times bigger. No preparation technique is good or bad in general: each one throws something away, and what matters is whether what it threw away was what decided.</p>
+</div></details>
+</div></section>
+
+<!-- BLOCK 9 — real Python -->
+<section class="block" id="s9"><div class="wrap">
+<div class="eyebrow">Block 9</div>
+<h2>The same, in Python</h2>
+<p>The same 1,984 reviews and the same 20 draws as the blocks above, now with the libraries people actually use: <code>nltk</code> and <code>scikit-learn</code>. The reviews are already loaded into the variables <code>texts</code>, <code>labels</code> and <code>splits</code>.</p>
+<div class="q">Find, in the code, the line for each block of the class. Then change the sentence and run it again.</div>
+<div class="widget">
+<div class="ctrls"><span id="pyStatus" class="status">The first time, the browser downloads Python, scikit-learn and nltk (about 25&nbsp;MB). It takes a few seconds.</span></div>
+<textarea id="py1" spellcheck="false">import re
+from nltk.stem import PorterStemmer
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
+stem = PorterStemmer(mode="ORIGINAL_ALGORITHM").stem
+def prepare(text):
+    words = re.findall(r"[^\W\d_]+(?:'[^\W\d_]+)?", text.lower())   # block 4: lowercase, letters only
+    return [stem(w) for w in words]                                 # block 6: the stem
+
+vectorizer = CountVectorizer(analyzer=prepare, binary=True)   # block 3: one column per word
+X = vectorizer.fit_transform(texts)
+model = MultinomialNB().fit(X, labels)                        # block 7: learning is counting
+
+sentence = "it did not disappoint"
+weights = model.feature_log_prob_[1] - model.feature_log_prob_[0]
+columns = vectorizer.vocabulary_
+for word in prepare(sentence):
+    print(word, round(weights[columns[word]], 2) if word in columns else "never seen")
+print(X.shape, "->", ["negative", "positive"][model.predict(vectorizer.transform([sentence]))[0]])</textarea>
+<div class="ctrls" style="margin-top:12px"><button id="run1">Run Python</button></div>
+<div class="console" id="pyOut1"></div>
+</div>
+<div class="widget">
+<textarea id="py2" spellcheck="false">from nltk.corpus import stopwords
+empty = set(stopwords.words("english"))
+
+def mean_score(prep):
+    docs = [prep(t) for t in texts]
+    scores = []
+    for split in splits:                                      # the same 20 draws as the widgets
+        train = [i for i, s in enumerate(split) if s == "0"]
+        test = [i for i, s in enumerate(split) if s == "1"]
+        vec = CountVectorizer(analyzer=lambda d: d, binary=True)
+        m = MultinomialNB().fit(vec.fit_transform([docs[i] for i in train]), [labels[i] for i in train])
+        scores.append(m.score(vec.transform([docs[i] for i in test]), [labels[i] for i in test]))
+    return round(sum(scores) / len(scores), 3)
+
+letters = lambda t: re.findall(r"[^\W\d_]+(?:'[^\W\d_]+)?", t.lower())
+print("letters only:  ", mean_score(letters))
+print("no stopwords:  ", mean_score(lambda t: [w for w in letters(t) if w not in empty]))
+print("with stem:     ", mean_score(prepare))</textarea>
+<div class="ctrls" style="margin-top:12px"><button id="run2">Run Python</button><span class="status">Run the first box before this one: this one uses what it defined.</span></div>
+<div class="console" id="pyOut2"></div>
+</div>
+<details class="reveal"><summary>Reveal</summary><div class="in">
+<p>The same classifier, with the real libraries. <code>CountVectorizer</code> is the table from block 3, and <code>binary=True</code> means "1 if the word is there". <code>PorterStemmer</code> is the cut from block 6. <code>MultinomialNB</code> is the counting from block 7. The 20 draws are the same as in the widgets, which is why the numbers match: 0.813, 0.793 and 0.819. <mark>Nothing you saw was a toy.</mark></p>
+</div></details>
+</div></section>
+
+<!-- BLOCK 10 — map -->
+<section class="block" id="s10"><div class="wrap">
+<div class="eyebrow">Block 10</div>
+<h2>A map of what you did today</h2>
+<table><tr><th>Question we asked</th><th>Idea</th><th>Technical name</th></tr>
+<tr><td>Are these phrases similar?</td><td>form is not meaning</td><td>NLP</td></tr>
+<tr><td>Can we just list the words?</td><td>the list goes silent</td><td>sentiment classifier</td></tr>
+<tr><td>How does text become a table?</td><td>one column per word, almost all zeros, no order</td><td>vocabulary, bag of words, sparse</td></tr>
+<tr><td>Why so many columns?</td><td>"great" spread over 11</td><td>tokenization, normalization</td></tr>
+<tr><td>Throw away the common words?</td><td>the list erases "not"</td><td>stopwords</td></tr>
+<tr><td>Gather a word's family?</td><td>the cut joins too much and too little</td><td>stemming, lemmatization</td></tr>
+<tr><td>Where do the weights come from?</td><td>learning is counting</td><td>weight, Naive Bayes</td></tr>
+<tr><td>Why does it fail?</td><td>the sum cannot negate</td><td>n-grams</td></tr></table>
+<p>Three questions were left open, and they are the road for the next classes:</p>
+<p>1. "great" and "excellent" are columns with nothing in common. What if words with similar meanings sat close to each other, like the fruit on the chart? → <em>embeddings</em><br>2. "not bad" fails because the sum ignores order. What if the model read each word together with the others in the sentence? → <em>Transformers</em><br>3. The weights come from 1,984 reviews of shops and restaurants, in English. "town" is positive here. In movie reviews, in another language or in a mix of two, what changes? → <em>domain and multilingual models</em></p>
+<h3 style="margin-top:34px">Test yourself</h3>
+<p>Eight questions about everything we covered. Answer them before you close the tab.</p>
+<div class="widget"><div class="quiz" id="quiz10"></div><div class="out" id="quiz10Out"></div></div>
+</div></section>
+
+<!-- BLOCK 11 — further reading -->
+<section class="block" id="s11"><div class="wrap">
+<div class="eyebrow">Block 11</div>
+<h2>Further reading</h2>
 <p>Everything here is free and open.</p>
 <h3 class="refgroup">Books and courses</h3>
 <ul class="refs">
-<li><a href="https://pyodide.org/en/stable/" target="_blank" rel="noopener">Pyodide</a>
-<span class="why">Why read it: one sentence saying what the student gets from this link.</span></li>
+<li><a href="https://web.stanford.edu/~jurafsky/slp3/B.pdf" target="_blank" rel="noopener">Jurafsky &amp; Martin, <em>Speech and Language Processing</em>, appendix B</a>
+<span class="why">The classifier from this class, step by step, with the tweaks for sentiment (presence instead of counts, the trick for negation).</span></li>
+<li><a href="https://web.stanford.edu/~jurafsky/slp3/2.pdf" target="_blank" rel="noopener">Jurafsky &amp; Martin, chapter 2, "Words and Tokens"</a>
+<span class="why">Tokenization for real: what a word is, and why today's models cut text into pieces smaller than words.</span></li>
+<li><a href="https://web.stanford.edu/class/cs224n/" target="_blank" rel="noopener">Stanford CS224n, lecture 2, "Word Vectors"</a>
+<span class="why">The next step: words as points in space, where "hotel" and "motel" sit close together.</span></li>
+<li><a href="https://www.nltk.org/book/ch03.html" target="_blank" rel="noopener">NLTK Book, chapter 3, section 3.6 "Normalizing Text"</a>
+<span class="why">Stemmers and lemmatizers side by side, with code.</span></li>
+</ul>
+<h3 class="refgroup">Documentation and papers</h3>
+<ul class="refs">
+<li><a href="https://scikit-learn.org/stable/modules/feature_extraction.html#text-feature-extraction" target="_blank" rel="noopener">scikit-learn, "Text feature extraction"</a>
+<span class="why">The table from block 3, sparsity and the warning about stopword lists, in the official documentation.</span></li>
+<li><a href="https://aclanthology.org/W02-1011/" target="_blank" rel="noopener">Pang, Lee &amp; Vaithyanathan (2002), "Thumbs up?"</a>
+<span class="why">The paper behind the word-list experiment from block 2, on movie reviews.</span></li>
+<li><a href="https://tartarus.org/martin/PorterStemmer/" target="_blank" rel="noopener">The Porter stemming algorithm</a>
+<span class="why">Martin Porter's page for the stemmer from block 6, with the original paper and his own notes on its limits.</span></li>
+</ul>
+<h3 class="refgroup">Data for this class</h3>
+<ul class="refs">
+<li><a href="https://archive.ics.uci.edu/dataset/331/sentiment+labelled+sentences" target="_blank" rel="noopener">Sentiment Labelled Sentences (UCI)</a>
+<span class="why">Where the 1,984 reviews come from: Kotzias et al. (2015), the Amazon and Yelp parts. License <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</span></li>
+<li><a href="https://www.nltk.org/nltk_data/" target="_blank" rel="noopener">NLTK Data</a>
+<span class="why">Where the stopword list from block 5 comes from.</span></li>
 </ul>
 </div></section>
 
-<footer>Texto vira número · interactive class · the Python on this page runs in your browser via Pyodide.</footer>
+<footer>Text becomes numbers · lesson 2 · the Python on this page runs in your browser via Pyodide.</footer>
 
-<!-- Every piece of text that JS writes on screen lives here. The pt version has
-     exactly the same keys. core.js reads locale and the py* and viz* keys; the rest is aula.js. -->
+<!-- Every piece of text that the JS writes on screen lives here. The pt version has exactly the same keys. -->
 <script>
 window.STR = {
   locale: "en-US",
   decimalComma: false,
+  // this language's data (paths relative to the page)
+  dadosUrl: "../assets/avaliacoes-en.json",
+  stopUrl: "../assets/stopwords-en.json",
+  rslpUrl: "",
+  stemmer: "porter",
+  dataError: "Could not load the reviews. Reload the page.",
+  labelPos: "positive",
+  labelNeg: "negative",
 
-  // block 1 — drawing
-  axX: "measurement",
-  axY: "answer",
-  demoOut: "{acima} points above the line, {abaixo} below.",
-
-  // block 2 — two options quiz (quizPair): [statement, "A" or "B"]
-  quizA: "type A",
-  quizB: "type B",
-  quizAnswer: "  → it is {a}",
-  quizScore: "{right} of {total}. ",
-  quizPerfect: "Perfect.",
-  quizHint: "Hint: reread the criterion in Reveal.",
-  quiz: [
-    ["First item", "A"],
-    ["Second item", "B"],
-    ["Third item", "A"]
+  // block 1 — pairs: [phrase A, phrase B, same meaning?]
+  pairs: [
+    ["bad", "not bad", false],
+    ["great", "excellent", true],
+    ["great", "Great!!!", true],
+    ["fast delivery but it arrived broken", "it arrived broken but fast delivery", true]
   ],
+  pairSame: "similar",
+  pairDiff: "different",
+  pairMeter: "letters that change: {n} of {m}",
+  pairMeanSame: "same meaning",
+  pairMeanOpp: "opposite meaning",
+  pairOutMore: "{n} pairs to go.",
+  pairOutDone: "Done. Compare the letter meter with the meaning of each pair.",
 
-  // block 3 — N options quiz (quizOptions): [question, [options], index of the right one]
-  quiz3Score: "{right} of {total}. ",
-  quiz3Perfect: "You got the whole block.",
-  quiz3Good: "Good. Review the ones you missed.",
-  quiz3Weak: "Worth reopening this block's Reveal.",
-  quiz3: [
-    ["First question?", ["right option", "wrong option", "another wrong one"], 0],
-    ["Second question?", ["wrong option", "right option"], 1]
-  ],
+  // block 2 — hand-written list
+  listRight: "right",
+  listWrong: "wrong",
+  listMute: "no answer",
+  listGuessFmt: "{v}%",
+  listOut: "Your list got {certas} right, {erradas} wrong and had no answer for {mudas}. Your guess was {palpite} right.",
+  listMuteTitle: "Three reviews where the list had no answer:",
+  listEmpty: "Both lists are empty: the list has no answer for anything.",
 
-  // block 4 — Python in the browser. core.js reads pyDownload, pySklearn, pyReady,
-  // pyNetError, vizDownload, vizFail and vizFailStatus; the others belong to aula.js.
+  // block 3 — the table
+  tabYou: "your sentence",
+  tabReview: "review {n}",
+  tabMore: "+ {n} columns, all 0",
+  tabPick: ["fast", "arrived", "broken"],
+  tabOut: "{cols} columns · your sentence has {uns} ones and {zeros} zeros: {pct} of the row is zero.",
+  tabGuessOut: " Your guess was {g}.",
+  tabNew: " {n} word(s) in your sentence do not appear in any review and have no column.",
+  tabSame: "Same words, different order: the row is identical.",
+  tabEmpty: "Write a sentence.",
+
+  // block 4 — pieces
+  tokOut: "{cols} columns in the table · \"{q}\" is in {k} different column(s).",
+  tokItem: "{w} · {n}×",
+  tokNone: "No column with that word.",
+
+  // block 5 — empty words
+  stopOut: "Cut: {pct} of the text and {cols} columns (out of {total}).",
+  stopNone: "Nothing cut yet.",
+  stopSampleWords: ["not", "very", "but"],
+  stopExtra: ["i did not like it", "i do not recommend it"],
+
+  // block 6 — cutting the ending: [word A, word B]
+  stemPairs: [["loved", "loving"], ["liked", "likely"], ["general", "generous"], ["news", "new"], ["university", "universe"], ["good", "better"], ["went", "go"], ["arrive", "arrival"]],
+  stemSame: "same column",
+  stemDiff: "different columns",
+  stemOut: "{w} → {r} · the whole table: {antes} columns → {depois} ({pct})",
+  stemEmpty: "Type a word. The whole table: {antes} columns → {depois} ({pct}).",
+
+  // block 7 — weights
+  pullWords: ["town", "money", "the", "minutes", "great", "not"],
+  pullNeg: "← negative",
+  pullNeu: "neutral",
+  pullPos: "positive →",
+  pullCounts: "in {p} positive · in {n} negative",
+  pullWeight: "weight {w}",
+  sumOut: "sum {s} → {label}",
+  sumUnknown: "never seen",
+  sumEmpty: "Write a sentence.",
+  accOut: "Accuracy on the test reviews: {acc} (average over 20 train/test draws).",
+
+  // block 8 — your sentence
+  frChips: ["not bad", "no problems", "no complaints at all", "the delivery was late", "oh great, it broke after two days", "i did not like it", "i do not recommend it"],
+  beltTokens: "pieces",
+  beltPrep: "after preparation",
+  beltRow: "the row",
+  beltRowOut: "{uns} columns with 1 · {zeros} with 0",
+  frVerdict: "{label} · sum {s}",
+  frAcc: "Accuracy, average over 20 draws: {acc} with these options · {base} with no options · {cmp}.",
+  frBetter: "better in {n} of 20",
+  frWorse: "worse in {n} of 20",
+  frEqual: "the same in all of them",
+  frBase: "these are the starting options",
+  frCalc: "Computing accuracy…",
+  frEmpty: "Write a review.",
+
+  // block 9 — Python. core.js reads pyDownload, pySklearn, pyReady and pyNetError.
   pyDownload: "Downloading Python…",
   pySklearn: "Downloading scikit-learn…",
   pyReady: "Ready. Run it as many times as you like.",
   pyNetError: "Could not download Python. Check your connection and try again.",
+  pyNltk: "Downloading nltk and the stopword list…",
+  pyData: "Loading the reviews into Python…",
   pyCodeError: "The code raised an error (see below). Fix it and run again.",
-  vizDownload: "Downloading matplotlib…",
-  vizLoading: "Downloading…",
-  vizDone: "Done. Move the slider to redraw.",
-  vizFail: "Could not draw the figure. It needs to download matplotlib from the internet — check your connection and tap <em>Load the figure</em> again.",
-  vizFailStatus: "Download failed. Try again."
+  pyVars: ["texts", "labels", "splits"],
+
+  // block 10 — quiz: [question, [options], index of the right one]
+  quiz10Score: "{right} of {total}. ",
+  quiz10Perfect: "You tied the whole class together.",
+  quiz10Good: "Nice. Reopen the Reveal for the ones you missed.",
+  quiz10Weak: "Worth going back to blocks 3, 7 and 8.",
+  quiz10: [
+    ["\"Great!\" and \"great\", in a bag of words with no preparation, are…", ["the same column", "different columns", "the same row"], 1],
+    ["Why does removing stopwords hurt sentiment analysis?", ["it erases \"not\"", "it makes the table bigger", "it slows training down"], 0],
+    ["After cutting the endings, \"liked\" and \"likely\"…", ["become the same column", "stay apart", "are erased"], 0],
+    ["Where does a word's weight come from?", ["a sentiment dictionary", "how many positive and negative reviews use it", "the length of the word"], 1],
+    ["\"fast delivery but it arrived broken\" and the same sentence with its halves swapped…", ["become the same row", "become different rows"], 0],
+    ["A word that never appeared in training weighs…", ["a lot toward positive", "zero", "a lot toward negative"], 1],
+    ["Word pairs get more right. What is the cost?", ["none", "the table becomes several times bigger", "\"not\" disappears"], 1],
+    ["The hand-written word list got few things wrong, but…", ["it had no answer for most reviews", "it got everything right", "it only works in Portuguese"], 0]
+  ]
 };
 </script>
 <script src="../../../assets/core.js"></script>
