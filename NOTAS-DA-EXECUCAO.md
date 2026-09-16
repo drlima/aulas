@@ -150,3 +150,32 @@ perguntar. Em cada uma, a alternativa escolhida foi a que muda menos coisa.
 - **Fora do escopo, só registrado:** o rótulo "Pergunta" acima de cada `.q` vem de
   `content:"Pergunta"` no aula.css e aparece também nas páginas em inglês. Isso já
   acontecia na aula de ML, e o template en herda o mesmo problema.
+
+## Aula nlp-intro — construção (fases 4 e 5)
+
+Decisões fora do roteiro aprovado. As que mudam a página também estão no fim do
+`site/aulas/nlp-intro/ROTEIRO.md`.
+
+- **Rascunhos e scripts de verificação fora do repositório.** Pesquisa, roteiro e os
+  scripts que produziram cada número ficaram em `rascunhos/nlp-intro/`, com o CSV do
+  B2W (49 MB). A pasta entrou no `.git/info/exclude` (local, não no `.gitignore`, para não
+  mexer em arquivo do repo). `PESQUISA.md` e `ROTEIRO.md` foram copiados para a pasta da
+  aula; os scripts não.
+- **Python local.** O `python3` desta máquina falha (trampoline do uv). Tudo rodou com
+  `uv run --python 3.12`, inclusive o `nova-aula.py` (respostas por stdin) e o `check.py`.
+- **Dados em JSON dentro de `assets/`** (`avaliacoes-pt.json`, `avaliacoes-en.json`,
+  `rslp.json`, `stopwords-*.json`), carregados por `fetch`. O `check.py` só confere
+  `href`/`src`, não esses caminhos; a conferência foi feita no Playwright. Não alterei o
+  `check.py`.
+- **Chave `rslpUrl` vazia na página en.** As duas páginas precisam das mesmas chaves de
+  `STR`; o en usa o Porter e não carrega o arquivo.
+- **nltk_data pelo jsdelivr.** O bloco 9 baixa `rslp.zip` e `stopwords.zip` de
+  `cdn.jsdelivr.net/gh/nltk/nltk_data@gh-pages/`: mesma CDN do Pyodide, outro caminho.
+- **Arquivo JS único.** Tokenizador, stemmers, Naive Bayes e widgets ficaram todos no
+  `aula.js` (sem um segundo arquivo), para seguir a ordem de scripts do `CLAUDE.md` da raiz.
+  Nada foi subido para o `core.js`: nenhuma outra aula usa texto.
+- **Testes no Chromium com `--disable-quic`.** Sem essa opção, o download do Pyodide falhava
+  nesta rede (`ERR_QUIC_PROTOCOL_ERROR`). É do ambiente de teste, não da página.
+- **Fora do escopo, só registrado:** a meta `description` dos dois HTMLs ficou com o
+  resumo que o `nova-aula.py` gravou; o `aulas.json` ganhou um resumo reescrito. Os dois
+  dizem a mesma coisa.

@@ -26,17 +26,17 @@
       "status": "rascunho",
       "duracao_min": 90,
       "nivel": "iniciante",
-      "tags": [],
+      "tags": ["nlp", "análise de sentimentos", "python", "ao vivo"],
       "atualizada_em": "2026-09-16",
-      "capa": { "emoji": "📘", "cor": "grape" },
+      "capa": { "emoji": "💬", "cor": "teal" },
       "pt-BR": {
         "titulo": "Texto vira número",
-        "resumo": "Como um computador lê uma avaliação e decide se ela é positiva, e por que ele erra em \"não é ruim\".",
+        "resumo": "Uma frase vira uma linha de números, um classificador decide se ela é positiva, e você entende por que ele erra em \"não é ruim\".",
         "url": "aulas/nlp-intro/"
       },
       "en": {
-        "titulo": "Texto vira número",
-        "resumo": "Como um computador lê uma avaliação e decide se ela é positiva, e por que ele erra em \"não é ruim\".",
+        "titulo": "Text becomes numbers",
+        "resumo": "A sentence becomes a row of numbers, a classifier decides whether it is positive, and you see why it gets \"not bad\" wrong.",
         "url": "aulas/nlp-intro/en/"
       }
     }
