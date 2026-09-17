@@ -23,11 +23,11 @@
     {
       "slug": "nlp-intro",
       "ordem": 2,
-      "status": "rascunho",
+      "status": "publicada",
       "duracao_min": 90,
       "nivel": "iniciante",
       "tags": ["nlp", "análise de sentimentos", "python", "ao vivo"],
-      "atualizada_em": "2026-09-16",
+      "atualizada_em": "2026-09-17",
       "capa": { "emoji": "💬", "cor": "teal" },
       "pt-BR": {
         "titulo": "Texto vira número",

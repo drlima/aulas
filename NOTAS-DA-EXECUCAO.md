@@ -178,6 +178,11 @@ Decisões fora do roteiro aprovado. As que mudam a página também estão no fim
   Nada foi subido para o `core.js`: nenhuma outra aula usa texto.
 - **Testes no Chromium com `--disable-quic`.** É uma opção do ambiente de teste e não muda
   nada na página.
+- **Histórico do git, a pedido do autor.** A limpeza das notas internas (menção a um
+  notebook, detalhes do ambiente local e uma afirmação sobre monetização) foi feita por
+  commit normal. **Os commits anteriores a `af4ce0d` continuam com o texto antigo no
+  GitHub**, e é assim de propósito: reescrever o histórico exigiria um force push, que
+  quebra qualquer clone e não se desfaz. Não foi tentado.
 - **Fora do escopo, só registrado:** a meta `description` dos dois HTMLs ficou com o
   resumo que o `nova-aula.py` gravou; o `aulas.json` ganhou um resumo reescrito. Os dois
   dizem a mesma coisa.
