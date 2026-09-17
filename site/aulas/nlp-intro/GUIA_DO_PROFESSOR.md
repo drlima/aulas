@@ -10,7 +10,7 @@ comenta duas ou três respostas, e só então diz "agora abram o Revelar".
 
 **Antes de começar (5 min antes):** peça que todos abram o link e, já no bloco 9, apertem
 **"Rodar Python"** na primeira caixa. O navegador baixa o Python, o scikit-learn e o nltk
-(cerca de 25 MB). Os blocos 1 a 8 não precisam disso: as 4000 avaliações vêm com a página.
+(cerca de 30 MB). Os blocos 1 a 8 não precisam disso: as 4000 avaliações vêm com a página.
 Enquanto carrega, peça que escrevam no chat uma avaliação curta de algo que compraram:
 você usa essas frases no bloco 8.
 

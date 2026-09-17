@@ -1,75 +1,61 @@
-0	JSON publicado = regenerado do UCI cru (textos, rotulos)	-	True
-0	reviews / pos / neg	1,984 · 992 · 992	1984 · 992 · 992
-1	letras: bad x not bad	4	4
-1	letras: great x excellent	7	7
-1	letras: frase x metades trocadas	26	26
-2	lista: certas	34%	34.1% (677)
-2	lista: erradas	under 4%	3.5% (69)
-2	lista: sem resposta	62%	62.4% (1238)
-3	colunas (split por espaco)	4,977	4977
-3	palavras distintas por avaliacao	10.1	10.15
-3	% da linha que e zero	99.80%	99.80%
-3	% das colunas em uma avaliacao so	66%	66.7%
-4	colunas de great	11	11
-4	great/Great/great./great,/great!/GREAT	69/46/22/11/6/1	69/46/22/11/6/1
-4	colunas minusculas + so letras	3,187	3187
-4	queda	-36%	-36.0%
-4	colunas sem acento	3,185	3185
-5	palavras no corpus	21,000	20957
-5	% do texto que e stopword	49%	49.2%
-5	colunas cortadas	150	150
-5	posicao de not	11th	11
-5	not na lista pronta	yes	True
-5	avaliacoes com not: neg / pos	189 / 32	189 / 32
-5	'i did not like it' sem stopwords	like	like
-5	'i do not recommend it' sem stopwords	recommend	recommend
-6	liked x likely	same	like / like -> same
-6	general x generous	same	gener / gener -> same
-6	news x new	same	new / new -> same
-6	good x better	apart	good / better -> apart
-6	went x go	apart	went / go -> apart
-6	loved x loving	(card, no claim)	love / love -> same
-6	university x universe	(card, no claim)	univers / univers -> same
-6	arrive x arrival	(card, no claim)	arriv / arriv -> same
-6	'love' tem coluna	(four columns)	True
-6	'loved' tem coluna	(four columns)	True
-6	'loves' tem coluna	(four columns)	True
-6	'loving' tem coluna	(four columns)	True
-6	colunas com radical	3,187 -> 2,554	3187 -> 2554
-6	queda com radical	20%	19.9%
-6	tabela: radical de went	went	went
-6	tabela: radical de going	go	go
-6	tabela: radical de am	am	am
-6	tabela: radical de was	wa	wa
-6	tabela: radical de were	were	were
-6	tabela: radical de better	better	better
-6	tabela: radical de loved	love	love
-6	tabela: radical de broken	broken	broken
-6	tabela: radical de phones	phone	phone
-6	tabela: radical de deliveries	deliveri	deliveri
-6	tabela: radical de arrived	arriv	arriv
-7	lacunas (colunas)	3,187	3187
-7	peso de money	-2.47	-2.47
-7	money em neg (pos)	24 negative	24 (1 pos)
-7	money dentro de 'waste of money'	almost always	3 de 25
-7	town: pos/neg e peso	positive, from 'best tacos in town'	(7, 0) peso +2.14; frases: ['They also have the best cheese crisp in town.', 'Favorite place in town for shawarrrrrrma!!!!!!', 'In an interesting part of town, this place is amazing.', 'Best tacos in town by far!!', "When I'm on this side of town, this will definitely be a spot I'll hit up again!", 'This wonderful experience made this place a must-stop whenever we are in town again.', 'Best Buffet in town, for the price you cannot beat it.']
-7	peso de the	almost nothing	+0.07 (em 821 avaliacoes)
-7	card minutes: pos/neg, peso	(computed live)	(2, 20) -1.89
-7	card great: pos/neg, peso	(computed live)	(150, 5) +3.29
-7	card not: pos/neg, peso	(computed live)	(32, 189) -1.69
-7	acuracia sem opcoes	81.3%	81.3%
-8	acuracia sem stopwords	79.3%	79.3%
-8	sem stopwords pior em	18 of 20	pior 18 melhor 2 empate 0
-8	acuracia com pares	82.4%	82.4%
-8	pares melhor em	15 of 20	melhor 15 pior 5 empate 0
-8	tabela com pares	almost five times bigger	3187 -> 15264 (4.79x)
-9	Python: letters/no stop/stem	0.813 / 0.793 / 0.819	0.813 / 0.793 / 0.819
-8	peso de not / bad	-1.7 / -3.4	-1.7 / -3.4
-8	frase 'not bad' sem opcoes / stop / radical	-	NEG -5.10 / NEG -3.46 / NEG -5.09
-8	frase 'no problems' sem opcoes / stop / radical	-	NEG -0.80 / POS +0.01 / NEG -1.22
-8	frase 'no complaints at all' sem opcoes / stop / radical	-	NEG -1.12 / POS +0.41 / NEG -1.77
-8	frase 'the delivery was late' sem opcoes / stop / radical	-	POS +0.08 / POS +0.02 / POS +0.50
-8	frase 'oh great, it broke after two days' sem opcoes / stop / radical	-	NEG -0.41 / POS +0.69 / POS +0.18
-8	frase 'i did not like it' sem opcoes / stop / radical	-	NEG -2.61 / NEG -0.18 / NEG -2.35
-8	frase 'i do not recommend it' sem opcoes / stop / radical	-	NEG -2.26 / POS +0.91 / NEG -1.79
-8	late: pos/neg, peso	1 / 1, weighs nothing	(1, 1) +0.06
+0	JSON publicado = regenerado do UCI cru	-	igual	sim
+0	avaliacoes / pos / neg	1,984 · 992 · 992	1984 · 992 · 992	sim
+1	letras: bad/not bad · great/excellent · metades	4 · 7 · 26	4 · 7 · 26	sim
+2	lista: certas	34%	34.1%	sim
+2	lista: erradas	under 4%	3.5%	sim
+2	lista: sem resposta	62%	62.4%	sim
+3	colunas (split por espaco)	4,977	4977	sim
+3	palavras distintas por avaliacao	10.1	10.15	sim
+3	% da linha que e zero	99.80%	99.80%	sim
+3	% das colunas em uma avaliacao so	67%	66.7%	sim
+4	colunas de great	11	11	sim
+4	great/Great/great./great,/great!/GREAT	69/46/22/11/6/1	69/46/22/11/6/1	sim
+4	colunas minusculas + so letras · queda	3,187 · -36%	3187 · -36.0%	sim
+4	colunas sem acento	3,185	3185	sim
+5	palavras no texto	21,000	20957	sim
+5	% do texto que e stopword	49%	49.2%	sim
+5	colunas cortadas	150	150	sim
+5	not esta na lista · posicao	sim · 11th	True · 11	sim
+5	avaliacoes com not: neg / pos	189 / 32	189 / 32	sim
+5	'i did not like it' sem stopwords	like	like	sim
+5	'i do not recommend it' sem stopwords	recommend	recommend	sim
+6	liked x likely	junta	like / like	sim
+6	general x generous	junta	gener / gener	sim
+6	news x new	junta	new / new	sim
+6	good x better	separa	good / better	sim
+6	went x go	separa	went / go	sim
+6	colunas com radical · queda	3,187 -> 2,554 · 20%	3187 -> 2554 · 19.9%	sim
+6	tabela: radical de went	went	went	sim
+6	tabela: radical de going	go	go	sim
+6	tabela: radical de am	am	am	sim
+6	tabela: radical de was	wa	wa	sim
+6	tabela: radical de were	were	were	sim
+6	tabela: radical de better	better	better	sim
+6	tabela: radical de loved	love	love	sim
+6	tabela: radical de broken	broken	broken	sim
+6	tabela: radical de phones	phone	phone	sim
+6	tabela: radical de deliveries	deliveri	deliveri	sim
+6	tabela: radical de arrived	arriv	arriv	sim
+7	lacunas (colunas)	3,187	3187	sim
+7	peso de money	-2.47	-2.47	sim
+7	money: neg / pos	24 / 1	24 / 1	sim
+7	exemplo de money: 'don't waste your money'	existe	3x	sim
+7	exemplo de money: 'I want my money back'	existe	1x	sim
+7	town: avaliacoes, todas positivas	7, all positive	7 (7 pos, 0 neg)	sim
+7	exemplo de town: 'best tacos in town'	existe	1x	sim
+7	peso de the	almost nothing	+0.07	sim
+7	acuracia sem opcoes	81.3%	81.32%	sim
+8	acuracia sem stopwords · pior em	79.3% · 18 of 20	79.33% · 18	sim
+8	acuracia com pares · melhor em	82.4% · 15 of 20	82.44% · 15	sim
+8	tabela com pares	almost five times	3187 -> 15264 (4.79x)	sim
+8	peso de not / bad	-1.7 / -3.4	-1.69 / -3.41	sim
+8	'not bad' sem opcoes	negativa	-5.10	sim
+8	'no problems' sem opcoes	negativa (erro)	-0.80	sim
+8	'the delivery was late'	positiva por um fio	+0.08	sim
+8	late: pos / neg · peso	1 / 1 · nothing	1 / 1 · +0.06	sim
+8	'oh great, it broke…' sem / com radical	neg -> pos	-0.41 -> +0.18	sim
+8	'i do not recommend it' sem / com corte de stopwords	neg -> pos	-2.26 -> +0.91	sim
+8	nuance: 'i did not like it' sem stopwords	(nao afirmado)	-0.18, continua negativa	sim
+9	Python: letters / no stopwords / stem	0.813 / 0.793 / 0.819	0.813 / 0.793 / 0.819	sim
+
+TUDO BATE

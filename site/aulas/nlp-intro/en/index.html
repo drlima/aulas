@@ -89,7 +89,7 @@
 </div>
 <details class="reveal"><summary>Reveal</summary><div class="in">
 <p>The intuition is that the table would have a few hundred columns: nobody uses that many words.</p>
-<p>It has <strong>4,977 columns</strong>. A review uses, on average, 10.1 different words: <mark>99.80% of the row is zero</mark>. And 66% of the columns show up in a single review. The order is gone too: "fast delivery but it arrived broken" and "it arrived broken but fast delivery" are the same row, like the lyrics of a song with the lines shuffled, still using the same words.</p>
+<p>It has <strong>4,977 columns</strong>. A review uses, on average, 10.1 different words: <mark>99.80% of the row is zero</mark>. And 67% of the columns show up in a single review. The order is gone too: "fast delivery but it arrived broken" and "it arrived broken but fast delivery" are the same row, like the lyrics of a song with the lines shuffled, still using the same words.</p>
 <p>The list of all the different words is called the <strong>vocabulary</strong>; the sentence's row is a <strong>vector</strong>; and this way of building the table, throwing the words in a bag and writing down only which ones are there, is the <strong>bag of words</strong>. A table made almost entirely of zeros is <strong>sparse</strong>. Three costs are on the table: too many columns, most of them with a single example, and lost order. The next three blocks go after the first two; the third comes back in block 8.</p>
 </div></details>
 </div></section>
@@ -207,7 +207,7 @@ print(round(weights[vectorizer.vocabulary_["money"]], 2))   # -2.47</code></pre>
 </div></details>
 <details class="reveal"><summary>Reveal</summary><div class="in">
 <p>We judge a word by what it means: "money" is neutral, and so is "town".</p>
-<p>The computer does not know what any word means. It only counted where each one showed up: "money" appeared in 24 negative reviews, almost always as "waste of money"; "town" came from "best tacos in town"; "the" is everywhere and weighs almost nothing. <mark>The weight comes from where the word appeared, not from what it means.</mark> A sentence's score is the sum of the weights, and with that it gets 81.3% of the reviews it did not see in training right.</p>
+<p>The computer does not know what any word means. It only counted where each one showed up: "money" appeared in 24 negative reviews and 1 positive one, in phrases like "don't waste your money" and "I want my money back"; "town" appeared in 7 reviews, all positive, like "best tacos in town"; "the" is everywhere and weighs almost nothing. <mark>The weight comes from where the word appeared, not from what it means.</mark> A sentence's score is the sum of the weights, and with that it gets 81.3% of the reviews it did not see in training right.</p>
 <p>Each of these numbers is a <strong>weight</strong>: it is the "a" of the previous class's formula, one per column. Learning, here, is counting. This classifier is called <strong>Naive Bayes</strong>. <em>Naive</em> because it adds up the words as if each one had nothing to do with its neighbours, which already tells you where it will go wrong.</p>
 </div></details>
 </div></section>
@@ -245,7 +245,7 @@ print(round(weights[vectorizer.vocabulary_["money"]], 2))   # -2.47</code></pre>
 <p>The same 1,984 reviews and the same 20 draws as the blocks above, now with the libraries people actually use: <code>nltk</code> and <code>scikit-learn</code>. The reviews are already loaded into the variables <code>texts</code>, <code>labels</code> and <code>splits</code>.</p>
 <div class="q">Find, in the code, the line for each block of the class. Then change the sentence and run it again.</div>
 <div class="widget">
-<div class="ctrls"><span id="pyStatus" class="status">The first time, the browser downloads Python, scikit-learn and nltk (about 25&nbsp;MB). It takes a few seconds.</span></div>
+<div class="ctrls"><span id="pyStatus" class="status">The first time, the browser downloads Python, scikit-learn and nltk (about 30&nbsp;MB). It takes a few seconds.</span></div>
 <textarea id="py1" spellcheck="false">import re
 from nltk.stem import PorterStemmer
 from sklearn.feature_extraction.text import CountVectorizer
