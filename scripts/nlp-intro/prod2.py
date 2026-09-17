@@ -1,7 +1,8 @@
 # Site publicado: bloco 9 (as duas caixas, e a segunda antes da primeira) e o quiz, em sessao limpa.
-import asyncio, time
+# Uso: python prod2.py [url base]   (padrao: o site publicado; local: http://localhost:8000)
+import asyncio, sys, time
 from playwright.async_api import async_playwright
-B = "https://drlima.github.io/aulas"
+B = sys.argv[1] if len(sys.argv) > 1 else "https://drlima.github.io/aulas"
 PATHS = [("pt", "/aulas/nlp-intro/"), ("en", "/aulas/nlp-intro/en/")]
 DONE = lambda n: f"!document.querySelector('#run{n}').disabled && document.querySelector('#pyOut{n}').textContent.trim().length>0"
 
@@ -19,14 +20,20 @@ async def sessao(p, lang, path, ordem):
     print(f"== {lang} · ordem {ordem}")
     for i, n in enumerate(ordem):
         t = time.time(); await pg.click(f"#run{n}")
-        await pg.wait_for_function(DONE(n), timeout=300000)
+        await pg.wait_for_function(f"document.querySelector('#pyOut{n}').textContent.trim().length>0 && !document.querySelector('#run{n}').disabled", timeout=300000)
         dt = time.time() - t
-        if i == 0: await pg.wait_for_timeout(1500); dl = bytes_["n"] - antes
-        print(f"  run{n} ({dt:.1f}s){' · baixou %.1f MB em %d requisicoes' % (dl/1e6, bytes_['req']) if i == 0 else ''}")
+        await pg.wait_for_timeout(1500); dl = bytes_["n"] - antes; antes = bytes_["n"]
+        print(f"  run{n} ({dt:.1f}s) · baixou {dl/1e6:.1f} MB")
         print("    status:", await pg.inner_text("#pyStatus"))
         print("    " + (await pg.inner_text(f"#pyOut{n}")).strip().replace("\n", "\n    "))
+    if ordem[0] == 2:
+        orig = await pg.input_value("#py1")
+        await pg.fill("#py1", "print(1/0)"); await pg.click("#run1"); await pg.wait_for_function(DONE(1), timeout=300000)
+        print("    caixa 1 com erro -> status:", await pg.inner_text("#pyStatus"))
+        await pg.fill("#py1", orig); await pg.click("#run1"); await pg.wait_for_function(DONE(1), timeout=300000)
+        print("    caixa 1 corrigida -> status:", await pg.inner_text("#pyStatus"))
     print("  erros de pagina:", erros)
-    await pg.locator("#s9").screenshot(path=f"shots/prod-{lang}-s9-{''.join(map(str, ordem))}.png")
+    await pg.locator("#s9").screenshot(path=f"shots/{'prod' if 'github' in B else 'local'}-{lang}-s9-{''.join(map(str, ordem))}.png")
     await b.close()
 
 async def quiz(p, lang, path, modo):
@@ -43,7 +50,7 @@ async def quiz(p, lang, path, modo):
         hint = await (await row.query_selector_all("button"))[certa].get_attribute("style")
         marcas.append(("right" in cls) == (esc == certa) and (esc == certa or "--ok" in (hint or "")))
     print(f"  quiz {lang} {modo}: {await pg.inner_text('#quiz10Out')!r} · marcacoes corretas {sum(marcas)}/{len(marcas)} · erros {erros}")
-    await pg.locator("#s10 .widget").screenshot(path=f"shots/prod-{lang}-quiz-{modo}.png")
+    await pg.locator("#s10 .widget").screenshot(path=f"shots/{'prod' if 'github' in B else 'local'}-{lang}-quiz-{modo}.png")
     await b.close()
 
 async def main():

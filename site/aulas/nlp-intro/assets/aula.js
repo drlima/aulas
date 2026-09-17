@@ -161,10 +161,13 @@ for _sub, _nome in [("stemmers", "rslp"), ("corpora", "stopwords")]:
     await py.runPythonAsync(`_d = await (await pyfetch(_dados)).json()\n${vt}, ${vr}, ${vd} = _d["texto"], _d["rotulo"], _d["divisoes"]`);
     $("#pyStatus").textContent=S.pyReady;return py})();
   pyNlp.catch(()=>{pyNlp=null});return pyNlp}
+let ran1=false;   // a caixa 2 usa o que a caixa 1 define
 [["#run1","#py1","#pyOut1"],["#run2","#py2","#pyOut2"]].forEach(([b,src,dst])=>{
-  $(b).onclick=async()=>{const btn=$(b),out=$(dst);btn.disabled=true;out.textContent="";
+  $(b).onclick=async()=>{const btn=$(b),out=$(dst);
+    if(b==="#run2"&&!ran1){out.textContent=S.pyNeedFirst;return}
+    btn.disabled=true;out.textContent="";
     try{const py=await getPyNlp();py.setStdout({batched:s=>out.textContent+=s+"\n"});py.setStderr({batched:s=>out.textContent+=s+"\n"});
-      await py.runPythonAsync($(src).value)}
+      await py.runPythonAsync($(src).value);$("#pyStatus").textContent=S.pyReady;if(b==="#run1")ran1=true}
     catch(e){out.textContent+=String(e.message||e).split("\n").slice(-3).join("\n");$("#pyStatus").textContent=pyNlp?S.pyCodeError:S.pyNetError}
     btn.disabled=false}});
 
