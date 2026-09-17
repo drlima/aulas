@@ -8,6 +8,8 @@
 // original em en) e o tokenizador (en aceita apostrofo no meio: didn't).
 // Tudo aqui foi conferido contra o nltk 3.8.1 e o scikit-learn 1.6.1: os mesmos
 // radicais, as mesmas colunas e o mesmo acerto medio nos 20 sorteios.
+// As funcoes rslp() e porter() sao porte do nltk (Copyright 2001-2023 NLTK Project,
+// Apache License 2.0). Licencas dos dados e desses trechos: LICENCA-DADOS.md.
 
 // ---------------------------------------------------------------- formatos
 const MINUS="−";
