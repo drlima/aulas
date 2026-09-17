@@ -5,7 +5,7 @@ B = "https://drlima.github.io/aulas"
 async def main():
     async with async_playwright() as p:
         b = await p.chromium.launch(args=["--disable-quic"])
-        for lang, path, secs in [("en", "/aulas/nlp-intro/en/", ["s3", "s7"]), ("pt", "/aulas/nlp-intro/", ["s3", "s7"])]:
+        for lang, path, secs in [("en", "/aulas/nlp-intro/en/", ["s3", "s7"]), ("pt", "/aulas/nlp-intro/", ["s3", "s7", "s8"])]:
             pg = await b.new_page(viewport={"width": 1280, "height": 900})
             await pg.goto(B + path); await pg.wait_for_function("TXT.length>0", timeout=60000)
             for s in secs:
