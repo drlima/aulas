@@ -19,7 +19,9 @@ async def main():
                     t=time.time();await pg.click("#run1");await pg.wait_for_function("!document.querySelector('#run1').disabled&&document.querySelector('#pyOut1').textContent.length>0",timeout=300000)
                     print("   python:",(await pg.inner_text("#pyOut1")).strip().split("\n")[-1],"(%.0fs)"%(time.time()-t))
                     await pg.click("nav.map .lang a");await pg.wait_for_load_state();print("   alternador ->",pg.url)
-                    await pg.click("nav.map a.home");await pg.wait_for_load_state();print("   home ->",pg.url,"| nlp-intro no hub?", "nlp-intro" in await pg.content())
+                    await pg.click("nav.map a.home");await pg.wait_for_load_state()
+                    await pg.wait_for_selector("a.aula-card",timeout=30000)   # os cards so aparecem depois do fetch do aulas.json
+                    print("   home ->",pg.url,"| cards no hub:",await pg.eval_on_selector_all("a.aula-card","e=>e.map(x=>x.getAttribute('href'))"))
                 await ctx.close()
         await b.close()
 asyncio.run(main())
