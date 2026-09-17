@@ -28,8 +28,8 @@ estão no `CLAUDE.md` da raiz. `ROTEIRO.md` é o roteiro aprovado; `PESQUISA.md`
   token, normalização 4 · stopwords 5 · stemming, radical, lematização, lema 6 ·
   peso, Naive Bayes 7 · n-grama, bigrama 8 · embeddings, Transformers só no 10. O menu
   do topo conta como texto visível desde o início (por isso "6 A ponta", "7 Quanto
-  puxa"). Conferir com `rascunhos/nlp-intro/verif/gating.py` (fora do repositório) ou
-  com um grep por termo nas seções anteriores.
+  puxa"). Conferir com `scripts/nlp-intro/gating.py` ou com um grep por termo nas seções
+  anteriores.
 - **Classificador: Naive Bayes multinomial sobre presença (0/1), alpha = 1.** O peso se
   explica por contagem, que é o centro da aula. Não trocar por regressão logística nem
   por contagem de ocorrências.
@@ -53,6 +53,29 @@ estão no `CLAUDE.md` da raiz. `ROTEIRO.md` é o roteiro aprovado; `PESQUISA.md`
   dá o crédito. Só texto e rótulo entram na amostra.
 - **Bloco 9** baixa `rslp.zip` e `stopwords.zip` do nltk_data pelo jsdelivr e o JSON do
   corpus do próprio site. `nltk.download()` não funciona no Pyodide.
+
+## Regenerar a amostra
+
+Os scripts ficam em `scripts/nlp-intro/`, fora de `site/`. O `README.md` de lá diz de onde
+baixar os dados originais, que não entram no repositório.
+
+1. Critérios, todos no topo de `scripts/nlp-intro/gerar_amostra.py`:
+   - **pt (B2W):** notas 1 e 2 são negativas (rótulo 0), notas 4 e 5 positivas
+     (rótulo 1), e a nota 3 fica de fora. Entram avaliações de 3 a 20 palavras separadas
+     por espaço, sem texto duplicado e sem o filtro de `filtros.py`. Sorteio de 2000 por
+     classe com `random_state=7`, e o conjunto é embaralhado com a mesma semente.
+   - **en (UCI):** Amazon e Yelp, sem duplicatas, com filtro e embaralhamento pela
+     semente 7.
+   - **Divisões:** 20 divisões com `train_test_split` (`random_state` de 0 a 19, 25% de
+     teste, estratificadas).
+2. `./env.sh gerar_amostra.py --conferir` precisa dizer "identico ao publicado: True"
+   nas duas línguas. Se disser False, a amostra mudou: o motivo pode ser a versão de
+   pandas, numpy ou scikit-learn, ou o próprio CSV.
+3. Para mudar a amostra de propósito, altere as constantes e rode
+   `./env.sh gerar_amostra.py`, depois `./env.sh build_assets.py`. Em seguida
+   `./env.sh v12_final.py pt` e `en` e `./env.sh v21_revelar_en.py` para refazer os
+   números dos Revelar, `harness.py pt` e `en` para conferir o JS e `v13_robustez.py`
+   para os punches de frase.
 
 ## Contrato de ids
 

@@ -1,0 +1,31 @@
+<!doctype html><meta charset="utf-8"><pre id="o"></pre>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.27.5/full/pyodide.js"></script>
+<script>
+const log=s=>{document.getElementById("o").textContent+=s+"\n"};
+(async()=>{try{
+ const t0=performance.now(); const py=await loadPyodide(); log("pyodide "+((performance.now()-t0)/1000).toFixed(1)+"s");
+ const t1=performance.now(); await py.loadPackage(["nltk","scikit-learn"]); log("nltk+sklearn "+((performance.now()-t1)/1000).toFixed(1)+"s");
+ const t2=performance.now();
+ await py.runPythonAsync(`
+from pyodide.http import pyfetch
+import zipfile, io, os
+base = "https://cdn.jsdelivr.net/gh/nltk/nltk_data@gh-pages/packages/"
+for sub, nome in [("stemmers","rslp"),("corpora","stopwords")]:
+    r = await pyfetch(base + sub + "/" + nome + ".zip")
+    dados = await r.bytes()
+    destino = "/home/pyodide/nltk_data/" + sub
+    os.makedirs(destino, exist_ok=True)
+    zipfile.ZipFile(io.BytesIO(dados)).extractall(destino)
+`);
+ log("corpora "+((performance.now()-t2)/1000).toFixed(1)+"s");
+ log(py.runPython(`
+import nltk, sklearn
+from nltk.stem import RSLPStemmer
+from nltk.corpus import stopwords
+s = RSLPStemmer()
+r = {w: s.stem(w) for w in ["não","barata","barato","casamento","gostei","atrasou"]}
+f"nltk {nltk.__version__} sklearn {sklearn.__version__} {r} 'não' in stopwords: {'não' in stopwords.words('portuguese')}"
+`));
+ log("OK");
+}catch(e){log("ERRO "+e)}})();
+</script>

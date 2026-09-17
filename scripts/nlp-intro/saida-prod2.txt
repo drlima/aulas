@@ -1,0 +1,68 @@
+== pt · ordem [1, 2]
+  run1 (5.5s) · baixou 32.4 MB em 31 requisicoes
+    status: Pronto. Rode quantas vezes quiser.
+    a 0.03
+    entreg 0.69
+    atras -1.95
+    (4000, 3195) -> negativa
+  run2 (1.9s)
+    status: Pronto. Rode quantas vezes quiser.
+    só letras:         0.917
+    sem stopwords:     0.912
+    com radical:       0.919
+  erros de pagina: []
+== pt · ordem [2, 1, 2]
+  run2 (4.2s) · baixou 32.4 MB em 31 requisicoes
+    status: Deu erro no código (veja abaixo). Corrija e rode de novo.
+    File "<exec>", line 15, in <lambda>
+    NameError: name 're' is not defined. Did you forget to import 're'
+  run1 (1.7s)
+    status: Deu erro no código (veja abaixo). Corrija e rode de novo.
+    a 0.03
+    entreg 0.69
+    atras -1.95
+    (4000, 3195) -> negativa
+  run2 (1.9s)
+    status: Deu erro no código (veja abaixo). Corrija e rode de novo.
+    só letras:         0.917
+    sem stopwords:     0.912
+    com radical:       0.919
+  erros de pagina: []
+  quiz pt certo: '8 de 8. Você amarrou a aula inteira.' · marcacoes corretas 8/8 · erros []
+  quiz pt errado: '0 de 8. Vale voltar aos blocos 3, 7 e 8.' · marcacoes corretas 8/8 · erros []
+  quiz pt misto: '5 de 8. Boa. Reabra o Revelar das que errou.' · marcacoes corretas 8/8 · erros []
+== en · ordem [1, 2]
+  run1 (4.5s) · baixou 32.4 MB em 30 requisicoes
+    status: Ready. Run it as many times as you like.
+    it -0.2
+    did -0.47
+    not -1.69
+    disappoint -1.66
+    (1984, 2554) -> negative
+  run2 (0.7s)
+    status: Ready. Run it as many times as you like.
+    letters only:   0.813
+    no stopwords:   0.793
+    with stem:      0.819
+  erros de pagina: []
+== en · ordem [2, 1, 2]
+  run2 (4.3s) · baixou 32.4 MB em 30 requisicoes
+    status: The code raised an error (see below). Fix it and run again.
+    File "<exec>", line 15, in <lambda>
+    NameError: name 're' is not defined. Did you forget to import 're'
+  run1 (1.1s)
+    status: The code raised an error (see below). Fix it and run again.
+    it -0.2
+    did -0.47
+    not -1.69
+    disappoint -1.66
+    (1984, 2554) -> negative
+  run2 (0.8s)
+    status: The code raised an error (see below). Fix it and run again.
+    letters only:   0.813
+    no stopwords:   0.793
+    with stem:      0.819
+  erros de pagina: []
+  quiz en certo: '8 of 8. You tied the whole class together.' · marcacoes corretas 8/8 · erros []
+  quiz en errado: '0 of 8. Worth going back to blocks 3, 7 and 8.' · marcacoes corretas 8/8 · erros []
+  quiz en misto: '5 of 8. Nice. Reopen the Reveal for the ones you missed.' · marcacoes corretas 8/8 · erros []

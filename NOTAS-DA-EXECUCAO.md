@@ -160,7 +160,12 @@ Decisões fora do roteiro aprovado. As que mudam a página também estão no fim
   scripts que produziram cada número ficaram em `rascunhos/nlp-intro/`, com o CSV do
   B2W (49 MB). A pasta entrou no `.git/info/exclude` (local, não no `.gitignore`, para não
   mexer em arquivo do repo). `PESQUISA.md` e `ROTEIRO.md` foram copiados para a pasta da
-  aula; os scripts não.
+  aula; os scripts não. **Atualizado a pedido do autor:** os scripts foram para
+  `scripts/nlp-intro/`, com um `gerar_amostra.py` que reproduz os dois JSON publicados byte a
+  byte. Os dados originais ficam em `scripts/nlp-intro/dados/`, ignorados por um
+  `.gitignore` local da pasta (o da raiz não mudou). Não entraram: `porter_src.py` (cópia
+  do código do nltk, usada só como consulta para o porte), `corpus-*.json` e
+  `esperado.json` (gerados) e os screenshots.
 - **Python local.** O `python3` desta máquina falha (trampoline do uv). Tudo rodou com
   `uv run --python 3.12`, inclusive o `nova-aula.py` (respostas por stdin) e o `check.py`.
 - **Dados em JSON dentro de `assets/`** (`avaliacoes-pt.json`, `avaliacoes-en.json`,

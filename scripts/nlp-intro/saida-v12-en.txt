@@ -1,0 +1,105 @@
+### en: 1984 avaliacoes, pos 992 neg 992, 110 KB
+colunas corpus inteiro [cru] 4977
+colunas corpus inteiro [minusc] 3187
+colunas corpus inteiro [acento] 3185
+colunas corpus inteiro [stop] 3037
+colunas corpus inteiro [stem] 2554
+palavras 20957, colunas 3187, uma vez so 1777 (56%), top10 ['the', 'and', 'i', 'a', 'it', 'to', 'is', 'was', 'this', 'of'] cobrem 24%
+stopwords: 49% do texto, 150 colunas
+distintas por avaliacao 10.0 -> zeros 99.69%
+variantes cruas great 11 [('great', 69), ('Great', 46), ('great.', 22), ('great,', 11), ('great!', 6), ('great!.', 2), ('GREAT', 1), ('great!!', 1), ('Great!!.', 1), ('great...', 1), ('great!!!!!!!!!!!!!!', 1)]
+lista a mao: {'muda': '62.4% (1238)', 'certa': '34.1% (677)', 'errada': '3.5% (69)'}
+presenca pos/neg: {'not': (32, 189), 'the': (413, 408), 'product': (32, 21), 'town': (7, 0), 'spot': (8, 0), 'money': (1, 24), 'minutes': (2, 20), 'disappoint': (2, 1), 'great': (150, 5), 'bad': (0, 31), 'good': (131, 35), 'like': (33, 40), 'liked': (3, 1), 'recommend': (26, 10), 'late': (1, 1), 'phone': (80, 72)}
+20 divisoes [base            ] colunas treino   2706 acuracia 0.813 vs base +0.0 pt, melhor 0 pior 0 empate 20
+20 divisoes [cru             ] colunas treino   4100 acuracia 0.770 vs base -4.3 pt, melhor 0 pior 20 empate 0
+20 divisoes [acento          ] colunas treino   2704 acuracia 0.814 vs base +0.1 pt, melhor 5 pior 0 empate 15
+20 divisoes [stop            ] colunas treino   2560 acuracia 0.793 vs base -2.0 pt, melhor 2 pior 18 empate 0
+20 divisoes [stopneg         ] colunas treino   2571 acuracia 0.816 vs base +0.3 pt, melhor 12 pior 7 empate 1
+20 divisoes [stem            ] colunas treino   2207 acuracia 0.819 vs base +0.6 pt, melhor 13 pior 6 empate 1
+20 divisoes [pares           ] colunas treino  12249 acuracia 0.824 vs base +1.1 pt, melhor 15 pior 5 empate 0
+20 divisoes [stem+pares      ] colunas treino  11428 acuracia 0.832 vs base +1.9 pt, melhor 18 pior 2 empate 0
+20 divisoes [acento+stop+stem] colunas treino   2074 acuracia 0.794 vs base -2.0 pt, melhor 1 pior 18 empate 1
+frases [base] colunas 3187 vies +0.000
+   NEG -2.62 'i did not like it' [('did', -0.48), ('i', -0.11), ('it', -0.21), ('like', -0.13), ('not', -1.69)]
+   NEG -2.26 'i do not recommend it' [('do', -1.21), ('i', -0.11), ('it', -0.21), ('not', -1.69), ('recommend', 0.96)]
+   NEG -5.10 'not bad' [('bad', -3.41), ('not', -1.69)]
+   NEG -5.83 'not bad at all' [('all', 0.16), ('at', -0.89), ('bad', -3.41), ('not', -1.69)]
+   NEG -1.91 'it did not disappoint' [('did', -0.48), ('disappoint', 0.47), ('it', -0.21), ('not', -1.69)]
+   POS +0.07 'the delivery was late' [('delivery', 0.06), ('late', 0.06), ('the', 0.07), ('was', -0.12)]
+   NEG -0.41 'oh great, it broke after two days' [('after', -1.14), ('broke', -2.14), ('days', -0.5), ('great', 3.29), ('it', -0.21), ('oh', 0.57), ('two', -0.28)]
+   POS +0.01 'fast delivery but it arrived broken' [('arrived', 0.06), ('broken', -1.04), ('but', -0.42), ('delivery', 0.06), ('fast', 1.56), ('it', -0.21)]
+   POS +0.01 'it arrived broken but fast delivery' [('arrived', 0.06), ('broken', -1.04), ('but', -0.42), ('delivery', 0.06), ('fast', 1.56), ('it', -0.21)]
+   POS +3.19 'it is not good, it is great' [('good', 1.36), ('great', 3.29), ('is', 0.44), ('it', -0.21), ('not', -1.69)]
+   POS +3.19 'it is not great, it is good' [('good', 1.36), ('great', 3.29), ('is', 0.44), ('it', -0.21), ('not', -1.69)]
+   POS +0.12 'nothing good' [('good', 1.36), ('nothing', -1.24)]
+   POS +1.41 'i really liked this phone' [('i', -0.11), ('liked', 0.75), ('phone', 0.16), ('really', 0.45), ('this', 0.16)]
+   POS +3.50 'best in town' [('best', 1.4), ('in', -0.04), ('town', 2.14)]
+   NEG -5.70 'waste of money' [('money', -2.47), ('of', -0.29), ('waste', -2.94)]
+   NEG -1.12 'no complaints at all' [('all', 0.16), ('at', -0.89), ('complaints', 0.47), ('no', -0.86)]
+   NEG -2.13 'nothing to complain about' [('about', -0.32), ('complain', -0.35), ('nothing', -1.24), ('to', -0.22)]
+   NEG -0.80 'no problems' [('no', -0.86), ('problems', 0.06)]
+   NEG -1.81 'still waiting for it' [('for', -0.1), ('it', -0.21), ('still', -0.31), ('waiting', -1.19)]
+   NEG -1.66 'i can not rate it yet' [('can', 0.23), ('i', -0.11), ('it', -0.21), ('not', -1.69), ('rate', 0.06), ('yet', 0.06)]
+frases [stop] colunas 3037 vies +0.000
+   NEG -0.18 'i did not like it' [('like', -0.18)]
+   POS +0.91 'i do not recommend it' [('recommend', 0.91)]
+   NEG -3.46 'not bad' [('bad', -3.46)]
+   NEG -3.46 'not bad at all' [('bad', -3.46)]
+   POS +0.41 'it did not disappoint' [('disappoint', 0.41)]
+   POS +0.02 'the delivery was late' [('delivery', 0.01), ('late', 0.01)]
+   POS +0.68 'oh great, it broke after two days' [('broke', -2.19), ('days', -0.55), ('great', 3.23), ('oh', 0.52), ('two', -0.33)]
+   POS +0.44 'fast delivery but it arrived broken' [('arrived', 0.01), ('broken', -1.09), ('delivery', 0.01), ('fast', 1.51)]
+   POS +0.44 'it arrived broken but fast delivery' [('arrived', 0.01), ('broken', -1.09), ('delivery', 0.01), ('fast', 1.51)]
+   POS +4.54 'it is not good, it is great' [('good', 1.31), ('great', 3.23)]
+   POS +4.54 'it is not great, it is good' [('good', 1.31), ('great', 3.23)]
+   POS +0.02 'nothing good' [('good', 1.31), ('nothing', -1.29)]
+   POS +1.21 'i really liked this phone' [('liked', 0.7), ('phone', 0.11), ('really', 0.4)]
+   POS +3.44 'best in town' [('best', 1.35), ('town', 2.09)]
+   NEG -5.51 'waste of money' [('money', -2.52), ('waste', -2.99)]
+   POS +0.41 'no complaints at all' [('complaints', 0.41)]
+   NEG -1.69 'nothing to complain about' [('complain', -0.4), ('nothing', -1.29)]
+   POS +0.01 'no problems' [('problems', 0.01)]
+   NEG -1.61 'still waiting for it' [('still', -0.37), ('waiting', -1.24)]
+   POS +0.02 'i can not rate it yet' [('rate', 0.01), ('yet', 0.01)]
+frases [stem] colunas 2554 vies +0.000
+   NEG -2.34 'i did not like it' [('did', -0.47), ('i', 0.1), ('it', -0.2), ('like', -0.08), ('not', -1.69)]
+   NEG -1.79 'i do not recommend it' [('do', -1.0), ('i', 0.1), ('it', -0.2), ('not', -1.69), ('recommend', 1.0)]
+   NEG -5.09 'not bad' [('bad', -3.4), ('not', -1.69)]
+   NEG -5.78 'not bad at all' [('all', 0.17), ('at', -0.86), ('bad', -3.4), ('not', -1.69)]
+   NEG -4.02 'it did not disappoint' [('did', -0.47), ('disappoint', -1.66), ('it', -0.2), ('not', -1.69)]
+   POS +0.50 'the delivery was late' [('deliveri', 0.06), ('late', 0.47), ('the', 0.08), ('wa', -0.11)]
+   POS +0.19 'oh great, it broke after two days' [('after', -1.14), ('broke', -2.13), ('dai', 0.06), ('great', 3.29), ('it', -0.2), ('oh', 0.58), ('two', -0.27)]
+   NEG -0.11 'fast delivery but it arrived broken' [('arriv', -0.09), ('broken', -1.03), ('but', -0.42), ('deliveri', 0.06), ('fast', 1.57), ('it', -0.2)]
+   NEG -0.11 'it arrived broken but fast delivery' [('arriv', -0.09), ('broken', -1.03), ('but', -0.42), ('deliveri', 0.06), ('fast', 1.57), ('it', -0.2)]
+   POS +2.86 'it is not good, it is great' [('good', 1.36), ('great', 3.29), ('i', 0.1), ('it', -0.2), ('not', -1.69)]
+   POS +2.86 'it is not great, it is good' [('good', 1.36), ('great', 3.29), ('i', 0.1), ('it', -0.2), ('not', -1.69)]
+   POS +0.12 'nothing good' [('good', 1.36), ('noth', -1.24)]
+   POS +0.79 'i really liked this phone' [('i', 0.1), ('like', -0.08), ('phone', 0.14), ('realli', 0.46), ('thi', 0.17)]
+   POS +3.51 'best in town' [('best', 1.4), ('in', -0.03), ('town', 2.14)]
+   NEG -5.94 'waste of money' [('monei', -2.46), ('of', -0.29), ('wast', -3.19)]
+   NEG -1.76 'no complaints at all' [('all', 0.17), ('at', -0.86), ('complaint', -0.22), ('no', -0.85)]
+   NEG -2.41 'nothing to complain about' [('about', -0.32), ('complain', -0.63), ('noth', -1.24), ('to', -0.22)]
+   NEG -1.22 'no problems' [('no', -0.85), ('problem', -0.37)]
+   NEG -2.02 'still waiting for it' [('for', -0.09), ('it', -0.2), ('still', -0.31), ('wait', -1.42)]
+   NEG -2.12 'i can not rate it yet' [('can', 0.24), ('i', 0.1), ('it', -0.2), ('not', -1.69), ('rate', -0.63), ('yet', 0.06)]
+frases [pares] colunas 15264 vies +0.000
+   NEG -5.93 'i did not like it' [('did', -0.49), ('did_not', -1.51), ('i', -0.12), ('i_did', 0.05), ('it', -0.22), ('like', -0.14), ('like_it', -0.24), ('not', -1.7), ('not_like', -1.56)]
+   NEG -6.43 'i do not recommend it' [('do', -1.23), ('do_not', -1.9), ('i', -0.12), ('i_do', -1.05), ('it', -0.22), ('not', -1.7), ('not_recommend', -1.9), ('recommend', 0.95), ('recommend_it', 0.74)]
+   NEG -5.12 'not bad' [('bad', -3.42), ('not', -1.7), ('not_bad', None)]
+   NEG -7.03 'not bad at all' [('all', 0.15), ('at', -0.9), ('at_all', -1.16), ('bad', -3.42), ('bad_at', None), ('not', -1.7), ('not_bad', None)]
+   NEG -2.68 'it did not disappoint' [('did', -0.49), ('did_not', -1.51), ('disappoint', 0.45), ('it', -0.22), ('it_did', 0.05), ('not', -1.7), ('not_disappoint', 0.74)]
+   POS +0.82 'the delivery was late' [('delivery', 0.05), ('delivery_was', 0.74), ('late', 0.05), ('the', 0.06), ('the_delivery', 0.05), ('was', -0.13), ('was_late', None)]
+   NEG -3.84 'oh great, it broke after two days' [('after', -1.16), ('after_two', -1.05), ('broke', -2.15), ('broke_after', -1.05), ('days', -0.51), ('great', 3.27), ('great_it', 1.15), ('it', -0.22), ('it_broke', -1.34), ('oh', 0.56), ('oh_great', None), ('two', -0.29), ('two_days', -1.05)]
+   POS +0.00 'fast delivery but it arrived broken' [('arrived', 0.05), ('arrived_broken', None), ('broken', -1.05), ('but', -0.43), ('but_it', 0.05), ('delivery', 0.05), ('delivery_but', None), ('fast', 1.55), ('fast_delivery', None), ('it', -0.22), ('it_arrived', None)]
+   NEG -0.05 'it arrived broken but fast delivery' [('arrived', 0.05), ('arrived_broken', None), ('broken', -1.05), ('broken_but', None), ('but', -0.43), ('but_fast', None), ('delivery', 0.05), ('fast', 1.55), ('fast_delivery', None), ('it', -0.22), ('it_arrived', None)]
+   POS +2.54 'it is not good, it is great' [('good', 1.35), ('good_it', None), ('great', 3.27), ('is', 0.43), ('is_great', 2.19), ('is_not', -0.83), ('it', -0.22), ('it_is', 0.49), ('not', -1.7), ('not_good', -2.44)]
+   POS +5.28 'it is not great, it is good' [('good', 1.35), ('great', 3.27), ('great_it', 1.15), ('is', 0.43), ('is_good', 1.99), ('is_not', -0.83), ('it', -0.22), ('it_is', 0.49), ('not', -1.7), ('not_great', -0.65)]
+   POS +0.10 'nothing good' [('good', 1.35), ('nothing', -1.25), ('nothing_good', None)]
+   POS +2.53 'i really liked this phone' [('i', -0.12), ('i_really', 0.52), ('liked', 0.74), ('liked_this', None), ('phone', 0.15), ('really', 0.44), ('really_liked', 0.74), ('this', 0.15), ('this_phone', -0.09)]
+   POS +5.31 'best in town' [('best', 1.39), ('best_in', None), ('in', -0.05), ('in_town', 1.84), ('town', 2.13)]
+   NEG -8.53 'waste of money' [('money', -2.48), ('of', -0.3), ('of_money', -0.65), ('waste', -2.95), ('waste_of', -2.15)]
+   NEG -1.18 'no complaints at all' [('all', 0.15), ('at', -0.9), ('at_all', -1.16), ('complaints', 0.45), ('complaints_at', None), ('no', -0.87), ('no_complaints', 1.15)]
+   NEG -0.70 'nothing to complain about' [('about', -0.34), ('complain', -0.36), ('complain_about', 0.74), ('nothing', -1.25), ('nothing_to', None), ('to', -0.23), ('to_complain', 0.74)]
+   POS +0.61 'no problems' [('no', -0.87), ('no_problems', 1.43), ('problems', 0.05)]
+   NEG -4.90 'still waiting for it' [('for', -0.11), ('for_it', -1.34), ('it', -0.22), ('still', -0.33), ('still_waiting', -0.65), ('waiting', -1.2), ('waiting_for', -1.05)]
+   NEG -2.59 'i can not rate it yet' [('can', 0.22), ('can_not', -1.05), ('i', -0.12), ('i_can', 0.18), ('it', -0.22), ('it_yet', None), ('not', -1.7), ('not_rate', None), ('rate', 0.05), ('rate_it', None), ('yet', 0.05)]

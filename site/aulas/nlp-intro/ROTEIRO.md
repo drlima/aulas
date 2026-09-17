@@ -11,8 +11,8 @@ blocos 2 a 9 (pt: 4000 do B2W; en: 1984 do UCI Amazon + Yelp).
 em branco; aprender = preencher"), rótulo, treino/teste, acurácia, k-NN, parâmetro,
 overfitting, hiperparâmetro, classificação.
 
-Todo número abaixo foi produzido pelos scripts de `verif/` (verificação local, fora do repositório) (Pyodide 0.27.5: nltk 3.8.1,
-scikit-learn 1.6.1). Saídas completas em `verif/saida-v12-pt.txt` e `verif/saida-v12-en.txt`.
+Todo número abaixo foi produzido pelos scripts de `scripts/nlp-intro/` (Pyodide 0.27.5: nltk 3.8.1,
+scikit-learn 1.6.1). Saídas completas em `scripts/nlp-intro/saida-v12-pt.txt` e `scripts/nlp-intro/saida-v12-en.txt`.
 Onde pt e en diferem, o valor en vem entre colchetes: **[en: …]**.
 
 ## Mapa de tempo
@@ -452,7 +452,7 @@ Quiz (`quizOptions`, 8 itens):
 
 Dados comuns: `assets/avaliacoes-pt.json` / `assets/avaliacoes-en.json`
 (`{fonte, licenca, texto[], rotulo[], divisoes[20 strings "0/1"]}`, gerados por
-`verif/v12_final.py`), `assets/rslp.json` (as 7 tabelas de regras do nltk_data),
+`scripts/nlp-intro/gerar_amostra.py`), `assets/rslp.json` (as 7 tabelas de regras do nltk_data),
 `assets/stopwords-pt.json` / `stopwords-en.json` (listas do nltk_data). Carregados uma vez ao
 abrir a página; JSON e não `.js` por causa da regra de acentos. O caminho de cada língua vem
 de `STR` (`dadosUrl`, `stopUrl`). Porte do Porter original: em `aula.js` (sem acentos).
@@ -531,7 +531,7 @@ peso(palavra) = ln( (positivas com a palavra + 1) / (palavras nas positivas + V)
 ln( (negativas com a palavra + 1) / (palavras nas negativas + V) ), com V = colunas. É o que
 `MultinomialNB(alpha=1)` guarda em `feature_log_prob_` sobre a tabela 0/1; a diferença das
 duas linhas é o peso. A soma dos pesos das palavras da frase, mais `ln(P(positiva)/P(negativa))`
-= 0 (classes do mesmo tamanho), decide o lado. Verificado em `verif/v12_final.py` (a
+= 0 (classes do mesmo tamanho), decide o lado. Verificado em `scripts/nlp-intro/v12_final.py` (a
 decisão pela soma coincide com `modelo.predict`).
 
 ### Bloco 9 — célula 1 (pt)
@@ -599,7 +599,7 @@ Mesma lógica, nomes em inglês (`texts`, `labels`, `splits`, `prepare`, `vector
 `PorterStemmer(mode="ORIGINAL_ALGORITHM").stem`, regex `[^\W\d_]+(?:'[^\W\d_]+)?`, frase
 "it did not disappoint". Saída verificada: `it -0.2 / did -0.47 / not -1.69 / disappoint
 -1.66 / (1984, 2554) -> negative`; `letters only: 0.813 / no stopwords: 0.793 / with stem:
-0.819`. Script: `verif/v14_bloco_python_en.py`.
+0.819`. Script: `scripts/nlp-intro/v14_bloco_python_en.py`.
 
 Pyodide: pacotes e corpora do NLTK testados em Chromium headless (ver PESQUISA.md); as duas
 células ainda não foram cronometradas dentro do Pyodide — fase 4.
@@ -610,7 +610,7 @@ células ainda não foram cronometradas dentro do Pyodide — fase 4.
    um peso por palavra e a soma decidindo — a ponte direta com `preço = a × área + b` — e o
    peso se explica por contagem, sem otimização. Regressão logística acerta parecido e
    também seria linear, mas os pesos não se explicam contando. Nas mesmas 20 divisões: Naive Bayes 91,7% [en: 81,3%], regressão logística 91,9% [en: 82,7%], k-NN (k = 5) 87,5% [en: 73,9%]. k-NN fica só no vocabulário
-   (`verif/v17_conferencias.py`).
+   (`scripts/nlp-intro/v17_conferencias.py`).
 2. **Presença, não contagem.** Pang 2002 e SLP3 B.4; e "Excelente! Excelente! Excelente!"
    não vale três vezes.
 3. **Rótulo pt: notas 1–2 negativa, 4–5 positiva, 3 fora.** Convenção da literatura (o artigo
@@ -622,13 +622,13 @@ células ainda não foram cronometradas dentro do Pyodide — fase 4.
    pt em vez de −1,5).
 5. **Punches descartados por não se sustentarem com outra amostra:** "atrasou só aparece em
    'não atrasou'" e "encontrei uma barata dentro da caixa sai positiva" (morreram ao aplicar
-   o filtro de conteúdo e trocar a amostra; teste de 10 amostras em `verif/v13_robustez.py`).
+   o filtro de conteúdo e trocar a amostra; teste de 10 amostras em `scripts/nlp-intro/v13_robustez.py`).
    Não reintroduzir sem refazer esse teste.
 6. **Acurácia sempre como média de 20 divisões fixas**, gravadas no JSON. Com uma divisão só
    (`random_state=7`), o radical parece ganhar +1,8 pt, o que é ruído.
 7. **Filtro de conteúdo antes da amostragem:** fora palavrão forte, acusação a terceiros
    ("golpe", "ladrão", "revendedor" com nome) e dados pessoais (sequências de dígitos, e-mail,
-   URL). Palavrão leve (en "crap", "damn") fica. Lista em `verif/filtros.py`.
+   URL). Palavrão leve (en "crap", "damn") fica. Lista em `scripts/nlp-intro/filtros.py`.
 8. **Stemmer en: Porter no modo original**, não o default do NLTK (NLTK_EXTENSIONS, 715
    linhas): o original tem porte curto e conhecido, e o bloco 9 usa o mesmo modo.
 9. **Lematização só com exemplos pré-calculados** (spaCy fora do navegador). A página diz que

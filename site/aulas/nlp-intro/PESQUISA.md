@@ -1,9 +1,9 @@
 # Pesquisa — Texto vira número: introdução a NLP e análise de sentimentos
 
 Dossiê da fase 1 da aula `nlp-intro`. Todo número marcado com **[v]** foi produzido em
-shell pelos scripts de verificação (`verif/`, fora do repositório), com as versões do
+shell pelos scripts de verificação (`scripts/nlp-intro/`), com as versões do
 Pyodide 0.27.5: nltk 3.8.1,
-scikit-learn 1.6.1, numpy 2.0.2, scipy 1.14.1, pandas 2.2.3 (`verif/env.sh`).
+scikit-learn 1.6.1, numpy 2.0.2, scipy 1.14.1, pandas 2.2.3 (`scripts/nlp-intro/env.sh`).
 
 O notebook de NLP do projeto do claude.ai não foi acessível a partir do Claude Code; o autor
 autorizou seguir sem ele. Os três punches do brief que vieram dele (`não` sobrevive ao RSLP;
@@ -88,10 +88,10 @@ entra nas referências da página.
 > **Atenção — números exploratórios.** Esta seção e os candidatos a punch usam a amostra de
 > exploração (1000 por classe, antes do filtro de conteúdo). A configuração final (2000 por
 > classe em pt, filtro aplicado, Porter no modo original) mudou vários valores; **os números
-> que valem estão no `ROTEIRO.md`** e em `verif/saida-v12-*.txt`. Dois punches não
+> que valem estão no `ROTEIRO.md`** e em `scripts/nlp-intro/saida-v12-*.txt`. Dois punches não
 > sobreviveram à troca de amostra e foram descartados: P9 na versão "atrasou só aparece em
 > 'não atrasou'" e P11 na frase "encontrei uma barata dentro da caixa" (teste de 10 amostras
-> em `verif/v13_robustez.py`).
+> em `scripts/nlp-intro/v13_robustez.py`).
 
 Corpus pt: B2W, reviews de 3 a 20 palavras, sem duplicatas, 1000 com nota 1–2 (negativas)
 e 1000 com nota 4–5 (positivas), amostra `random_state=7`; 158 KB de texto. Corpus en: UCI,
@@ -126,7 +126,7 @@ Outros números **[v]** (corpus inteiro, pipeline base):
 - Variantes cruas de "ótimo" no corpus pt: **18** colunas diferentes (Ótimo 47, ótimo 44,
   otimo 10, "ótimo," 8, "ótimo." 6, Otimo 3, OTIMO 3, …). Em en, "great": 11.
 - Lista de palavras escrita à mão **antes** de olhar os pesos (13 positivas, 12 negativas;
-  lista em `verif/v04_pareado_zipf_lista.py`): pt acerta 46,9%, erra 6,6% e fica **muda em
+  lista em `scripts/nlp-intro/v04_pareado_zipf_lista.py`): pt acerta 46,9%, erra 6,6% e fica **muda em
   46,6%** (nenhuma palavra da lista, ou saldo zero); en acerta 34,1%, erra 3,5%, muda em
   62,4%. Pang 2002 (Fig. 1): humanos 58% e 64%, com 75% e 39% de empates.
 - Presença por classe (em quantas das 1000 positivas / 1000 negativas a palavra aparece):

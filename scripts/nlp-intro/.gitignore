@@ -1,0 +1,4 @@
+dados/
+corpus-*.json
+esperado.json
+shots/
