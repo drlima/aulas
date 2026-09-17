@@ -1,0 +1,55 @@
+0	avaliacoes / pos / neg	4000 · 2000 · 2000	4000 · 2000 · 2000	sim
+1	letras: é ruim/não é ruim · ótimo/excelente · metades	4 · 9 · 20	4 · 9 · 20	sim
+2	lista: certas / erradas / sem resposta	47% / 6% / 47%	47,15% / 5,97% / 46,88%	sim
+3	colunas (split por espaco)	9801	9801	sim
+3	palavras distintas por avaliacao · % de zeros	12,6 · 99,87%	12.55 · 99,872%	sim
+3	% das colunas em uma avaliacao so	67%	67,6%	NAO
+4	colunas de ótimo	19	19	sim
+4	ótimo/Ótimo/otimo/ótimo./Otimo/ótimo,/ÓTIMO	122/101/28/15/13/11/7	122/101/28/15/13/11/7	sim
+4	minusculas + so letras · queda	5357 · −45%	5357 · -45,3%	sim
+4	sem acento	5145	5145	sim
+5	palavras no texto · % stopwords	52 mil · 39%	52138 · 39,2%	sim
+5	colunas cortadas	131	131	sim
+5	não na lista · posicao	sim · 4ª	True · 4	sim
+5	avaliacoes com não: neg / pos	1118 / 136	1118 / 136	sim
+5	'não gostei' sem stopwords	gostei	gostei	sim
+5	'não recomendo' sem stopwords	recomendo	recomendo	sim
+6	barato x barata	junta	barat / barat	sim
+6	casa x casamento	junta	cas / cas	sim
+6	bom x boa	separa	bom / boa	sim
+6	amei x amo	separa	ame / amo	sim
+6	colunas com radical · queda	5357 -> 3195 · 40%	5357 -> 3195 · 40,4%	sim
+6	tabela: radical de fui	fui	fui	sim
+6	tabela: radical de vou	vou	vou	sim
+6	tabela: radical de iria	iri	iri	sim
+6	tabela: radical de foi	foi	foi	sim
+6	tabela: radical de era	era	era	sim
+6	tabela: radical de boa	boa	boa	sim
+6	tabela: radical de Amei	ame	ame	sim
+6	tabela: radical de amo	amo	amo	sim
+6	tabela: radical de amava	am	am	sim
+6	tabela: radical de quebrado	quebr	quebr	sim
+6	tabela: radical de entregas	entreg	entreg	sim
+7	espacos (colunas)	5357	5357	sim
+7	peso de avaliar	-3.7	-3.70	sim
+7	avaliar em negativas	131	131 (e 2 positivas)	sim
+7	avaliar: quase sempre sem ter recebido	quase sempre	111 de 131 (85%, contagem conservadora por regex)	sim
+7	dentro: veio de 'chegou dentro do prazo'	origem	dentro 59 pos / 15 neg; 'dentro do prazo' em 40 das 59 positivas; 'chegou dentro do prazo' literal em 13	NAO
+7	produto: em tudo, peso quase zero	quase zero	(886, 857) peso +0.12	sim
+7	acuracia sem opcoes	91,7%	91,72%	sim
+8	sem stopwords · pior em	91,2% · 16 de 20	91,18% · 16	sim
+8	pares · melhor em	92,7% · 20 de 20	92,70% · 20	sim
+8	tabela com pares	cinco vezes maior	5357 -> 29509 (5.51x)	NAO
+8	peso de não / ruim	−2,0 / −3,5	-2.01 / -3.48	sim
+8	'não é ruim' sem opcoes	negativa (erro)	-5.33	sim
+8	'sem defeito nenhum' sem opcoes	negativa (erro)	-3.63	sim
+8	'a entrega atrasou' sem / com radical	pos -> neg	+0.24 -> -1.22	sim
+8	atrasou quase nunca apareceu	quase nunca	2 avaliacoes	sim
+8	entrega: veio de 'entrega rápida'	origem	entrega 364 pos / 116 neg; 'entrega rápida' em 84 das 364 positivas	NAO
+8	ironia sem / com radical	neg -> pos	-2.31 -> +3.04	sim
+8	maravilha e maravilhoso: mesmo radical	junta	maravilh / maravilh	sim
+8	atraso e atrasado: mesmo radical de atrasou	junta	atras / atras / atras	sim
+8	'não gostei' sem / com corte de stopwords	neg -> pos	-0.89 -> +1.05	sim
+9	Python: só letras / sem stopwords / radical	0,917 / 0,912 / 0,919	0.917 / 0.912 / 0.919	sim
+
+NAO BATE: % das colunas em uma avaliacao so; dentro: veio de 'chegou dentro do prazo'; tabela com pares; entrega: veio de 'entrega rápida'

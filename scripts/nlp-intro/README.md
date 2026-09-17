@@ -33,7 +33,7 @@ A pasta `dados/` está no `.gitignore`. Para regenerar:
 | `gerar_amostra.py` | Grava `avaliacoes-pt.json` e `avaliacoes-en.json` em `site/aulas/nlp-intro/assets/`. Critérios e semente estão no topo do arquivo. Com `--conferir`, só compara com os arquivos publicados. |
 | `build_assets.py` | Grava `rslp.json` e `stopwords-*.json` e gera `esperado.json` (radicais, colunas e acerto em cada sorteio), que o `harness.py` usa. |
 | `v12_final.py pt\|en` | Imprime os números dos Revelar: colunas por etapa, lista à mão, presença por classe, tabela das 20 divisões e frases. Saídas em `saida-v12-*.txt`. |
-| `v21_revelar_en.py` | Uma linha por afirmação numérica dos Revelar da versão en, com o valor medido. Saída em `saida-v21-en.txt`. |
+| `v21_revelar_en.py`, `v22_revelar_pt.py` | Uma linha por afirmação dos Revelar (en e pt), com o valor medido e se bate com o texto da página; termina em "TUDO BATE" ou na lista do que não bate. Saídas em `saida-v21-en.txt` e `saida-v22-pt.txt`. |
 | `v14_bloco_python.py`, `v14_bloco_python_en.py` | As duas caixas do bloco 9, fora do navegador. |
 | `harness.py pt\|en` | Com `python -m http.server --directory ../../site 8000` rodando, compara o JS da página com o `esperado.json`: radicais, colunas e acerto em cada sorteio. |
 | `widgets.py pt\|en`, `nav.py`, `pytest_page.py pt\|en` | Página local: widgets e screenshots, navegação, bloco 9. |

@@ -19,6 +19,10 @@ inglês usa outras avaliações (Amazon e Yelp) e outro stemmer (Porter), então
 dela são diferentes; a estrutura e os punches são os mesmos. Link direto:
 https://drlima.github.io/aulas/aulas/nlp-intro/en/
 
+**Cuidado ao vivo na versão en (blocos 5 e 8).** Sem stopwords, "i did not like it" vira
+"like", mas **continua negativa (−0,18)**. A frase que inverte é **"i do not recommend it"**
+(−2,3 → +0,9). Em pt as duas invertem.
+
 | Bloco da página | Tempo | O que acontece ao vivo |
 |---|---|---|
 | 1. Parecido | 6 min | Votação nos quatro pares. Lembre as frutas de 150 g e 151 g. Punch: em texto, parecido na forma não é parecido no sentido. Só então diga "NLP". |
