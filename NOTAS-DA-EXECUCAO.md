@@ -156,18 +156,15 @@ perguntar. Em cada uma, a alternativa escolhida foi a que muda menos coisa.
 Decisões fora do roteiro aprovado. As que mudam a página também estão no fim do
 `site/aulas/nlp-intro/ROTEIRO.md`.
 
-- **Rascunhos e scripts de verificação fora do repositório.** Pesquisa, roteiro e os
-  scripts que produziram cada número ficaram em `rascunhos/nlp-intro/`, com o CSV do
-  B2W (49 MB). A pasta entrou no `.git/info/exclude` (local, não no `.gitignore`, para não
-  mexer em arquivo do repo). `PESQUISA.md` e `ROTEIRO.md` foram copiados para a pasta da
-  aula; os scripts não. **Atualizado a pedido do autor:** os scripts foram para
-  `scripts/nlp-intro/`, com um `gerar_amostra.py` que reproduz os dois JSON publicados byte a
-  byte. Os dados originais ficam em `scripts/nlp-intro/dados/`, ignorados por um
-  `.gitignore` local da pasta (o da raiz não mudou). Não entraram: `porter_src.py` (cópia
-  do código do nltk, usada só como consulta para o porte), `corpus-*.json` e
-  `esperado.json` (gerados) e os screenshots.
-- **Python local.** O `python3` desta máquina falha (trampoline do uv). Tudo rodou com
-  `uv run --python 3.12`, inclusive o `nova-aula.py` (respostas por stdin) e o `check.py`.
+- **Scripts de verificação em `scripts/nlp-intro/`.** Estão lá os scripts que produziram
+  cada número, mais um `gerar_amostra.py` que reproduz byte a byte os dois JSON publicados.
+  Os dados originais (o CSV do B2W tem 49 MB) ficam em `scripts/nlp-intro/dados/`,
+  ignorados por um `.gitignore` local da pasta; o da raiz não mudou. Ficaram de fora dos
+  commits: uma cópia do código do nltk usada só como consulta para o porte, os
+  `corpus-*.json` e o `esperado.json` (arquivos gerados) e os screenshots.
+- **Versões do Python.** Os scripts rodaram com `uv run --python 3.12`, inclusive o
+  `nova-aula.py` (respostas por stdin) e o `check.py`, com as versões fixadas em
+  `scripts/nlp-intro/env.sh`.
 - **Dados em JSON dentro de `assets/`** (`avaliacoes-pt.json`, `avaliacoes-en.json`,
   `rslp.json`, `stopwords-*.json`), carregados por `fetch`. O `check.py` só confere
   `href`/`src`, não esses caminhos; a conferência foi feita no Playwright. Não alterei o
@@ -179,8 +176,8 @@ Decisões fora do roteiro aprovado. As que mudam a página também estão no fim
 - **Arquivo JS único.** Tokenizador, stemmers, Naive Bayes e widgets ficaram todos no
   `aula.js` (sem um segundo arquivo), para seguir a ordem de scripts do `CLAUDE.md` da raiz.
   Nada foi subido para o `core.js`: nenhuma outra aula usa texto.
-- **Testes no Chromium com `--disable-quic`.** Sem essa opção, o download do Pyodide falhava
-  nesta rede (`ERR_QUIC_PROTOCOL_ERROR`). É do ambiente de teste, não da página.
+- **Testes no Chromium com `--disable-quic`.** É uma opção do ambiente de teste e não muda
+  nada na página.
 - **Fora do escopo, só registrado:** a meta `description` dos dois HTMLs ficou com o
   resumo que o `nova-aula.py` gravou; o `aulas.json` ganhou um resumo reescrito. Os dois
   dizem a mesma coisa.

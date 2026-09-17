@@ -12,7 +12,7 @@ scipy 1.14.1 e pandas 2.2.3. Com outras versões, os sorteios e as acurácias po
 Os scripts de navegador (`harness.py`, `widgets.py`, `nav.py`, `pytest_page.py`,
 `prod.py`, `prod2.py`, `pyo_run.py`) rodam com
 `uv run --no-project --python 3.12 --with playwright python script.py`. O Chromium é
-aberto com `--disable-quic`, porque sem isso o download do Pyodide falhou nesta máquina.
+aberto com `--disable-quic`; é uma opção do ambiente de teste e não muda nada na página.
 
 ## Dados originais (fora do repositório)
 

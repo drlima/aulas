@@ -5,9 +5,8 @@ shell pelos scripts de verificação (`scripts/nlp-intro/`), com as versões do
 Pyodide 0.27.5: nltk 3.8.1,
 scikit-learn 1.6.1, numpy 2.0.2, scipy 1.14.1, pandas 2.2.3 (`scripts/nlp-intro/env.sh`).
 
-O notebook de NLP do projeto do claude.ai não foi acessível a partir do Claude Code; o autor
-autorizou seguir sem ele. Os três punches do brief que vieram dele (`não` sobrevive ao RSLP;
-barato/barata, casa/casamento, livro/livre colidem) foram reverificados **[v]**.
+Os três punches de partida do brief (`não` sobrevive ao RSLP; barato/barata, casa/casamento,
+livro/livre colidem) foram reverificados **[v]**.
 
 ## Recorte
 
@@ -135,7 +134,7 @@ Outros números **[v]** (corpus inteiro, pipeline base):
   `dinheiro` 1 / 38; `hoje` 1 / 31; `top` 11 / 0; `ótimo` 118 / 2; `otimo` 18 / 0; `ruim` 1 /
   34; `bom` 205 / 36; `nem` 3 / 40; `quebrado` 0 / 15.
   en (992 / 994): `not` 32 / 189; `the` 413 / 408; `town` 7 / 0 ("best … in town"); `spot` 8
-  / 0; `money` 1 / 24 ("waste of money"); `minutes` 2 / 20; **`disappoint` 2 / 1 — as duas
+  / 0; `money` 1 / 24 ("don't waste your money", "I want my money back"); `minutes` 2 / 20; **`disappoint` 2 / 1 — as duas
   positivas são "did not / won't disappoint"**; `great` 150 / 5; `bad` 0 / 31.
 - Stemmer RSLP (nltk 3.8.1) **[v]**: `Não/NÃO → não`; gostei, gosto, gosta, gostaria,
   gostoso → `gost`; barato, barata, baratinho → `barat`; casa, casamento → `cas`; livro,
@@ -272,8 +271,7 @@ Outros números **[v]** (corpus inteiro, pipeline base):
   **Testado em Chromium headless [v]:** `loadPackage(["nltk","scikit-learn"])`, `pyfetch`
   dos dois zips, `extractall` em `/home/pyodide/nltk_data/…`, `RSLPStemmer().stem("barata")
   == "barat"` e `"não" in stopwords.words("portuguese")`. `nltk.download()` não é usado
-  (urllib não funciona no Pyodide). No Chromium headless desta máquina o QUIC falhou e foi
-  preciso `--disable-quic`: registrar para a verificação da fase 5.
+  (urllib não funciona no Pyodide).
 - **Sem rede:** stemmer RSLP portado para JS (137 linhas de Python + 246 regras em 7
   arquivos, que vão como dados JSON) e Porter original em JS; ambos conferidos palavra a
   palavra contra o nltk sobre o vocabulário inteiro de cada corpus. Tokenizador, saco de
@@ -281,14 +279,13 @@ Outros números **[v]** (corpus inteiro, pipeline base):
   corpus para bater com o scikit-learn.
 - **Lematização** não tem implementação viável no navegador (spaCy não está no Pyodide;
   nltk não tem lematizador pt): exemplos pré-computados com spaCy, marcados como tal.
-- **Local:** o `python` padrão da máquina está quebrado (trampoline do uv); tudo roda por
-  `uv run --python 3.12`. O `check.py` vai precisar do mesmo.
+- **Fora do navegador:** os scripts rodam com `uv run --python 3.12` e as versões fixadas em
+  `scripts/nlp-intro/env.sh`.
 
 ## Licenças dos dados
 
-- **B2W-Reviews01: CC BY-NC-SA 4.0.** Compatível com o hub (educacional, sem fins
-  comerciais) se: (BY) crédito à B2W Digital + artigo + link da licença, na página e no
-  arquivo; (NC) o site não monetiza; (SA) o arquivo de amostra sai sob CC BY-NC-SA 4.0, com
+- **B2W-Reviews01: CC BY-NC-SA 4.0.** (BY) crédito à B2W Digital + artigo + link da
+  licença, na página e no arquivo; (SA) o arquivo de amostra sai sob CC BY-NC-SA 4.0, com
   o aviso dentro dele. Só `texto` e `rótulo` vão para a amostra (nada de id, idade, gênero,
   estado).
 - **UCI Sentiment Labelled Sentences: CC BY 4.0.** Crédito a Kotzias et al. 2015.

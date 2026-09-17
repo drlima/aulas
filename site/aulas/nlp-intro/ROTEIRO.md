@@ -160,7 +160,7 @@ idêntica").
 (a) A intuição é que a tabela teria algumas centenas de colunas: não usamos tantas palavras.
 (b) São **9801 colunas** [en: 4977]. Uma avaliação usa em média 12,6 palavras diferentes
 [en: 10,1]: **99,87% da linha é zero** [en: 99,80%]. E 67% das colunas aparecem em uma
-avaliação só [en: 66%]. E a ordem sumiu: "chegou rápido mas veio quebrado" e "veio quebrado
+avaliação só [en: 67%]. E a ordem sumiu: "chegou rápido mas veio quebrado" e "veio quebrado
 mas chegou rápido" são a mesma linha, como uma letra de música com os versos embaralhados
 que ainda usa as mesmas palavras.
 (c) A lista de todas as palavras diferentes chama-se **vocabulário**; a linha da frase é um
@@ -295,7 +295,7 @@ avaliações de exemplo com a palavra destacada.
 | ainda | 24 | 223 | negativo (−2,1) | "ainda não chegou" |
 | top | 16 | 0 | positivo (+2,9) | "produto top" |
 
-[en: town 7 / 0 ("best tacos in town"); money 1 / 24 ("waste of money", −2,5); the 413 / 408
+[en: town 7 / 0 ("best tacos in town"); money 1 / 24 ("don't waste your money", "I want my money back"; −2,5); the 413 / 408
 (≈ 0); minutes 2 / 20 ("waited 45 minutes"); great 150 / 5 (+3,3); not 32 / 189 (−1,7)]
 
 **Widget (W7b-soma).** Uma frase (valor inicial "não posso avaliar") com uma barra por
