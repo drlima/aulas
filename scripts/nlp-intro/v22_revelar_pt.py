@@ -51,7 +51,7 @@ cr = Counter(w for d in raw for w in set(d))
 md = np.mean([len(set(d)) for d in raw]); um = sum(1 for v in cr.values() if v == 1) / len(cr)
 out("3", "colunas (split por espaco)", "9801", len(cr), len(cr) == 9801, "9801 colunas")
 out("3", "palavras distintas por avaliacao · % de zeros", "12,6 · 99,87%", f"{md:.2f} · {pct(1-md/len(cr), 3)}", f"{md:.1f}" == "12.6" and pct(1-md/len(cr), 2) == "99,87%", "99,87% da linha é zero")
-out("3", "% das colunas em uma avaliacao so", "67%", pct(um, 1), pct(um) == "67%", "E 67% das colunas")
+out("3", "% das colunas em uma avaliacao so", "68%", pct(um, 1), pct(um) == "68%", "E 68% das colunas")
 
 # bloco 4
 cru = Counter(w for d in raw for w in d)
@@ -98,7 +98,7 @@ k = sum(1 for t in neg_av if SEM_RECEBER.search(t))
 out("7", "avaliar: quase sempre sem ter recebido", "quase sempre", f"{k} de {len(neg_av)} ({pct(k/len(neg_av))}, contagem conservadora por regex)", k / len(neg_av) >= 0.75, "quase sempre de quem ainda não tinha recebido o produto")
 pos_de = [t for t, s, y in zip(T, S, Y) if "dentro" in s and y == 1]
 k1 = sum(1 for t in pos_de if "dentro do prazo" in t.lower()); k2 = sum(1 for t in pos_de if "chegou dentro do prazo" in t.lower())
-out("7", "dentro: veio de 'chegou dentro do prazo'", "origem", f"dentro {pn('dentro')[0]} pos / {pn('dentro')[1]} neg; 'dentro do prazo' em {k1} das {len(pos_de)} positivas; 'chegou dentro do prazo' literal em {k2}", k2 / len(pos_de) >= 0.5, '"dentro" veio de "chegou dentro do prazo"')
+out("7", "dentro: 59 pos, 15 neg, na maioria em 'dentro do prazo'", "maioria", f"{pn('dentro')[0]} pos / {pn('dentro')[1]} neg; 'dentro do prazo' em {k1} das {len(pos_de)} positivas ({pct(k1/len(pos_de))}); 'chegou dentro do prazo' literal em {k2}", pn("dentro") == (59, 15) and k1 / len(pos_de) > 0.5, '"dentro" apareceu em 59 positivas e 15 negativas, na maioria das vezes em "dentro do prazo"')
 out("7", "produto: em tudo, peso quase zero", "quase zero", f"{pn('produto')} peso {w[V['produto']]:+.2f}", abs(w[V["produto"]]) < 0.2, '"produto" está em tudo e pesa quase zero')
 
 def acc(stop=False, stem=False, pares=False):
@@ -116,7 +116,7 @@ out("7", "acuracia sem opcoes", "91,7%", pct(A0.mean(), 2), pct(A0.mean(), 1) ==
 # bloco 8
 out("8", "sem stopwords · pior em", "91,2% · 16 de 20", f"{pct(As.mean(), 2)} · {(As<A0).sum()}", pct(As.mean(), 1) == "91,2%" and (As < A0).sum() == 16, "91,2% sem as palavras vazias, pior em 16 de 20")
 out("8", "pares · melhor em", "92,7% · 20 de 20", f"{pct(Ap.mean(), 2)} · {(Ap>A0).sum()}", pct(Ap.mean(), 1) == "92,7%" and (Ap > A0).sum() == 20, "92,7%, melhor em 20 de 20")
-out("8", "tabela com pares", "cinco vezes maior", f"{c0} -> {cp} ({cp/c0:.2f}x)", 4.5 <= cp / c0 < 5.5, "cinco vezes maior")
+out("8", "tabela com pares", "mais de cinco vezes maior", f"{c0} -> {cp} ({cp/c0:.2f}x)", cp / c0 > 5, "mais de cinco vezes maior")
 out("8", "peso de não / ruim", "−2,0 / −3,5", f"{w[V['não']]:+.2f} / {w[V['ruim']]:+.2f}", (round(float(w[V["não"]]), 1), round(float(w[V["ruim"]]), 1)) == (-2.0, -3.5), '"não" pesa −2,0 e "ruim" pesa −3,5')
 
 def nota(f, **kw):
@@ -128,9 +128,14 @@ for f in ["não é ruim", "sem defeito nenhum"]:
 s0, s1 = nota("a entrega atrasou"), nota("a entrega atrasou", stem=True)
 out("8", "'a entrega atrasou' sem / com radical", "pos -> neg", f"{s0:+.2f} -> {s1:+.2f}", s0 > 0 > s1, '"a entrega atrasou" sai positiva')
 out("8", "atrasou quase nunca apareceu", "quase nunca", f"{sum(pn('atrasou'))} avaliacoes", sum(pn("atrasou")) <= 3, '"atrasou" quase nunca apareceu')
-pos_en = [t for t, s, y in zip(T, S, Y) if "entrega" in s and y == 1]
-k = sum(1 for t in pos_en if re.search(r"entrega r[aá]pida", t.lower()))
-out("8", "entrega: veio de 'entrega rápida'", "origem", f"entrega {pn('entrega')[0]} pos / {pn('entrega')[1]} neg; 'entrega rápida' em {k} das {len(pos_en)} positivas", k / len(pos_en) >= 0.5, '"entrega" veio de "entrega rápida"')
+# "entrega" perto de elogio a rapidez ou ao prazo: janela de 3 palavras, so termos explicitos (v23_contexto_entrega.py)
+RAPIDEZ = re.compile(r"^(r[aá]pid\w*|ligeir\w*|express\w*|[aá]gil|adiantad\w*|antecipad\w*|prazo|pontual\w*)$")
+docs_pos = [prepara(t, "pt") for t, y in zip(T, Y) if y == 1]
+def perto(d):
+    return any(w == "entrega" and any(RAPIDEZ.match(x) for x in d[max(0, i-3):i] + d[i+1:i+4]) for i, w in enumerate(d))
+com_entrega = [d for d in docs_pos if "entrega" in d]
+k = sum(1 for d in com_entrega if perto(d))
+out("8", "entrega: elogio a rapidez ou prazo em 3 de cada 4 positivas", "3 de cada 4 das 364", f"{pn('entrega')[0]} pos / {pn('entrega')[1]} neg; com rapidez ou prazo a ate 3 palavras: {k} de {len(com_entrega)} ({pct(k/len(com_entrega))})", pn("entrega")[0] == 364 and 0.70 <= k / len(com_entrega) < 0.80, '3 de cada 4 das 364 positivas que usam a palavra')
 f = "que maravilha, esperei dois meses pela entrega"; s0, s1 = nota(f), nota(f, stem=True)
 out("8", "ironia sem / com radical", "neg -> pos", f"{s0:+.2f} -> {s1:+.2f}", s0 < 0 < s1, "cai na ironia")
 out("8", "maravilha e maravilhoso: mesmo radical", "junta", f"{st('maravilha')} / {st('maravilhoso')}", st("maravilha") == st("maravilhoso"), 'junta "maravilha" com "maravilhoso"')

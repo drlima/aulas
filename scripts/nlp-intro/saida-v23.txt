@@ -1,0 +1,40 @@
+
+=== pt: "entrega" em 364 positivas e 116 negativas
+  10 palavras mais frequentes antes de "entrega" (370 ocorrencias):
+      97 (26.2%)  a entrega
+      46 (12.4%)  (inicio da frase) entrega
+      34 ( 9.2%)  e entrega
+      31 ( 8.4%)  de entrega
+      22 ( 5.9%)  produto entrega
+      12 ( 3.2%)  qualidade entrega
+      10 ( 2.7%)  recomendo entrega
+       8 ( 2.2%)  bom entrega
+       8 ( 2.2%)  excelente entrega
+       7 ( 1.9%)  na entrega
+    top 10 cobrem 74% das ocorrencias
+  10 palavras mais frequentes depois de "entrega" (370 ocorrencias):
+      79 (21.4%)  entrega rápida
+      69 (18.6%)  entrega foi
+      33 ( 8.9%)  entrega super
+      23 ( 6.2%)  entrega antes
+      14 ( 3.8%)  entrega no
+      14 ( 3.8%)  entrega dentro
+      13 ( 3.5%)  entrega muito
+      10 ( 2.7%)  entrega e
+       9 ( 2.4%)  entrega (fim da frase)
+       8 ( 2.2%)  entrega rapida
+    top 10 cobrem 74% das ocorrencias
+  positivas com pista de rapidez ou prazo a ate 3 palavras do alvo: 306 de 364 (84%)
+  10 bigramas mais frequentes: a entrega (97), entrega rápida (79), entrega foi (69), e entrega (34), entrega super (33), de entrega (31), entrega antes (23), produto entrega (22), entrega no (14), entrega dentro (14)
+  avaliacoes positivas cobertas por esses 10 bigramas: 303 de 364 (83%)
+
+=== en: "delivery" em 1 positivas e 1 negativas
+  10 palavras mais frequentes antes de "delivery" (1 ocorrencias):
+       1 (100.0%)  the delivery
+    top 10 cobrem 100% das ocorrencias
+  10 palavras mais frequentes depois de "delivery" (1 ocorrencias):
+       1 (100.0%)  delivery was
+    top 10 cobrem 100% das ocorrencias
+  positivas com pista de rapidez ou prazo a ate 3 palavras do alvo: 1 de 1 (100%)
+  10 bigramas mais frequentes: the delivery (1), delivery was (1)
+  avaliacoes positivas cobertas por esses 10 bigramas: 1 de 1 (100%)

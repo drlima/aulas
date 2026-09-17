@@ -89,7 +89,7 @@
 </div>
 <details class="reveal"><summary>Revelar</summary><div class="in">
 <p>A intuição é que a tabela teria algumas centenas de colunas: ninguém usa tantas palavras assim.</p>
-<p>São <strong>9801 colunas</strong>. Uma avaliação usa, em média, 12,6 palavras diferentes: <mark>99,87% da linha é zero</mark>. E 67% das colunas aparecem numa avaliação só. A ordem também sumiu: "chegou rápido mas veio quebrado" e "veio quebrado mas chegou rápido" são a mesma linha, como a letra de uma música com os versos embaralhados, que continua usando as mesmas palavras.</p>
+<p>São <strong>9801 colunas</strong>. Uma avaliação usa, em média, 12,6 palavras diferentes: <mark>99,87% da linha é zero</mark>. E 68% das colunas aparecem numa avaliação só. A ordem também sumiu: "chegou rápido mas veio quebrado" e "veio quebrado mas chegou rápido" são a mesma linha, como a letra de uma música com os versos embaralhados, que continua usando as mesmas palavras.</p>
 <p>A lista de todas as palavras diferentes chama-se <strong>vocabulário</strong>; a linha da frase é um <strong>vetor</strong>; e essa forma de montar a tabela, jogando as palavras num saco e anotando só quais estão lá, é o <strong>saco de palavras</strong> (<em>bag of words</em>). Uma tabela quase só de zeros é <strong>esparsa</strong>. Ficaram três custos na mesa: colunas demais, a maioria com um exemplo só, e a ordem perdida. Os próximos três blocos atacam os dois primeiros; o terceiro volta no bloco 8.</p>
 </div></details>
 </div></section>
@@ -207,7 +207,7 @@ print(round(pesos[vetorizador.vocabulary_["avaliar"]], 2))   # -3.7</code></pre>
 </div></details>
 <details class="reveal"><summary>Revelar</summary><div class="in">
 <p>A gente julga a palavra pelo que ela quer dizer: "avaliar" é neutra, "dentro" também.</p>
-<p>O computador não sabe o que nenhuma palavra quer dizer. Ele só contou onde cada uma apareceu: "avaliar" apareceu em 131 negativas, quase sempre de quem ainda não tinha recebido o produto; "dentro" veio de "chegou dentro do prazo"; "produto" está em tudo e pesa quase zero. <mark>O peso vem de onde a palavra apareceu, não do que ela significa.</mark> A nota da frase é a soma dos pesos, e com isso ele acerta 91,7% das avaliações que não viu no treino.</p>
+<p>O computador não sabe o que nenhuma palavra quer dizer. Ele só contou onde cada uma apareceu: "avaliar" apareceu em 131 negativas, quase sempre de quem ainda não tinha recebido o produto; "dentro" apareceu em 59 positivas e 15 negativas, na maioria das vezes em "dentro do prazo"; "produto" está em tudo e pesa quase zero. <mark>O peso vem de onde a palavra apareceu, não do que ela significa.</mark> A nota da frase é a soma dos pesos, e com isso ele acerta 91,7% das avaliações que não viu no treino.</p>
 <p>Cada um desses números é um <strong>peso</strong>: é o "a" da fórmula da aula anterior, um por coluna. Aprender, aqui, é contar. Esse classificador chama-se <strong>Naive Bayes</strong>. <em>Naive</em>, ingênuo, porque soma as palavras como se cada uma não tivesse nada a ver com as vizinhas, o que já diz onde ele vai errar.</p>
 </div></details>
 </div></section>
@@ -233,8 +233,8 @@ print(round(pesos[vetorizador.vocabulary_["avaliar"]], 2))   # -3.7</code></pre>
 </div>
 <details class="reveal"><summary>Revelar</summary><div class="in">
 <p>A gente esperava que ele errasse ironia, e ele erra. Mas talvez não esperasse que errasse "não é ruim" ou "sem defeito nenhum", que qualquer pessoa entende.</p>
-<p>Cada erro está escrito nos números. "não" pesa −2,0 e "ruim" pesa −3,5: somados, dão uma frase muito negativa, porque <mark>a soma não sabe que um desfaz o outro</mark>. "a entrega atrasou" sai positiva porque "entrega" veio de "entrega rápida" e "atrasou" quase nunca apareceu; cortar a ponta junta atraso e atrasado, e conserta. O mesmo corte junta "maravilha" com "maravilhoso" e cai na ironia. Tirar as palavras vazias apaga o "não" e inverte "não gostei". E a média quase não se mexe (91,7% sem opções, 91,2% sem as palavras vazias, pior em 16 de 20 sorteios) enquanto frases inteiras trocam de lado.</p>
-<p>Pares de palavras ("não_recomendo") devolvem um pouco da ordem: são os <strong>n-gramas</strong> (<strong>bigramas</strong>, no caso de pares). Acertam mais, 92,7%, melhor em 20 de 20 sorteios, e deixam a tabela cinco vezes maior. Nenhuma técnica de preparo é boa ou ruim em geral: cada uma joga alguma coisa fora, e o que importa é se aquilo que ela jogou fora era o que decidia.</p>
+<p>Cada erro está escrito nos números. "não" pesa −2,0 e "ruim" pesa −3,5: somados, dão uma frase muito negativa, porque <mark>a soma não sabe que um desfaz o outro</mark>. "a entrega atrasou" sai positiva porque "entrega" quase sempre apareceu junto de um elogio à rapidez ou ao prazo ("entrega rápida", "entrega antes do prazo": 3 de cada 4 das 364 positivas que usam a palavra) e "atrasou" quase nunca apareceu; cortar a ponta junta atraso e atrasado, e conserta. O mesmo corte junta "maravilha" com "maravilhoso" e cai na ironia. Tirar as palavras vazias apaga o "não" e inverte "não gostei". E a média quase não se mexe (91,7% sem opções, 91,2% sem as palavras vazias, pior em 16 de 20 sorteios) enquanto frases inteiras trocam de lado.</p>
+<p>Pares de palavras ("não_recomendo") devolvem um pouco da ordem: são os <strong>n-gramas</strong> (<strong>bigramas</strong>, no caso de pares). Acertam mais, 92,7%, melhor em 20 de 20 sorteios, e deixam a tabela mais de cinco vezes maior. Nenhuma técnica de preparo é boa ou ruim em geral: cada uma joga alguma coisa fora, e o que importa é se aquilo que ela jogou fora era o que decidia.</p>
 </div></details>
 </div></section>
 

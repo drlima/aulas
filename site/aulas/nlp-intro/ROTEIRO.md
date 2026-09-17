@@ -159,7 +159,7 @@ idêntica").
 **Revelação.**
 (a) A intuição é que a tabela teria algumas centenas de colunas: não usamos tantas palavras.
 (b) São **9801 colunas** [en: 4977]. Uma avaliação usa em média 12,6 palavras diferentes
-[en: 10,1]: **99,87% da linha é zero** [en: 99,80%]. E 67% das colunas aparecem em uma
+[en: 10,1]: **99,87% da linha é zero** [en: 99,80%]. E 68% das colunas aparecem em uma
 avaliação só [en: 67%]. E a ordem sumiu: "chegou rápido mas veio quebrado" e "veio quebrado
 mas chegou rápido" são a mesma linha, como uma letra de música com os versos embaralhados
 que ainda usa as mesmas palavras.
@@ -288,8 +288,8 @@ avaliações de exemplo com a palavra destacada.
 
 | Palavra (pt) | positivas | negativas | peso | por quê (exemplo do corpus) |
 |---|---|---|---|---|
-| entrega | 364 | 116 | positivo | "entrega rápida" |
-| dentro | 59 | 15 | positivo | "chegou dentro do prazo" |
+| entrega | 364 | 116 | positivo | elogio à rapidez ou ao prazo em 3 de cada 4 ("entrega rápida", "entrega antes do prazo") |
+| dentro | 59 | 15 | positivo | "dentro do prazo" (40 das 59 positivas) |
 | avaliar | 2 | 131 | muito negativo (−3,7) | "não posso avaliar, ainda não recebi" |
 | produto | 886 | 857 | quase zero (+0,1) | aparece em tudo |
 | ainda | 24 | 223 | negativo (−2,1) | "ainda não chegou" |
@@ -377,7 +377,8 @@ Acerto, média de 20 sorteios (pt / en):
 "não é ruim" ou "sem defeito nenhum", que qualquer pessoa entende.
 (b) Cada erro está escrito nos números. "não" pesa −2,0 e "ruim" pesa −3,5: somados, dão uma
 frase muito negativa, porque a soma não sabe que um desfaz o outro. "a entrega atrasou" sai
-positiva porque "entrega" veio de "entrega rápida" e "atrasou" quase nunca apareceu; o
+positiva porque "entrega" quase sempre veio de elogio à rapidez ou ao prazo (3 de cada 4) e
+"atrasou" quase nunca apareceu; o
 radical junta atraso e atrasado e conserta. O mesmo radical junta "maravilha" com
 "maravilhoso" e cai na ironia. Tirar stopwords apaga o "não" e inverte "não gostei". E a
 média quase não se mexe — 91,7% para 91,2% — enquanto frases inteiras trocam de lado.
