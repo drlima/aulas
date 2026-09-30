@@ -39,6 +39,22 @@
         "resumo": "A sentence becomes a row of numbers, a classifier decides whether it is positive, and you see why it gets \"not bad\" wrong.",
         "url": "aulas/nlp-intro/en/"
       }
+    },
+    {
+      "slug": "github-windows",
+      "ordem": 3,
+      "status": "publicada",
+      "duracao_min": 60,
+      "nivel": "iniciante",
+      "tags": ["git", "github", "windows", "guia de consulta"],
+      "atualizada_em": "2026-09-30",
+      "capa": { "emoji": "🐙", "cor": "coral" },
+      "idiomas": ["pt-BR"],
+      "pt-BR": {
+        "titulo": "GitHub no Windows (Tech Challenge Fase 2)",
+        "resumo": "Do cadastro no GitHub ao repositório do grupo no ar: instalar as ferramentas, criar o repo a partir do template, clonar, trabalhar em equipe e usar o Colab.",
+        "url": "aulas/github-windows/"
+      }
     }
   ]
 }

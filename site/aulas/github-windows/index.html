@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GitHub no Windows (Tech Challenge Fase 2) — guia de consulta</title>
+<meta name="description" content="Do cadastro no GitHub ao repositório do grupo no ar: instalar as ferramentas, criar o repo a partir do template, clonar, trabalhar em equipe e usar o Colab.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GitHub no Windows (Tech Challenge Fase 2)">
+<meta property="og:description" content="Do cadastro no GitHub ao repositório do grupo no ar: instalar as ferramentas, criar o repo a partir do template, clonar, trabalhar em equipe e usar o Colab.">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://drlima.github.io/aulas/aulas/github-windows/">
+<link rel="alternate" hreflang="pt-BR" href="./">
+<link rel="alternate" hreflang="x-default" href="./">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- Ordem das folhas: base (o site), aula (componentes de qualquer aula), extra (só esta aula). -->
+<link rel="stylesheet" href="../../assets/base.css">
+<link rel="stylesheet" href="../../assets/aula.css">
+<link rel="stylesheet" href="assets/extra.css">
+</head>
+<body>
+
+<nav class="map solo" aria-label="Navegação do site"><div class="wrap">
+<a class="home" href="../../">← Todas as aulas</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+<div class="eyebrow">Guia de consulta</div>
+<h1>Tutorial: GitHub no Windows (Tech Challenge Fase 2)</h1>
+<p><strong>Glossário:</strong> <em>repo</em> = projeto no GitHub; <em>clonar</em> = copiar o repo para o computador; <em>commit</em> = versão salva; <em>push</em> / <em>pull</em> = enviar / baixar.</p>
+</div></header>
+
+<!-- Índice: fixo na lateral no desktop, recolhível no mobile (aula.js). Sem JS fica aberto. -->
+<nav class="toc" id="toc" aria-label="Índice"><details open><summary>Índice</summary>
+<ol>
+<li><a href="#s1">1. Criar conta no GitHub</a></li>
+<li><a href="#s2">2. Instalar as ferramentas</a></li>
+<li><a href="#s3">3. Configurar sua identidade (uma vez por computador)</a></li>
+<li><a href="#s4">4. Escolher como obter o template</a></li>
+<li><a href="#5a">5A. Use this template (recomendado)</a></li>
+<li><a href="#5b">5B. Fork</a></li>
+<li><a href="#5c">5C. Download ZIP</a></li>
+<li><a href="#s6">6. Clonar para o seu computador (5A e 5B)</a></li>
+<li><a href="#s7">7. Rotina de trabalho</a></li>
+<li><a href="#s8">8. Trabalho em grupo (1 a 5 integrantes)</a></li>
+<li><a href="#s9">9. Google Colab</a></li>
+<li><a href="#s10">10. Antes de entregar</a></li>
+<li><a href="#erros">Erros comuns</a></li>
+</ol>
+<div class="toc-foot"><div class="toc-prog" id="tocProg" role="status"></div><div id="tocTools"></div></div>
+</details></nav>
+
+<main id="conteudo">
+<section class="block" id="s1"><div class="wrap">
+<h2>1. Criar conta no GitHub</h2>
+<p>Acesse <a href="https://github.com/signup" target="_blank" rel="noopener noreferrer">github.com/signup</a> e crie a conta. Anote o <strong>usuário</strong> (URL do repositório e convites) e o <strong>e-mail</strong> (passo 3).</p>
+</div></section>
+
+<section class="block" id="s2"><div class="wrap">
+<h2>2. Instalar as ferramentas</h2>
+<ul>
+<li><strong>VS Code:</strong> <a href="https://code.visualstudio.com" target="_blank" rel="noopener noreferrer">code.visualstudio.com</a> (instale <strong>antes</strong> do Git).</li>
+<li><strong>Git:</strong> <a href="https://git-scm.com/download/win" target="_blank" rel="noopener noreferrer">git-scm.com/download/win</a> → baixe o instalador de 64 bits. No instalador, clique <em>Next</em> em tudo, exceto <strong>Editor padrão: Visual Studio Code</strong>.</li>
+<li><strong>GitHub Desktop:</strong> <a href="https://desktop.github.com" target="_blank" rel="noopener noreferrer">desktop.github.com</a> → depois <em>File → Options → Accounts → Sign in</em>.</li>
+<li><strong>Google Colab:</strong> não instala nada, basta uma conta Google.</li>
+</ul>
+<p>Confirme a instalação abrindo o <strong>PowerShell</strong> e rodando <code>git --version</code>.</p>
+<p>Na primeira vez que você enviar arquivos ao GitHub (push), abre uma janela do navegador para você entrar na sua conta. O GitHub não aceita mais senha no terminal.</p>
+</div></section>
+
+<section class="block" id="s3"><div class="wrap">
+<h2>3. Configurar sua identidade (uma vez por computador)</h2>
+<pre><code class="term">git config --global user.name &quot;<span class="ph">Seu Nome</span>&quot;
+git config --global user.email &quot;<span class="ph">email-da-conta-github</span>&quot;
+git config --global init.defaultBranch main
+git config --global pull.rebase false</code></pre>
+</div></section>
+
+<section class="block" id="s4"><div class="wrap">
+<h2>4. Escolher como obter o template</h2>
+<table>
+<thead>
+<tr>
+<th scope="col"></th>
+<th scope="col">Use this template</th>
+<th scope="col">Fork</th>
+<th scope="col">Download ZIP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row">Repo novo na sua conta</th>
+<td>Sim</td>
+<td>Sim</td>
+<td>Só depois de criar manualmente</td>
+</tr>
+<tr>
+<th scope="row">Histórico</th>
+<td>Limpo (1 commit)</td>
+<td>Herda o original</td>
+<td>Nenhum</td>
+</tr>
+<tr>
+<th scope="row">Vínculo com o original</th>
+<td>Não</td>
+<td>Sim</td>
+<td>Não</td>
+</tr>
+<tr>
+<th scope="row">Receber correções do professor</th>
+<td>Copiar à mão</td>
+<td><code>git pull upstream main</code></td>
+<td>Copiar à mão</td>
+</tr>
+<tr>
+<th scope="row">Dificuldade</th>
+<td>Baixa</td>
+<td>Baixa</td>
+<td>Alta</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Recomendado:</strong> <em>Use this template</em>. Use Fork se quiser receber atualizações do template. Use ZIP só se não conseguir das outras formas.</p>
+<p>O template é o repositório <a href="https://github.com/drlima/postech-tech-challenge-fase2-template" target="_blank" rel="noopener noreferrer">https://github.com/drlima/postech-tech-challenge-fase2-template</a>. Escolha <strong>uma</strong> opção (5A, 5B ou 5C).</p>
+</div></section>
+
+<section class="block" id="s5"><div class="wrap">
+<div class="tabs" id="tabs5">
+<div class="tabpanel" id="5a">
+<h2>5A. Use this template (recomendado)</h2>
+<ol>
+<li>Abra o repositório do template e clique em <strong>Use this template → Create a new repository</strong>.</li>
+<li>Preencha:
+<ul>
+<li><strong>Owner:</strong> sua conta.</li>
+<li><strong>Name:</strong> por exemplo <code>tech-challenge-fase2-grupoXX</code>.</li>
+<li><strong>Visibility: Public.</strong> O professor não consegue acessar repositórios privados.</li>
+</ul>
+</li>
+<li>Clique em <strong>Create repository</strong>.</li>
+</ol>
+</div>
+<div class="tabpanel" id="5b">
+<h2>5B. Fork</h2>
+<ol>
+<li>No template, clique em <strong>Fork</strong> (canto superior direito) → <strong>Create fork</strong>.</li>
+<li>Abra a aba <strong>Actions</strong> do seu fork e clique em <strong>I understand my workflows, go ahead and enable them</strong>. Em forks, os workflows vêm desativados.</li>
+<li>Opcional, para receber atualizações do template, <strong>depois de clonar (passo 6)</strong>, na pasta do repo:</li>
+</ol>
+<pre><code class="term">git remote add upstream https://github.com/drlima/postech-tech-challenge-fase2-template.git
+git pull upstream main</code></pre>
+</div>
+<div class="tabpanel" id="5c">
+<h2>5C. Download ZIP</h2>
+<ol>
+<li>No template, clique em <strong>Code → Download ZIP</strong>, use <em>Extrair tudo</em> e, em &quot;Destino&quot;, digite apenas <code>C:\projetos</code>.</li>
+<li>No GitHub, clique em <strong>New repository</strong>, use o nome sugerido na 5A (por exemplo <code>tech-challenge-fase2-grupoXX</code>) e marque <strong>Public</strong>. <strong>Não</strong> marque README, .gitignore nem License.</li>
+<li>No PowerShell:</li>
+</ol>
+<pre><code class="term">cd C:\projetos\postech-tech-challenge-fase2-template-main
+dir</code></pre>
+<p>O <code>dir</code> deve listar <code>README.md</code>; se não, entre na subpasta com <code>cd</code>. Depois:</p>
+<pre><code class="term">git init -b main
+git add .
+git commit -m &quot;Primeiro commit&quot;
+git remote add origin https://github.com/<span class="ph">USUARIO</span>/<span class="ph">REPO</span>.git
+git push -u origin main</code></pre>
+<p>No GitHub Desktop, <strong>em vez dos passos 2 e 3</strong>: <em>File → Add local repository → create a repository → Create repository → Commit to main → Publish repository</em>, desmarcando &quot;Keep this code private&quot;.</p>
+</div>
+</div>
+</div></section>
+
+<section class="block" id="s6"><div class="wrap">
+<h2>6. Clonar para o seu computador (5A e 5B)</h2>
+<p>No repositório, clique em <strong>Code → HTTPS</strong> e copie a URL.</p>
+<p><strong>PowerShell:</strong></p>
+<pre><code class="term">mkdir -Force C:\projetos
+cd C:\projetos
+git clone <span class="ph">URL-COPIADA</span>
+cd <span class="ph">nome-do-repo</span>
+code .</code></pre>
+<p>Evite pastas sincronizadas com o OneDrive, como <em>Documentos</em> e <em>Área de Trabalho</em>.</p>
+<p><strong>GitHub Desktop:</strong> <em>File → Clone repository → GitHub.com →</em> escolha o repo, mude <em>Local path</em> para <code>C:\projetos\<span class="ph">nome-do-repo</span></code> → <em>Clone</em>.</p>
+<p>Confirme com <code>git remote -v</code>: o endereço do <strong><code>origin</code></strong> deve ser o do repo do <strong>seu grupo</strong>, nunca o do template.</p>
+</div></section>
+
+<section class="block" id="s7"><div class="wrap">
+<h2>7. Rotina de trabalho</h2>
+<p>Edite os arquivos no VS Code. Os dados brutos ficam <strong>só</strong> em <code>data/raw/</code> e <strong>não</strong> vão para o Git, conforme <code>data/README.md</code>. O repositório é público: não coloque senhas nem chaves de API.</p>
+<p><strong>PowerShell</strong> (no VS Code: <em>Terminal → New Terminal</em>, que já abre na pasta do repo). Ao começar a trabalhar, rode <code>git pull</code>. Para enviar:</p>
+<pre><code class="term">git add .
+git commit -m &quot;descreva o que mudou&quot;
+git pull
+git push</code></pre>
+<p><strong>VS Code:</strong> ícone <em>Source Control</em> (<code>Ctrl+Shift+G</code>) → mensagem → <strong>Commit</strong> → <strong>Sync Changes</strong>.</p>
+<p><strong>GitHub Desktop:</strong> <strong>Fetch origin</strong> e, se aparecer, <strong>Pull origin</strong> (ao começar e antes do push); depois mensagem em <em>Summary</em> → <strong>Commit to main</strong> → <strong>Push origin</strong>.</p>
+<p>O ✗ na aba <strong>Actions</strong> é esperado até você preencher o <code>README.md</code> e o <code>submissao/entrega.json</code>.</p>
+</div></section>
+
+<section class="block" id="s8"><div class="wrap">
+<h2>8. Trabalho em grupo (1 a 5 integrantes)</h2>
+<p>Um integrante é o dono do repositório. Só ele cria o repo pelo passo 5 e convida os demais:</p>
+<ol>
+<li>Ele abre <strong>Settings → Collaborators → Add people</strong> e digita o usuário de cada colega.</li>
+<li>Cada colega aceita o convite em até 7 dias (chega por e-mail).</li>
+<li>Cada colega faz os passos 1 a 3 (se ainda não fez) e clona o repo do grupo (passo 6).</li>
+</ol>
+<p>Regras para evitar conflito:</p>
+<ul>
+<li>Rode <code>git pull</code> <strong>antes</strong> de começar a trabalhar e antes de cada push.</li>
+<li>Faça commits pequenos e frequentes.</li>
+<li>Não edite o <strong>mesmo notebook</strong> ao mesmo tempo. Arquivos <code>.ipynb</code> geram conflitos difíceis de resolver.</li>
+<li>Se o push for rejeitado, rode <code>git pull</code> (se abrir uma aba de mensagem, salve e feche). Se avisar <code>CONFLICT</code>, abra o arquivo no VS Code, escolha <strong>Accept Current Change</strong> (a sua) ou <strong>Accept Incoming Change</strong> (a do colega), salve e rode <code>git add .</code>, <code>git commit -m &quot;resolve conflito&quot;</code> e <code>git push</code>. Para desistir: <code>git merge --abort</code>.</li>
+</ul>
+</div></section>
+
+<section class="block" id="s9"><div class="wrap">
+<h2>9. Google Colab</h2>
+<ul>
+<li><strong>Abrir:</strong> <em>File → Open notebook → aba GitHub →</em> cole a URL do repo → escolha o notebook. O Colab abre só o notebook: na primeira célula, <code>!git clone <span class="ph">URL-DO-REPO</span></code> e <code>%cd <span class="ph">nome-do-repo</span>/notebooks</code>; envie o dataset para <code><span class="ph">nome-do-repo</span>/data/raw/</code> pelo painel <em>Arquivos</em>.</li>
+<li><strong>Salvar no repo:</strong> <em>File → Save a copy in GitHub</em> → escolha o repo e escreva a mensagem de commit.</li>
+<li>Depois de salvar pelo Colab, rode <code>git pull</code> no computador antes de continuar.</li>
+</ul>
+</div></section>
+
+<section class="block" id="s10"><div class="wrap">
+<h2>10. Antes de entregar</h2>
+<ol id="checklist">
+<li>Abra o link do repositório em uma <strong>janela anônima</strong>. Ele precisa abrir sem login; se aparecer <strong>404</strong> ou pedir login, o repositório está privado e o professor não conseguirá vê-lo. Corrija em <em>Settings → General → Danger Zone → Change visibility → Public</em>.</li>
+<li>Preencha o <code>README.md</code>, apague o bloco <code>&gt; **INSTRUÇÕES:**</code> e busque <code>PREENCHER</code> (<code>Ctrl+Shift+F</code>) até não restar nenhum.</li>
+<li>Percorra o <code>CHECKLIST.md</code>.</li>
+<li>Gere o PDF de submissão conforme <code>submissao/README.md</code> e confirme que o link do repo no README é <strong>idêntico</strong> ao do PDF.</li>
+</ol>
+</div></section>
+
+<section class="block" id="erros"><div class="wrap">
+<h2>Erros comuns</h2>
+<ul>
+<li><strong><code>git</code> não é reconhecido:</strong> feche e reabra o terminal. Se persistir, reinstale o Git.</li>
+<li><strong><code>Author identity unknown</code>:</strong> refaça o passo 3.</li>
+<li><strong><code>rejected... fetch first</code>:</strong> rode <code>git pull</code> e depois <code>git push</code>.</li>
+<li><strong><code>403</code> / <code>Permission denied</code> no push:</strong> aceite o convite do repo e use a conta certa.</li>
+</ul>
+</div></section>
+</main>
+
+<footer>GitHub no Windows (Tech Challenge Fase 2) · guia de consulta</footer>
+
+<!-- Todo texto que o JS escreve na tela mora aqui. Esta aula existe só em pt-BR. -->
+<script>
+window.STR = {
+  locale: "pt-BR",
+  decimalComma: true,
+
+  // copiar comandos (core.js: copyButtons)
+  copyLabel: "Copiar",
+  copyDone: "Copiado",
+  copyFail: "Use Ctrl+C",
+  copyNote: "Troque o trecho destacado",
+  copyAria: "Copiar comando {n}",
+
+  // seletor 5A / 5B / 5C (core.js: tabSet)
+  tabsLabel: "Como obter o template",
+  tab5a: "5A (recomendado)",
+  tab5b: "5B",
+  tab5c: "5C",
+
+  // progresso e checklist
+  doneMark: "Marcar como feito",
+  checkAll: "Marcar tudo como feito",
+  clearProg: "Limpar progresso",
+  progTpl: "{n} de {total} seções feitas",
+  storeOff: "O navegador bloqueou o armazenamento: o progresso vale só até fechar a página."
+};
+</script>
+<script src="../../assets/core.js"></script>
+<script src="assets/aula.js"></script>
+</body>
+</html>
