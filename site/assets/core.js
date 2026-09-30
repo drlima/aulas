@@ -94,3 +94,69 @@ async function drawFig(boxId,imgId,code,globals){const box=$("#"+boxId);box.clas
   catch(e){console.warn(e);
     figFail(boxId,S.vizFail);
     pySay(S.vizFailStatus);if(PyUI.onFigFail)PyUI.onFigFail();return false}}
+
+// armazenamento local que nunca derruba a pagina: o localStorage pode estar
+// bloqueado (janela privada, politica do navegador), cheio ou ausente. Toda
+// leitura e escrita passa por aqui; quem chama trata o retorno vazio/falso.
+const safeStore={
+  get(k){try{return localStorage.getItem(k)}catch(e){return null}},
+  set(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}},
+  del(k){try{localStorage.removeItem(k);return true}catch(e){return false}}};
+
+// botao "copiar" em cada bloco de codigo que casa com sel. Copia o texto exato
+// do bloco (textContent: sem o botao, sem o realce). Tenta a Clipboard API, depois
+// execCommand e, se nenhuma funcionar, seleciona o bloco para o aluno usar Ctrl+C.
+// L = {label, done, fail, note?, aria?}: rotulo do botao, rotulo depois de copiar,
+// rotulo quando a copia falha, aviso curto a esquerda da barra (so nos blocos que
+// trazem trechos .ph, os que o aluno precisa trocar) e molde "{n}" do aria-label.
+function copyButtons(sel,L){
+  const live=document.createElement("div");live.className="sr-only";live.setAttribute("role","status");document.body.appendChild(live);
+  const legacy=txt=>{const ta=document.createElement("textarea");ta.value=txt;ta.setAttribute("readonly","");
+    ta.style.cssText="position:fixed;top:0;left:0;opacity:0";document.body.appendChild(ta);ta.select();
+    let ok=false;try{ok=document.execCommand("copy")}catch(e){}ta.remove();return ok};
+  const copy=txt=>navigator.clipboard&&window.isSecureContext
+    ?navigator.clipboard.writeText(txt).then(()=>true,()=>legacy(txt)):Promise.resolve(legacy(txt));
+  $$(sel).forEach((pre,i)=>{
+    const box=document.createElement("div"),bar=document.createElement("div"),b=document.createElement("button");
+    box.className="codebox";bar.className="codebar";b.type="button";b.className="copy";b.textContent=L.label;
+    if(L.aria)b.setAttribute("aria-label",T(L.aria,{n:i+1}));
+    if(L.note&&pre.querySelector(".ph")){const n=document.createElement("span");n.className="codenote";n.textContent=L.note;bar.appendChild(n)}
+    bar.appendChild(b);pre.parentNode.insertBefore(box,pre);box.appendChild(bar);box.appendChild(pre);
+    let t;
+    b.addEventListener("click",async()=>{
+      const ok=await copy(pre.textContent);
+      if(!ok){const r=document.createRange();r.selectNodeContents(pre);const s=getSelection();s.removeAllRanges();s.addRange(r)}
+      b.textContent=ok?L.done:L.fail;b.classList.toggle("done",ok);b.classList.toggle("fail",!ok);live.textContent=b.textContent;
+      clearTimeout(t);t=setTimeout(()=>{b.textContent=L.label;b.classList.remove("done","fail");live.textContent=""},2200)})})}
+
+// abas acessiveis (padrao WAI-ARIA tabs). O HTML traz todos os paineis visiveis,
+// em sequencia; aqui eles viram abas. Sem JS (e na impressao, ver aula.css) a
+// pagina continua completa. Setas, Home e End trocam de aba; um #id de painel
+// na URL abre a aba dele; a escolha do aluno fica em safeStore sob cfg.key.
+// cfg = {root, list (aria-label do tablist), tabs:[{id,label}], def, key}
+function tabSet(cfg){
+  const root=typeof cfg.root==="string"?$(cfg.root):cfg.root;
+  const list=document.createElement("div");list.className="tablist";list.setAttribute("role","tablist");list.setAttribute("aria-label",cfg.list);
+  const tabs=cfg.tabs.map(t=>{
+    const p=document.getElementById(t.id),b=document.createElement("button");
+    b.type="button";b.className="tab";b.id="tab-"+t.id;b.setAttribute("role","tab");b.setAttribute("aria-controls",t.id);b.textContent=t.label;
+    p.setAttribute("role","tabpanel");p.setAttribute("aria-labelledby",b.id);p.tabIndex=0;
+    list.appendChild(b);return {id:t.id,b,p}});
+  root.insertBefore(list,root.firstChild);
+  const select=(id,o={})=>{
+    const t=tabs.find(x=>x.id===id)||tabs.find(x=>x.id===cfg.def)||tabs[0];
+    tabs.forEach(x=>{const on=x===t;x.b.setAttribute("aria-selected",on);x.b.tabIndex=on?0:-1;x.p.hidden=!on});
+    if(o.focus)t.b.focus();
+    if(o.save&&cfg.key)safeStore.set(cfg.key,t.id);
+    return t};
+  list.addEventListener("click",e=>{const b=e.target.closest(".tab");if(b)select(b.id.slice(4),{focus:true,save:true})});
+  list.addEventListener("keydown",e=>{
+    const i=tabs.findIndex(x=>x.b===document.activeElement);if(i<0)return;
+    const k={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:tabs.length-1}[e.key];if(k===undefined)return;
+    e.preventDefault();select(tabs[(k+tabs.length)%tabs.length].id,{focus:true,save:true})});
+  const fromHash=()=>{const t=tabs.find(x=>x.id===decodeURIComponent(location.hash.slice(1)));
+    if(t){select(t.id,{save:true});t.p.scrollIntoView()}};
+  const saved=cfg.key?safeStore.get(cfg.key):null;
+  select(tabs.some(x=>x.id===saved)?saved:cfg.def);
+  fromHash();addEventListener("hashchange",fromHash);
+  return {select}}
