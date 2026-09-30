@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Cria uma aula nova a partir de template/.
 
-    python3 scripts/nova-aula.py <slug>
+    python3 scripts/nova-aula.py <slug> [--so-pt]
 
 Pergunta título, resumo e duração no terminal, copia template/ para
 site/aulas/<slug>/ trocando os marcadores __SLUG__, __TITULO__, __RESUMO__ e
 __DURACAO__, e acrescenta a aula ao site/data/aulas.json como "rascunho", com
 `ordem` igual à maior existente + 1.
+
+Com --so-pt a aula nasce só em pt-BR: não copia template/en/, registra
+"idiomas": ["pt-BR"] e não cria a chave "en" no aulas.json.
 
 Escreve só essas duas coisas. Recusa-se a rodar se o slug já existe, em disco
 ou no aulas.json.
@@ -81,9 +84,12 @@ def main():
         sys.stderr.reconfigure(encoding="utf-8", errors="replace")
     if hasattr(sys.stdin, "reconfigure"):
         sys.stdin.reconfigure(encoding="utf-8", errors="replace")
-    if len(sys.argv) != 2:
-        falha("uso: python3 scripts/nova-aula.py <slug>")
-    slug = sys.argv[1]
+    args = sys.argv[1:]
+    so_pt = "--so-pt" in args
+    args = [a for a in args if a != "--so-pt"]
+    if len(args) != 1:
+        falha("uso: python3 scripts/nova-aula.py <slug> [--so-pt]")
+    slug = args[0]
     if not SLUG_OK.match(slug):
         falha(f'slug "{slug}" inválido: use só letras minúsculas sem acento, números e hífens (ex.: estatistica-basica)')
     destino = AULAS / slug
@@ -118,12 +124,14 @@ def main():
     # monta tudo em memória antes de escrever qualquer coisa
     arquivos = {}
     for origem in sorted(TEMPLATE.rglob("*")):
+        if so_pt and origem.relative_to(TEMPLATE).parts[0] == "en":
+            continue
         if origem.is_file():
             conteudo = origem.read_text(encoding="utf-8")
             arquivos[destino / origem.relative_to(TEMPLATE)] = preenche(conteudo, origem.suffix.lower())
 
     ordem = max((a.get("ordem", 0) for a in dados.get("aulas", [])), default=0) + 1
-    dados.setdefault("aulas", []).append({
+    entrada = {
         "slug": slug,
         "ordem": ordem,
         "status": "rascunho",
@@ -132,9 +140,13 @@ def main():
         "tags": [],
         "atualizada_em": datetime.date.today().isoformat(),
         "capa": {"emoji": "📘", "cor": "grape"},
-        "pt-BR": {"titulo": titulo, "resumo": resumo, "url": f"aulas/{slug}/"},
-        "en": {"titulo": titulo, "resumo": resumo, "url": f"aulas/{slug}/en/"},
-    })
+    }
+    if so_pt:
+        entrada["idiomas"] = ["pt-BR"]
+    entrada["pt-BR"] = {"titulo": titulo, "resumo": resumo, "url": f"aulas/{slug}/"}
+    if not so_pt:
+        entrada["en"] = {"titulo": titulo, "resumo": resumo, "url": f"aulas/{slug}/en/"}
+    dados.setdefault("aulas", []).append(entrada)
     indice_novo = formata_indice(dados)
 
     for caminho, conteudo in arquivos.items():
@@ -149,7 +161,10 @@ def main():
     print("\nPróximos passos:")
     print("  1. Escreva os blocos em index.html e en/index.html.")
     print("  2. Apague o bloco 4 (e o trecho dele no aula.js) se a aula não usa Python.")
-    print("  3. Traduza a versão en: ela nasce com o título e o resumo em pt, no HTML e no aulas.json.")
+    if so_pt:
+        print("  3. Aula só em pt-BR: não há versão en para traduzir.")
+    else:
+        print("  3. Traduza a versão en: ela nasce com o título e o resumo em pt, no HTML e no aulas.json.")
     print("  4. Acerte nivel, tags e capa no aulas.json; preencha CLAUDE.md e GUIA_DO_PROFESSOR.md.")
     print("  5. Rode python3 scripts/check.py.")
 

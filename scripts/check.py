@@ -7,7 +7,8 @@ Sai com código 1 e lista os problemas se qualquer verificação falhar:
 
   1. nenhum caractere acentuado em site/assets/*.js e site/aulas/*/assets/*.js
   2. site/data/aulas.json é JSON válido e segue o contrato (campos, valores
-     aceitos, os dois idiomas, slugs únicos)
+     aceitos, os dois idiomas, slugs únicos). Uma aula pode declarar
+     "idiomas": ["pt-BR"] para existir só em pt-BR; sem o campo, exige os dois
   3. toda aula do JSON existe em disco nos dois idiomas, e toda pasta de aula
      em disco está no JSON
   4. por aula (e no hub): as mesmas chaves de window.STR em pt e en, as mesmas
@@ -34,6 +35,12 @@ COMENTARIO_HTML = re.compile(r"<!--.*?-->", re.S)
 HEX = re.compile(r"^(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$")
 
 problemas = []
+
+
+def idiomas_da(a):
+    """Idiomas que a aula exige: o campo opcional "idiomas", ou os dois."""
+    ids = a.get("idiomas")
+    return tuple(ids) if isinstance(ids, list) and ids else IDIOMAS
 
 
 def erro(secao, msg):
@@ -117,7 +124,13 @@ def checa_indice():
             if capa.get("cor") not in CORES:
                 erro("aulas.json", f'{nome}: capa.cor "{capa.get("cor")}" não é {", ".join(sorted(CORES))}')
         idiomas_ok = True
-        for lang in IDIOMAS:
+        decl = a.get("idiomas")
+        if decl is not None and not (isinstance(decl, list) and "pt-BR" in decl
+                                     and all(i in IDIOMAS for i in decl) and len(set(decl)) == len(decl)):
+            erro("aulas.json", f'{nome}: idiomas precisa ser uma lista sem repetição, com "pt-BR" e só idiomas de {list(IDIOMAS)}')
+            decl = None
+            idiomas_ok = False
+        for lang in (tuple(decl) if decl else IDIOMAS):
             L = a.get(lang)
             if not isinstance(L, dict):
                 erro("aulas.json", f'{nome}: falta o idioma "{lang}"')
@@ -127,6 +140,9 @@ def checa_indice():
                 if not texto_ok(L.get(campo)):
                     erro("aulas.json", f"{nome}: {lang}.{campo} ausente")
                     idiomas_ok = False
+        if decl and "en" not in decl and "en" in a:
+            erro("aulas.json", f'{nome}: idiomas não inclui "en", mas há uma chave "en" (o hub en mostraria um link quebrado)')
+            idiomas_ok = False
         if isinstance(slug, str) and SLUG_OK.match(slug) and idiomas_ok and not repetido:
             validas.append(a)
     return validas
@@ -147,13 +163,15 @@ def checa_disco(aulas, slugs_no_json):
     no_json = slugs_no_json
     for a in aulas:
         pasta = (SITE / "aulas" / a["slug"]).resolve()
-        for lang in IDIOMAS:
+        for lang in idiomas_da(a):
             url = a[lang]["url"]
             pag = pagina_de(url)
             if pasta not in pag.parents:
                 erro("JSON e disco", f'{a["slug"]}: {lang}.url "{url}" não aponta para dentro de site/aulas/{a["slug"]}/')
             elif not pag.is_file():
                 erro("JSON e disco", f'{a["slug"]}: {lang}.url "{url}" não existe em disco ({rel(pag)})')
+        if "en" not in idiomas_da(a) and (pasta / "en").exists():
+            erro("JSON e disco", f'{a["slug"]}: idiomas não inclui "en", mas {rel(pasta / "en")}/ existe em disco')
     if (SITE / "aulas").is_dir():
         for pasta in sorted(p for p in (SITE / "aulas").iterdir() if p.is_dir()):
             if pasta.name not in no_json:
@@ -253,10 +271,28 @@ def checa_par(nome, pt, en, js=None):
                 erro("pt e en", f'{nome}: o aula.js usa #{i}, que não existe no HTML {lang}')
 
 
+def checa_so_pt(nome, pt, js):
+    """Aula só em pt-BR: não há par para comparar, mas o STR e os ids do aula.js valem."""
+    if not pt.is_file():
+        erro("pt e en", f"{nome}: {rel(pt)} não existe")
+        return
+    h = ler(pt)
+    if chaves_str(h) is None:
+        erro("pt e en", f"{nome}: sem window.STR em {rel(pt)}")
+    if not js.is_file():
+        erro("pt e en", f"{nome}: {rel(js)} não existe")
+        return
+    for i in sorted(ids_js(ler(js)) - ids_html(h)):
+        erro("pt e en", f"{nome}: o aula.js usa #{i}, que não existe no HTML pt")
+
+
 def checa_pares(aulas):
     checa_par("hub", SITE / "index.html", SITE / "en" / "index.html")
     for a in aulas:
         pasta = SITE / "aulas" / a["slug"]
+        if "en" not in idiomas_da(a):
+            checa_so_pt(a["slug"], pasta / "index.html", pasta / "assets" / "aula.js")
+            continue
         checa_par(a["slug"], pasta / "index.html", pasta / "en" / "index.html", pasta / "assets" / "aula.js")
 
 
@@ -312,8 +348,10 @@ def main():
                 secao_atual = secao
             print(f"  - {msg}")
         sys.exit(1)
+    so_pt = sum(1 for a in aulas if "en" not in idiomas_da(a))
+    ressalva = f" ({so_pt} só em pt-BR)" if so_pt else ""
     print(f"check.py: tudo certo — {n_js} arquivos JS sem acento, {len(aulas)} aula(s) no índice "
-          f"conferidas em disco e nos dois idiomas, {n_links} links relativos resolvidos.")
+          f"conferidas em disco e nos idiomas que declaram{ressalva}, {n_links} links relativos resolvidos.")
 
 
 if __name__ == "__main__":
