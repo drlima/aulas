@@ -53,7 +53,9 @@ Uma aula carrega, nesta ordem, `base.css`, `aula.css`, `extra.css` e depois
   `checkbox`, `text`, `button` com `.ghost`, `.small`), `.val`, `.out`, `.legend`,
   `.dot`, `details.reveal`, `.cards`/`.card`, `.quiz`, `.seg`, `.two`, tabelas,
   `details.code`, `pre` com o realce, o editor e o console do Python
-  (`textarea`, `.console`), `.fig`/`.figmsg`, `.refs`, `h3.refgroup`.
+  (`textarea`, `.console`), `.fig`/`.figmsg`, `.refs`, `h3.refgroup`, `.sr-only`,
+  blocos de comandos (`.codebox`, `.codebar`, `button.copy`, `pre code.term`, `.ph`)
+  e abas (`.tablist`, `button.tab`, `.tabpanel`, com a regra de impressão).
 - **`core.js`**: tudo o que qualquer aula pode usar (API abaixo). Declara; o
   `aula.js` de cada aula consome.
 
@@ -91,10 +93,14 @@ Paleta: paper `#F3F6FB`, ink `#17203A`, marker `#FFD84D`, coral `#FF6B57`, teal
 | `getViz` | `getViz() → Promise<pyodide>` | `getPy` + matplotlib |
 | `drawFig` | `drawFig(boxId, imgId, código, globais) → Promise<bool>` | roda `código` (que devolve um PNG em base64) e mostra em `#imgId` dentro de `#boxId` |
 | `figFail` | `figFail(boxId, msg)` | troca a figura por uma mensagem de erro visível |
+| `safeStore` | `{get(k), set(k, v), del(k)}` | `localStorage` que nunca lança: `get` devolve `null` e `set`/`del` devolvem `false` se o armazenamento falhar. Use sempre em vez de `localStorage` direto |
+| `copyButtons` | `copyButtons(sel, L)` | põe uma barra com botão "copiar" em cada `pre` que casa com `sel`; copia o `textContent` exato (Clipboard API, depois `execCommand`, depois seleciona o bloco). `L = {label, done, fail, note?, aria?}`; `note` aparece só nos blocos com `.ph` (trechos que o aluno troca) |
+| `tabSet` | `tabSet({root, list, tabs:[{id,label}], def, key})` | transforma painéis que já estão no HTML em abas WAI-ARIA (setas, Home, End; `#id` do painel na URL abre a aba; escolha em `safeStore` sob `key`). Sem JS e na impressão os painéis aparecem todos, em sequência |
 
 O core também liga, sozinho, o realce do link da `nav.map` conforme a rolagem.
 Chaves de `STR` que o core lê: `locale`, `pyDownload`, `pySklearn`, `pyReady`,
-`pyNetError`, `vizDownload`, `vizFail`, `vizFailStatus`.
+`pyNetError`, `vizDownload`, `vizFail`, `vizFailStatus`. `copyButtons` e `tabSet`
+não leem `STR`: a aula passa os textos nos parâmetros.
 
 ## i18n
 
@@ -105,7 +111,9 @@ Chaves de `STR` que o core lê: `locale`, `pyDownload`, `pySklearn`, `pyReady`,
   `grep -rnE "[áàâãéêíóôõúüç]" site/assets/*.js site/aulas/*/assets/*.js` deve
   voltar vazio.
 - pt e en têm as **mesmas chaves** de `STR`, os **mesmos ids** e as **mesmas
-  seções, na mesma ordem**. Renomeou em um idioma, renomeie no outro.
+  seções, na mesma ordem**. Renomeou em um idioma, renomeie no outro. Exceção: a
+  aula que declara `"idiomas": ["pt-BR"]` no `aulas.json` existe só em pt-BR, não
+  tem `en/` e o `check.py` não exige o par.
 - A versão pt fica em `.../`, a en em `.../en/`. Os caminhos relativos da en têm
   um `../` a mais.
 
@@ -130,7 +138,11 @@ Chaves de `STR` que o core lê: `locale`, `pyDownload`, `pySklearn`, `pyReady`,
 - `tags`: lista de textos, mostrados como estão nos dois idiomas.
 - `capa.cor`: um token da paleta, `marker`, `coral`, `teal` ou `grape`.
 - `url`: relativa à raiz de `site/`.
-- `pt-BR` e `en`: os dois obrigatórios, cada um com `titulo`, `resumo` e `url`.
+- `idiomas` (opcional): lista dos idiomas da aula. Ausente, vale `["pt-BR", "en"]`.
+  `["pt-BR"]` marca uma aula só em pt-BR: a chave `en` não deve existir (o hub en
+  já esconde entradas sem o idioma dele) e a pasta `en/` também não.
+- `pt-BR` e `en`: os dois obrigatórios, cada um com `titulo`, `resumo` e `url`,
+  exceto `en` numa aula com `idiomas: ["pt-BR"]`.
 
 O hub (`site/index.html` e `site/en/index.html`) define, inline e antes dos
 scripts, `window.HUB = { json, lang, base }` (o caminho do JSON, `"pt-BR"` ou
@@ -141,6 +153,9 @@ dos cards.
 
 ## Formato pedagógico padrão
 
+Uma aula pode ter outro formato (ex.: `github-windows`, um guia de consulta, sem
+perguntas nem Revelar). Nesse caso o `CLAUDE.md` dela diz isso como regra firme.
+
 Cada bloco é uma `section.block` com id e segue **pergunta (`div.q`) → widget
 (`div.widget`) → `details.reveal`** (o punch). O aluno pensa, mexe, erra, e só
 depois abre a resposta. Painéis `details.code` ("O mesmo, em Python") são
@@ -149,7 +164,7 @@ apêndice: vêm depois do widget e **nunca o substituem**.
 ## Criar uma aula nova
 
 ```bash
-python3 scripts/nova-aula.py <slug>
+python3 scripts/nova-aula.py <slug> [--so-pt]
 ```
 
 O script pergunta título, resumo e duração, copia `template/` para
@@ -157,7 +172,9 @@ O script pergunta título, resumo e duração, copia `template/` para
 `__DURACAO__`) e acrescenta a aula ao `aulas.json` como `"rascunho"`, com a próxima
 `ordem`, `nivel` `"iniciante"`, `tags` vazias e capa 📘 em `grape`. Nos `.js` e
 `.css` o título entra sem acento, por causa da regra de i18n. O slug aceita só
-letras minúsculas, números e hífens, e o script recusa slug que já existe.
+letras minúsculas, números e hífens, e o script recusa slug que já existe. Com
+`--so-pt` a aula nasce só em pt-BR: não copia `template/en/` e registra
+`"idiomas": ["pt-BR"]` sem a chave `en`.
 
 O template traz, prontos e comentados, os padrões da casa: um widget com SVG
 (`scale` + `axes`), um `quizPair`, um `quizOptions` com painel "O mesmo, em
@@ -180,7 +197,8 @@ python3 scripts/check.py                       # sai com código 1 e lista o que
 ```
 
 `check.py` confere: nenhum acento nos JS; `aulas.json` válido e completo; toda
-aula do JSON existe em disco nos dois idiomas, e vice-versa; em cada aula e no hub,
+aula do JSON existe em disco nos idiomas que ela declara (os dois, salvo `idiomas`),
+e vice-versa; em cada aula e no hub,
 as mesmas chaves de `STR` em pt e en e as mesmas `section` na mesma ordem; todo id
 que o `aula.js` usa (em seletores e em `drawFig`) existe nos dois HTMLs; todo
 `href`/`src` relativo aponta para um arquivo que existe, e os absolutos
