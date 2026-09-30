@@ -186,3 +186,62 @@ Decisões fora do roteiro aprovado. As que mudam a página também estão no fim
 - **Fora do escopo, só registrado:** a meta `description` dos dois HTMLs ficou com o
   resumo que o `nova-aula.py` gravou; o `aulas.json` ganhou um resumo reescrito. Os dois
   dizem a mesma coisa.
+
+## Aula github-windows (GitHub no Windows, Tech Challenge Fase 2)
+
+Três exceções decididas pelo autor para esta aula. Estão como regras firmes no
+`CLAUDE.md` dela:
+
+1. **Guia de consulta, não aula setup-punch.** Sem perguntas, Revelar, widgets de
+   chute nem vocabulário progressivo. O `CONTEUDO.md` entra intacto.
+2. **Só pt-BR.** Não existe `en/index.html`.
+3. **Sem Pyodide e sem verificador numérico.** O verificador da aula é o de
+   fidelidade de conteúdo (`scripts/verifica-github-windows.py`).
+
+Decisões tomadas sem perguntar; em cada uma, a que muda menos coisa:
+
+- **Aula só em pt-BR sem quebrar as outras.** O `aulas.json` ganhou o campo
+  opcional `idiomas`. Ausente, tudo funciona como antes (pt e en obrigatórios).
+  `"idiomas": ["pt-BR"]` dispensa a chave `en` e a pasta `en/`. O `check.py` lê o
+  campo (e recusa `en` inconsistente com ele); o `nova-aula.py` ganhou `--so-pt`.
+  O `hub.js` não mudou: já filtrava `a[H.lang]`, então o hub en simplesmente não
+  mostra a aula. Conferido: o `check.py` segue verde nas duas aulas anteriores e
+  as duas continuam com os dois idiomas.
+- **Slug `github-windows`:** não existia e segue a convenção (minúsculas e hífens).
+- **Duração de 60 min, nível `iniciante`, capa 🐙 em `coral`, tags `git`, `github`,
+  `windows`, `guia de consulta`.** O pedido não definia nenhum dos quatro. A duração
+  é estimativa; corrija se souber o tempo real.
+- **Status `publicada`.** O pedido é publicar e confirmar a URL; `rascunho` não
+  apareceria no hub, mas a página já fica no ar de qualquer jeito.
+- **Descrição do catálogo:** "Do cadastro no GitHub ao repositório do grupo no ar:
+  instalar as ferramentas, criar o repo a partir do template, clonar, trabalhar em
+  equipe e usar o Colab." Não cita critérios de correção nem pontuação.
+- **Onde ficam as abas 5A/5B/5C.** Vêm depois do último parágrafo do passo 4 (tabela,
+  "Recomendado" e "O template é o repositório…"), não entre a tabela e os
+  parágrafos: pôr o seletor no meio reordenaria o texto, e a regra de conteúdo
+  manda preservar a ordem. Não há seção "5" no `CONTEUDO.md`, então o `s5` só
+  contém o seletor e os painéis `5a`, `5b`, `5c` (os ids que as âncoras usam).
+- **Índice com 13 itens:** passos 1 a 4, 5A, 5B, 5C, passos 6 a 10 e Erros comuns.
+  Fixo na lateral a partir de 1240 px (abaixo disso não sobra margem), barra
+  recolhível grudada sob a nav nas telas menores.
+- **Progresso por seção.** Um botão "Marcar como feito" ao fim de cada seção de 1 a
+  10 (na 5, ao fim do seletor), refletido no índice. "Marcar tudo como feito" vale
+  só para o checklist do passo 10. "Limpar progresso" zera os dois.
+- **Tabela do passo 4 no mobile** cabe na largura, com as células quebrando linha,
+  em vez de rolar de lado (regra geral de `aula.css`), porque compara três opções
+  lado a lado. Só `extra.css` desta aula. A primeira célula de cada linha virou
+  `<th scope="row">`, e a linha de títulos usa `scope="col"`: mesmo texto.
+- **Links dos domínios:** `code.visualstudio.com`, `desktop.github.com` e os demais
+  apontam para `https://` + o texto citado. "GitHub.com" no menu do GitHub Desktop
+  (passo 6) é nome de item de menu, não domínio citado, e não virou link.
+- **Placeholders em código em linha também.** `URL-DO-REPO` só aparece em código em
+  linha (passo 9), não em bloco; foi destacado igual.
+- **Camada compartilhada:** `core.js` ganhou `safeStore`, `copyButtons` e `tabSet`;
+  `aula.css`, as regras desses componentes (`.sr-only`, `.codebox`, `button.copy`,
+  `.ph`, `.tablist`, `button.tab`, impressão). São funções novas no fim dos arquivos,
+  sem tocar no que existia. Nenhum outro `aula.js` declara esses nomes (conferido).
+- **Fim de linha.** O clone tinha vários arquivos em CRLF (só diferença de fim de
+  linha, sem mudança de conteúdo). Os dois arquivos da raiz que precisei editar
+  (`CLAUDE.md` e este) voltaram a LF, igual ao HEAD, para o commit mostrar só as
+  linhas alteradas. Os demais arquivos com CRLF não foram tocados nem versionados.
+- **Sem tema escuro.** O hub só tem tema claro; não há variante escura para testar.
